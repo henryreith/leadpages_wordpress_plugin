@@ -10,6 +10,15 @@ Author URI: http://leadpages.net
 License: GPL2
 */
 
+/**
+ * Load plugin textdomain.
+ */
+
+load_plugin_textdomain( 'leadpages', false, plugin_basename( dirname( __FILE__ ) ) . '/App/Languages' );
+
+use Leadpages\Bootstrap\AdminBootstrap;
+use Leadpages\Admin\Providers\AdminAuth;
+use Leadpages\Admin\Providers\LeadpagesLoginApi;
 
 /*
   |--------------------------------------------------------------------------
@@ -21,5 +30,30 @@ License: GPL2
   |
   */
 
-include 'App\Bootstrap\FrontBoostrap.php';
-include 'App\Bootstrap\AdminBootstrap.php';
+require('vendor/autoload.php');
+require('App/Config/App.php');
+/*
+  |--------------------------------------------------------------------------
+  | Bootstrap IOC Container
+  |--------------------------------------------------------------------------
+  |
+  | This framework utilizes the Pimple IOC container from SensioLabs
+  | Bootstrap the IOC container here. Documentation for container
+  | can be found at http://pimple.sensiolabs.org/
+  |
+  */
+
+require $config['basePath'].'Framework/ServiceContainer/ServiceContainer.php';
+
+/*
+  |--------------------------------------------------------------------------
+  | Application Bootstrap
+  |--------------------------------------------------------------------------
+  |
+  | Include bootstrap files to setup app
+  |
+  */
+
+
+$adminBootstrap = $ioc['adminBootStrap'];
+$frontBootstrap = $ioc['frontBootStrap'];

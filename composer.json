@@ -4,12 +4,13 @@
         "pimple/pimple": "^3.0"
     },
     "require-dev": {
-        "codeception/codeception": "^2.1"
+      "codeception/codeception": "*",
+      "codeception/mockery-module": "*"
     },
   "autoload": {
     "psr-4": {
       "TheLoop\\": "Framework//",
-      "App\\": "App//"
+      "Leadpages\\": "App//"
     }
   },
     "authors": [

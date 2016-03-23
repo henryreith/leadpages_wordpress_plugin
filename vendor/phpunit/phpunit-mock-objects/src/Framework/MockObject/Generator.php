@@ -807,17 +807,17 @@ class PHPUnit_Framework_MockObject_Generator
 
         $classTemplate->setVar(
             [
-            'prologue'          => isset($prologue) ? $prologue : '',
-            'epilogue'          => isset($epilogue) ? $epilogue : '',
-            'class_declaration' => $this->generateMockClassDeclaration(
-                $mockClassName,
-                $isInterface,
-                $additionalInterfaces
-            ),
-            'clone'             => $cloneTemplate,
-            'mock_class_name'   => $mockClassName['className'],
-            'mocked_methods'    => $mockedMethods,
-            'method'            => $method
+                'prologue'          => isset($prologue) ? $prologue : '',
+                'epilogue'          => isset($epilogue) ? $epilogue : '',
+                'class_declaration' => $this->generateMockClassDeclaration(
+                    $mockClassName,
+                    $isInterface,
+                    $additionalInterfaces
+                ),
+                'clone'             => $cloneTemplate,
+                'mock_class_name'   => $mockClassName['className'],
+                'mocked_methods'    => $mockedMethods,
+                'method'            => $method
             ]
         );
 
@@ -1084,7 +1084,7 @@ class PHPUnit_Framework_MockObject_Generator
             $typeDeclaration = '';
 
             if (!$forCall) {
-                if ($this->hasType($parameter)) {
+                if ($this->hasType($parameter) && (string) $parameter->getType() !== 'self') {
                     $typeDeclaration = (string) $parameter->getType() . ' ';
                 } elseif ($parameter->isArray()) {
                     $typeDeclaration = 'array ';
