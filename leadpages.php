@@ -10,3 +10,16 @@ Author URI: http://leadpages.net
 License: GPL2
 */
 
+
+/*
+  |--------------------------------------------------------------------------
+  | Application Entry Point
+  |--------------------------------------------------------------------------
+  |
+  | This will be your plugin entry point. This file should
+  | not contain any logic for your plugin what so ever.
+  |
+  */
+
+include 'App\Bootstrap\FrontBoostrap.php';
+include 'App\Bootstrap\AdminBootstrap.php';
