@@ -3,6 +3,8 @@
 
 namespace Leadpages\Admin\CustomPostTypes;
 
+use Leadpages\Helpers\LeadpageType;
+use Leadpages\models\LeadPagesPostTypeModel;
 use TheLoop\Contracts\CustomPostType;
 use TheLoop\Contracts\CustomPostTypeColumns;
 
@@ -42,11 +44,7 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
           'query_var'            => true,
           'menu_icon'            => $config['admin_images'].'/menu-icon.png',
           'capability_type'      => 'page',
-          'menu_position'        => null,
-          'rewrite'              => array(
-            'with_front' => false,
-            'slug'       => '/'
-          ),
+          'menu_position'        => 10000,
           'can_export'           => false,
           'hierarchical'         => true,
           'has_archive'          => true,
@@ -68,33 +66,39 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
         $cols[$this->postTypeName.'_type'] = __('Type', 'leadpages');
         $cols[$this->postTypeName.'_path'] = __('Url', 'leadpages');
         $cols['date']                      = __('Date', 'leadpages');
-        return $cols;;
+        return $cols;
     }
 
     public function populateColumns($column)
     {
-
-        $this->populateNameColumn($column);
+        $id = get_the_ID();
+        $this->populateNameColumn($column, $id);
+        $this->populatePathColumn($column, $id);
+        $this->populateTypeColumn($column, $id);
 
     }
 
-    private function populateNameColumn($column){
+    private function populateNameColumn($column, $id){
+
         if ( $this->postTypeName.'_name' == $column ) {
-            $url    = get_edit_post_link( get_the_ID() );
-            $p_name = get_post_meta( get_the_ID(), 'leadpages_name', true );
-            if($p_name == ''){
-                $p_name = get_the_title(get_the_ID());
+            $url    = get_edit_post_link( $id );
+            $post_name = get_post_meta( $id, 'leadpages_name', true );
+            $name = $post_name;
+            if($name == ''){
+                $name = get_the_title($id);
             }
-            echo '<strong><a href="' . $url . '">' . $p_name . '</a></strong>';
+            echo '<strong><a href="' . $url . '">' . $name . '</a></strong>';
         }
     }
 
-    /*private function populatePathColumn(){
-        if ( 'leadpages_post_path' == $column ) {
-            if ( $is_front_page ) {
+    private function populatePathColumn($column, $id){
+        $path = LeadPagesPostTypeModel::getMetaPagePath($id);
+        if ( $this->postTypeName.'_path' == $column ) {
+
+            if ( LeadpageType::is_front_page($id) ) {
                 $url = site_url() . '/';
                 echo '<a href="' . $url . '" target="_blank">' . $url . '</a>';
-            } elseif ( $is_nf_page ) {
+            } elseif ( LeadpageType::is_nf_page($id) ) {
                 $characters   = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
                 $randomString = '';
                 $length       = 10;
@@ -107,19 +111,38 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
                 if ( $path == '' ) {
                     echo '<strong style="color:#ff3300">Missing path!</strong> <i>Page is not active</i>';
                 } else {
-                    $url = site_url() . '/' . $path;
+                    $url = $path;
                     echo '<a href="' . $url . '" target="_blank">' . $url . '</a>';
                 }
             }
         }
-    }*/
+    }
 
+    private function populateTypeColumn($column, $id){
 
+        if ( $this->postTypeName.'_type' == $column ) {
+            $type    = LeadPagesPostTypeModel::getMetaPageType( $id );
+            switch($type){
+                case 'lp':
+                    echo 'Normal';
+                    break;
+                case 'fp':
+                    echo 'Homepage';
+                    break;
+                case 'wg':
+                    echo 'Welcome Gate';
+                    break;
+                case 'nf':
+                    echo '404 Page';
+                    break;
+            }
+        }
+    }
 
     public function addColumns()
     {
         add_filter( 'manage_edit-'.$this->postTypeName.'_columns', array( &$this, 'defineColumns' ) );
-        add_action( 'manage_posts_custom_column', array( &$this, 'populateColumns' ) );
+        add_action( 'manage_pages_custom_column', array( $this, 'populateColumns' ) );
 
     }
 

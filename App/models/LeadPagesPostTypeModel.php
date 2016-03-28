@@ -72,4 +72,12 @@ class LeadPagesPostTypeModel
             return $meta[0];
         }
     }
+    public static function getMetaPagePath($post_id){
+        $meta = get_post_meta($post_id, 'leadpages_slug');
+        if(sizeof($meta) == 0) {
+            return false;
+        }else{
+            return $meta[0];
+        }
+    }
 }
