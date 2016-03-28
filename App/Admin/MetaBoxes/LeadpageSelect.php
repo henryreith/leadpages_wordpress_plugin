@@ -4,6 +4,7 @@
 namespace Leadpages\admin\MetaBoxes;
 
 use TheLoop\Contracts\MetaBox;
+use Leadpages\models\LeadPagesPostTypeModel;
 use TheLoop\ServiceContainer\ServiceContainerTrait;
 use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
 
@@ -26,12 +27,12 @@ class LeadpageSelect extends LeadpagesPostType implements MetaBox
         add_meta_box("leadpage-select", "Select Leadpage ", array($this, 'callback'), $this->postTypeName, "normal", "high", null);
     }
 
-    public function callBack($object, $box)
+    public function callBack($post, $box)
     {
         ?>
             <select name="leadpages_my_selected_page" id="leadpages_my_selected_page">
                 <option value="none">Select...</option>
-                <?= $this->generateSelectList(); ?>
+                <?= $this->generateSelectList($post); ?>
             </select>
         <?php
     }
@@ -42,12 +43,12 @@ class LeadpageSelect extends LeadpagesPostType implements MetaBox
         add_action('add_meta_boxes', array($this, 'defineMetaBox'));
     }
 
-    private function generateSelectList(){
-
+    private function generateSelectList($post){
+        $currentPage = LeadPagesPostTypeModel::getMetaPageId($post->ID);
         $items = $this->ioc['pagesApi']->getAllUserPages();
         $optionString = '';
         foreach($items['_items'] as $page){
-            $optionString .= "<option value=\"{$page['id']}\">{$page['name']}</option>";
+            $optionString .= "<option value=\"{$page['id']}\" ". ($currentPage == $page['id'] ? 'selected="selected"' : '')." >{$page['name']}</option>";
         }
         return $optionString;
     }

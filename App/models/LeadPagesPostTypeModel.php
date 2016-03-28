@@ -4,13 +4,10 @@
 namespace Leadpages\models;
 
 use Leadpages\helpers\IsLeadPage;
-use Leadpages\helpers\ErrorHandlers;
-use Leadpages\admin\Services\LeadpagesPagesApi;
+use Leadpages\Admin\Providers\LeadpagesPagesApi;
 
 class LeadPagesPostTypeModel
 {
-    use ErrorHandlers;
-
     protected $html;
     /**
      * @var
@@ -25,7 +22,6 @@ class LeadPagesPostTypeModel
 
     function saveLeadPageMeta( $post_id, $post)
     {
-        $this->saveLeadPageErrorCheck();
         // check autosave
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return $post_id;
@@ -43,17 +39,37 @@ class LeadPagesPostTypeModel
         $permalink = get_permalink($post_id);
         update_post_meta( $post_id, 'leadpages_slug', $permalink );
         update_post_meta( $post_id, 'leadpages_page_id', $this->LeadPageId);
+        update_post_meta($post_id, 'leadpages_post_type', sanitize_text_field($_POST['leadpages-post-type']));
         //TODO add in split test when its avaiable
     }
 
     public function getLeadPageHtml(){
-        $this->LeadPageId = sanitize_text_field($_POST['leadpages_my_selected_page']);
-        $html = $this->PagesApi->downloadPageHtml($this->LeadPageId);
-        return $html;
+        if(isset($_POST['leadpages_my_selected_page'])) {
+            $this->LeadPageId = sanitize_text_field($_POST['leadpages_my_selected_page']);
+            $html             = $this->PagesApi->downloadPageHtml($this->LeadPageId);
+            return $html;
+        }
     }
 
     public function saveMeta(){
-        add_action( 'save_post', array($this, 'saveLeadPageMeta'), 10, 2 );
+        add_action( 'wp_insert_post', array($this, 'saveLeadPageMeta'), 10, 2 );
     }
 
+    public static function getMetaPageType($post_id){
+        $meta = get_post_meta($post_id, 'leadpages_post_type');
+        if(sizeof($meta) == 0) {
+            return false;
+        }else{
+            return $meta[0];
+        }
+    }
+
+    public static function getMetaPageId($post_id){
+        $meta = get_post_meta($post_id, 'leadpages_page_id');
+        if(sizeof($meta) == 0) {
+            return false;
+        }else{
+            return $meta[0];
+        }
+    }
 }
