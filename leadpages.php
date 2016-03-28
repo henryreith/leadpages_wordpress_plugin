@@ -14,11 +14,8 @@ License: GPL2
  * Load plugin textdomain.
  */
 
-load_plugin_textdomain( 'leadpages', false, plugin_basename( dirname( __FILE__ ) ) . '/App/Languages' );
-
-use Leadpages\Bootstrap\AdminBootstrap;
-use Leadpages\Admin\Providers\AdminAuth;
-use Leadpages\Admin\Providers\LeadpagesLoginApi;
+load_plugin_textdomain('leadpages', false,
+  plugin_basename(dirname(__FILE__)) . '/App/Languages');
 
 /*
   |--------------------------------------------------------------------------
@@ -43,7 +40,7 @@ require('App/Config/App.php');
   |
   */
 
-require $config['basePath'].'Framework/ServiceContainer/ServiceContainer.php';
+require $config['basePath'] . 'Framework/ServiceContainer/ServiceContainer.php';
 
 /*
   |--------------------------------------------------------------------------
@@ -54,6 +51,9 @@ require $config['basePath'].'Framework/ServiceContainer/ServiceContainer.php';
   |
   */
 
-
-$adminBootstrap = $ioc['adminBootStrap'];
-$frontBootstrap = $ioc['frontBootStrap'];
+if (is_admin() || is_network_admin()) {
+    $adminBootstrap = $ioc['adminBootStrap'];
+}
+if (!is_admin() && !is_network_admin()) {
+    $frontBootstrap = $ioc['frontBootStrap'];
+}

@@ -2,6 +2,7 @@
 
 namespace Leadpages\Bootstrap;
 
+use Leadpages\models\LeadPagesPostTypeModel;
 use TheLoop\Contracts\HttpClient;
 use Leadpages\Admin\Factories\Metaboxes;
 use Leadpages\Admin\Providers\AdminAuth;
@@ -30,18 +31,21 @@ class AdminBootstrap
      */
     private $auth;
 
+    private $ioc;
+
     public function __construct(HttpClient $httpClient, LeadpagesLoginApi $leadpagesLoginApi, AdminAuth $auth)
     {
 
         $this->httpClient = $httpClient;
         $this->leadpagesLoginApi = $leadpagesLoginApi;
         $this->auth = $auth;
+        $this->ioc = $this->getContainer();
         $this->initAdmin();
     }
 
     public function initAdmin()
     {
-
+        global $post_id;
         /**
          * set http time out to 20 seconds as sometimes our request take
          * a couple seconds longer than the default 5 seconds
@@ -57,6 +61,7 @@ class AdminBootstrap
             Metaboxes::create(LeadpageTypeMetaBox::class);
             Metaboxes::create(LeadpageSelect::class);
         }
+        $this->saveLeadPage();
     }
 
     //todo this needs refactored as it probably shouldn't be here plus hard
@@ -65,6 +70,9 @@ class AdminBootstrap
 
         $LeadpagesModel = new LeadPagesPostTypeModel($this->ioc['pagesApi']);
         $LeadpagesModel->saveMeta();
+    }
+
+    protected function getLeadPageMeta(){
 
     }
 }

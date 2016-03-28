@@ -6,7 +6,7 @@ namespace Leadpages\Admin\CustomPostTypes;
 use TheLoop\Contracts\CustomPostType;
 use TheLoop\Contracts\CustomPostTypeColumns;
 
-class LeadpagesPostType implements CustomPostType, CustomPostTypeColumns
+class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
 {
 
     private $labels = array();
@@ -48,8 +48,8 @@ class LeadpagesPostType implements CustomPostType, CustomPostTypeColumns
             'slug'       => '/'
           ),
           'can_export'           => false,
-          'hierarchical'         => false,
-          'has_archive'          => false,
+          'hierarchical'         => true,
+          'has_archive'          => true,
           'supports'             => array(),
         );
 
