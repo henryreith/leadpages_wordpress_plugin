@@ -52,7 +52,7 @@ class LeadPagesPostTypeModel
     }
 
     public function saveMeta(){
-        add_action( 'wp_insert_post', array($this, 'saveLeadPageMeta'), 10, 2 );
+        add_action( 'edit_post', array($this, 'saveLeadPageMeta'), 10, 2 );
     }
 
     public static function getMetaPageType($post_id){
