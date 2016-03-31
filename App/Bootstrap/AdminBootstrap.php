@@ -45,13 +45,12 @@ class AdminBootstrap
 
     public function initAdmin()
     {
-        global $post_id;
         /**
          * set http time out to 20 seconds as sometimes our request take
          * a couple seconds longer than the default 5 seconds
          */
         apply_filters('http_request_timeout', 20);
-
+        add_action( 'admin_enqueue_scripts', array($this, 'loadJS') );
         $this->auth->login();
 
         if(!$this->auth->isLoggedIn()){
@@ -61,18 +60,25 @@ class AdminBootstrap
             Metaboxes::create(LeadpageTypeMetaBox::class);
             Metaboxes::create(LeadpageSelect::class);
         }
+
         $this->saveLeadPage();
+
     }
 
     //todo this needs refactored as it probably shouldn't be here plus hard
     //depdency on Model
     protected function saveLeadPage(){
 
-        $LeadpagesModel = new LeadPagesPostTypeModel($this->ioc['pagesApi']);
-        $LeadpagesModel->saveMeta();
+        $LeadpagesModel = new LeadPagesPostTypeModel($this->ioc['pagesApi'], $this->ioc['leadpagesPostType']);
+        $LeadpagesModel->save();
     }
 
-    protected function getLeadPageMeta(){
-
+    public function loadJS(){
+        global $config;
+        wp_enqueue_script('LeadpagesPostType', $config['admin_assets'].'/js/LeadpagesPostType.js', array('jquery'));
+        wp_localize_script( 'LeadpagesPostType', 'ajax_object', array(
+          'ajax_url' => admin_url( 'admin-ajax.php' ),
+          'id'       => get_the_ID()
+        ));
     }
 }

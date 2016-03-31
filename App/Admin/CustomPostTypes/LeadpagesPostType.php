@@ -4,8 +4,8 @@
 namespace Leadpages\Admin\CustomPostTypes;
 
 use Leadpages\Helpers\LeadpageType;
-use Leadpages\models\LeadPagesPostTypeModel;
 use TheLoop\Contracts\CustomPostType;
+use Leadpages\models\LeadPagesPostTypeModel;
 use TheLoop\Contracts\CustomPostTypeColumns;
 
 class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
@@ -41,7 +41,7 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
           'public'               => true,
           'publicly_queryable'   => true,
           'show_ui'              => true,
-          'query_var'            => true,
+          'query_var'            => false,
           'menu_icon'            => $config['admin_images'].'/menu-icon.png',
           'capability_type'      => 'page',
           'menu_position'        => 10000,
@@ -49,6 +49,9 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
           'hierarchical'         => true,
           'has_archive'          => true,
           'supports'             => array(),
+          'rewrite'         => array(
+            'with_front'	=> true
+          ),
         );
 
         register_post_type( $this->postTypeName, $this->args );
@@ -57,6 +60,41 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
 
     }
 
+    /**
+     * Remove the slug from published post permalinks. Only affect our custom post type, though.
+     */
+    public function remove_cpt_slug( $post_link, $post, $leavename ) {
+
+        if ( $this->postTypeName != $post->post_type || 'publish' != $post->post_status ) {
+            return $post_link;
+        }
+
+        $post_link = str_replace( '/' . $post->post_type . '/', '/', $post_link );
+
+        return $post_link;
+    }
+
+    /**
+     * Have WordPress match postname to any of our public post types (post, page, race)
+     * All of our public post types can have /post-name/ as the slug, so they better be unique across all posts
+     * By default, core only accounts for posts and pages where the slug is /post-name/
+     */
+    public function parse_request_trick( $query ) {
+
+        // Only noop the main query
+        if ( ! $query->is_main_query() )
+            return;
+
+        // Only noop our very specific rewrite rule match
+        if ( 2 != count( $query->query ) || ! isset( $query->query['page'] ) ) {
+            return;
+        }
+
+        // 'name' will be set if post permalinks are just post_name, otherwise the page rule will match
+        if ( ! empty( $query->query['name'] ) ) {
+            $query->set( 'post_type', array( 'post', 'page', $this->postTypeName ) );
+        }
+    }
 
     public function defineColumns($columns)
     {
@@ -127,13 +165,19 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
                     echo 'Normal';
                     break;
                 case 'fp':
+                    $activePage = LeadpageType::get_front_lead_page($id);
                     echo 'Homepage';
+                    echo ($activePage ==  $id ? '<span style="font-style: italic; color:red;">'.__(' Active', 'leadpages').'</span>' : '');
                     break;
                 case 'wg':
+                    $activePage = LeadpageType::get_wg_lead_page($id);
                     echo 'Welcome Gate';
+                    echo ($activePage ==  $id ? '<span style="font-style: italic; color:red;">'.__(' Active', 'leadpages').'</span>' : '');
                     break;
                 case 'nf':
+                    $activePage = LeadpageType::get_404_lead_page($id);
                     echo '404 Page';
+                    echo ($activePage ==  $id ? '<span style="font-style: italic; color:red;">'.__(' Active', 'leadpages').'</span>' : '');
                     break;
             }
         }
@@ -146,10 +190,86 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
 
     }
 
+    public function checkErrorDisplay(){
+
+        $screen = get_current_screen();
+        if($screen->id != 'leadpages_post'){
+            return;
+        }
+
+        global $post;
+        $id = $post->ID;
+
+        $pageType = get_post_meta($id, 'leadpages_post_type', true);
+
+        if(!$pageType){
+            return;
+        }
+        switch($pageType){
+            case 'fp':
+                $activePage = LeadpageType::get_front_lead_page();
+               if($activePage && $activePage !== $id){?>
+                   <div class="error">
+                       <p><?php echo 'Post #'. $activePage .' is already a Home Page. Please remove that page to create a new one.'; ?></p>
+                   </div>
+                 <?php
+               }
+                break;
+            case 'wg':
+                $activePage = LeadpageType::get_wg_lead_page();
+                if($activePage && $activePage !== $id) {
+                    ?>
+                    <div class="error">
+                        <p><?php echo 'Post #' . $activePage . ' is already a Welcome Gate&trade;. Please remove that page to create a new one.'; ?></p>
+                    </div>
+                    <?php
+                }
+                break;
+            case 'nf':
+                $activePage = LeadpageType::get_404_lead_page();
+                if($activePage && $activePage !== $id){ ?>
+                <div class="error">
+                    <p><?php echo 'Post #' . $activePage . ' is already a 404 page. Please remove that page to create a new one.'; ?></p>
+                </div>
+                <?php
+            }
+                break;
+        }
+
+    }
+
+    public function checkError($pageType, $id){
+
+        switch($pageType){
+            case 'fp':
+                $activePage = LeadpageType::get_front_lead_page();
+
+                if($activePage && $activePage !== $id){
+                    return 'error';
+                }
+                break;
+            case 'wg':
+                $activePage = LeadpageType::get_wg_lead_page();
+                if($activePage && $activePage !== $id) {
+                    return 'error';
+                }
+                break;
+            case 'nf':
+                $activePage = LeadpageType::get_404_lead_page();
+                if($activePage && $activePage !== $id){
+                    return 'error';
+                }
+                break;
+        }
+
+    }
+
     public function buildPostType()
     {
         $this->defineLabels();
         add_action('init', array($this, 'registerPostType'));
+        add_filter( 'post_type_link', array($this,'remove_cpt_slug'), 10, 3 );
+        add_action( 'admin_notices', array($this, 'checkErrorDisplay') );
         $this->addColumns();
     }
 }

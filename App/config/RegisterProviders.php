@@ -1,13 +1,16 @@
 <?php
 
+use Leadpages\Front\Providers\NF;
 use Leadpages\Helpers\Security;
 use Leadpages\Bootstrap\AdminBootstrap;
+use Leadpages\Bootstrap\FrontBootstrap;
 use Leadpages\Admin\Providers\AdminAuth;
+use Leadpages\Front\Providers\WelcomeGate;
 use TheLoop\Providers\WordPressHttpClient;
 use TheLoop\ServiceContainer\ServiceContainer;
 use Leadpages\Admin\Providers\LeadpagesLoginApi;
 use Leadpages\Admin\Providers\LeadpagesPagesApi;
-use Leadpages\Bootstrap\FrontBootstrap;
+use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
 
 
 $container = new ServiceContainer();
@@ -51,12 +54,24 @@ $ioc['pagesApi'] = function($c){
     return new LeadpagesPagesApi($c['httpClient']);
 };
 
+$ioc['leadpagesPostType'] = function($c){
+  return new LeadpagesPostType();
+};
+
+
+$ioc['welcomeGate'] = function($c){
+    return new WelcomeGate();
+};
+
+$ioc['nfPage'] = function($c){
+    return new NF();
+};
 
 /**
  * Front Bootstrap
  */
 $ioc['frontBootStrap'] = $ioc->factory(function($c){
-    return new FrontBootstrap($c['pagesApi']);
+    return new FrontBootstrap($c['pagesApi'], $c['leadpagesPostType']);
 });
 
 /**
