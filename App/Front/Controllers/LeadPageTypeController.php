@@ -37,7 +37,7 @@ class LeadPageTypeController
                 $pageID = $pageID[0];
                 //TODO check if is split tested and if so dont use cache version
                 //non cache version
-                $html = $this->ioc['pagesApi']->downloadPageHtml($pageID);
+                $html = $this->ioc['leadpagesModel']->getHtml($pageID);
                 echo $html; die();
             }
         }
@@ -61,13 +61,12 @@ class LeadPageTypeController
     }
     public function normalPage($post)
     {
-
         if($post->post_type == 'leadpages_post'){
             $pageID = get_post_meta($post->ID, 'leadpages_page_id');
             $pageID = $pageID[0];
             //TODO check if is split tested and if so dont use cache version
             //non cache version
-            $html = $this->ioc['pagesApi']->downloadPageHtml($pageID);
+            $html = $this->ioc['leadpagesModel']->getHtml($pageID);
             echo $html; die();
 
             //cached version
@@ -79,6 +78,7 @@ class LeadPageTypeController
 
     public function initPage()
     {
+
         $this->displayNFPage();
         $this->displayWelcomeGate();
         $this->isFrontPage();

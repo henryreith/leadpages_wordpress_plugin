@@ -29,11 +29,16 @@ class LeadpageSelect extends LeadpagesPostType implements MetaBox
 
     public function callBack($post, $box)
     {
+        $useCache = LeadPagesPostTypeModel::getMetaCache($post->ID);
         ?>
             <select name="leadpages_my_selected_page" id="leadpages_my_selected_page">
                 <option value="none">Select...</option>
                 <?= $this->generateSelectList($post); ?>
             </select>
+        <br />
+        <br />
+        <label for="cache_this">Cache this page?</label>
+        <input type="checkbox" name="cache_this" value="true" <?php echo ($useCache == 'true' ? 'checked="checked"': ''); ?> >
         <?php
     }
 

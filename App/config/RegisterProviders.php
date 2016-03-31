@@ -1,12 +1,13 @@
 <?php
 
-use Leadpages\Front\Providers\NF;
 use Leadpages\Helpers\Security;
+use Leadpages\Front\Providers\NF;
 use Leadpages\Bootstrap\AdminBootstrap;
 use Leadpages\Bootstrap\FrontBootstrap;
 use Leadpages\Admin\Providers\AdminAuth;
 use Leadpages\Front\Providers\WelcomeGate;
 use TheLoop\Providers\WordPressHttpClient;
+use Leadpages\models\LeadPagesPostTypeModel;
 use TheLoop\ServiceContainer\ServiceContainer;
 use Leadpages\Admin\Providers\LeadpagesLoginApi;
 use Leadpages\Admin\Providers\LeadpagesPagesApi;
@@ -58,6 +59,10 @@ $ioc['leadpagesPostType'] = function($c){
   return new LeadpagesPostType();
 };
 
+
+$ioc['leadpagesModel'] = function($c){
+    return new LeadPagesPostTypeModel($c['pagesApi'], $c['leadpagesPostType']);
+};
 
 $ioc['welcomeGate'] = function($c){
     return new WelcomeGate();

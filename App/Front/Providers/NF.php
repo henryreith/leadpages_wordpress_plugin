@@ -29,9 +29,7 @@ class NF
     {
         if($this->nfPageExists() && is_404()){
             $pageID = get_post_meta($this->nfPageId, 'leadpages_page_id', true);
-            //TODO check if is split tested and if so dont use cache version
-            //non cache version
-            $html = $ioc['pagesApi']->downloadPageHtml($pageID);
+            $html = $ioc['leadpagesModel']->getHtml($this->nfPageId);
             status_header( '404' );
             echo $html; die();
         }

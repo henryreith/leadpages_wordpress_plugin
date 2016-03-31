@@ -34,10 +34,18 @@ class LeadPagesPostTypeModel
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return $post_id;
         }
-        //echo '<pre>';print_r($post);die();
+
+        //echo '<pre>';print_r($_POST);die();
 
         // check if this is our type
         IsLeadPage::checkByPost($post, $post_id);
+
+        //set cache
+        if(isset($_POST['cache_this'])){
+            update_post_meta($post_id, 'cache_page', 'true');
+        }else{
+            update_post_meta($post_id, 'cache_page', 'false');
+        }
 
         //save slug for backwards compatibiltiy
         $permalink = get_permalink($post_id);
@@ -45,11 +53,13 @@ class LeadPagesPostTypeModel
 
         //check to see if this page type already exists
         //save html for page
-        $html = $this->getLeadPageHtml();
-        update_post_meta($post_id, 'leadpages_my_selected_page', $html);
+        /*$html = $this->getLeadPageHtml();
+        update_post_meta($post_id, 'leadpages_my_selected_page', $html);*/
 
         //save post name in meta for backwards compatibility
         update_post_meta($post_id, 'leadpages_name', $post->post_name);
+
+        $this->LeadPageId = sanitize_text_field($_POST['leadpages_my_selected_page']);
 
         update_post_meta($post_id, 'leadpages_page_id', $this->LeadPageId);
 
@@ -183,5 +193,46 @@ class LeadPagesPostTypeModel
         } else {
             return $meta[0];
         }
+    }
+
+    public static function getMetaCache($post_id){
+        $meta = get_post_meta($post_id, 'cache_page');
+        if (sizeof($meta) == 0) {
+            return false;
+        } else {
+            return $meta[0];
+        }
+    }
+
+    public function setCacheForPage($pageId, $html){
+        set_transient('leadpages_page_html_cache_'.$pageId, $html, 600);
+    }
+
+    public function getCacheForPage($pageId){
+       return get_transient('leadpages_page_html_cache_'.$pageId);
+    }
+
+    public function getHtml($pageId){
+        //check to see if we need to return cached version
+        $LeadpageId = get_post_meta($pageId, 'leadpages_page_id', true);
+        $getCache = get_post_meta($pageId, 'cache_page', true);
+        if($getCache == 'true'){
+            //check if cache exist
+            $currentCache = $this->getCacheForPage($LeadpageId);
+            if($currentCache){
+                echo $currentCache;die();
+            }else{
+                //if no cache get the html then set the cache for next time
+                //then return html
+                $html = $this->PagesApi->downloadPageHtml($LeadpageId);
+                $this->setCacheForPage($LeadpageId, $html);
+                echo $html; die();
+            }
+        }
+
+        //if we don't fall into cache just echo $html
+        $html = $this->PagesApi->downloadPageHtml($LeadpageId);
+        echo $html; die();
+
     }
 }
