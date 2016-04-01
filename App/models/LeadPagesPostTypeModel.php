@@ -39,8 +39,7 @@ class LeadPagesPostTypeModel
         IsLeadPage::checkByPost($post, $post_id);
 
         if($post->post_status = "trash" && !isset($_POST['post_status'])){
-            $postType = $this->getMetaPageType($post_id);
-            $this->removePageType($post_id, $postType);
+            $this->deletePost($post_id);
             return $post_id;
         }
 
@@ -108,7 +107,6 @@ class LeadPagesPostTypeModel
     {
         $post = (object)$post;
 
-
         if ($post->post_status == 'trash' || $post->post_status == 'auto-draft') {
             return;
         }
@@ -123,6 +121,23 @@ class LeadPagesPostTypeModel
 
     }
 
+
+    public function deletePost($post_id){
+        global $wpdb;
+        $postType = $this->getMetaPageType($post_id);
+        $tablePrefix =  $wpdb->base_prefix;
+        $wpdb->delete( $tablePrefix.'postmeta', array( 'post_id' => $post_id ) );
+        if ($postType == 'fp') {
+            delete_option('leadpages_front_page_id');
+        }
+        if ($postType ==  'wg') {
+            delete_option('leadpages_wg_page_id');
+        }
+        if ($postType ==  'nf') {
+            delete_option('leadpages_404_page_id');
+        }
+    }
+
     /**
      * get the id of every special page type, then check the post id being saved
      * and if it matches the id of one of the page type but isnt being saved
@@ -133,16 +148,10 @@ class LeadPagesPostTypeModel
      */
     public function removePageType($post_id, $postType)
     {
-        global $wpdb;
-        if(!$wpdb){
-            return;
-        }
-       // wp_delete_post( $post_id, false );
-        $tablePrefix =  $wpdb->base_prefix;
-        $wpdb->delete( $tablePrefix.'postmeta', array( 'post_id' => $post_id ) );
         $frontpage   = LeadpageType::get_front_lead_page();
         $welcomeGate = LeadpageType::get_wg_lead_page();
         $nf          = LeadpageType::get_404_lead_page();
+
 
         if ($post_id == $frontpage && $postType != 'fp') {
             delete_option('leadpages_front_page_id');
@@ -166,8 +175,8 @@ class LeadPagesPostTypeModel
 
     public function save()
     {
-        //add_filter('wp_insert_post_data', array($this, 'checkPostTypes'), 10, 2);
-        add_action('edit_post', array($this, 'saveLeadPageMeta'), 10, 2);
+        add_action('edit_post', array($this, 'saveLeadPageMeta'), 999, 2);
+
     }
 
     public static function getMetaPageType($post_id)
