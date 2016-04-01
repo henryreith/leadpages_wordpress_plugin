@@ -16,64 +16,110 @@ class LeadpagesLoginPage implements SettingsPage
     public function displayCallback(){
 
         ?>
-        <link href='//fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
-        <link href='//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="https://my.leadpagestest.net/static/lp993/bootstrap/lp3/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="https://my.leadpagestest.net/static/lp993/bootstrap/lp3/css/font-awesome.min.css" />
-        <link rel="stylesheet" href="https://my.leadpagestest.net/static/lp993/build/css/lp.css" />
-        <link rel="stylesheet" href="https://my.leadpagestest.net/static/lp993/min/jquery-ui-1.9.2.custom.min.css" type="text/css" />
-        <link rel="stylesheet" href="https://my.leadpagestest.net/static/lp993/min/font-awesome.min.css" />
-        <div id="login-wrapper" style="margin-left:-10px;">
-            <div class="container">
-                <div class="row login-header no-gutter">
-                    <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 no-gutter">
-                        <a class="btn btn-secondary pull-right" href="https://www.leadpages.net/pricing/">Get LeadPages&trade;</a>
-                        <img alt="logo" src="https://my.leadpagestest.net/static/lp993/img/lp-login-logo.png">
+        <link rel="stylesheet" href="https://4-0-2-dot-leadpage-test.appspot.com/static/lp10016456456456/bootstrap/lp3/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://4-0-2-dot-leadpage-test.appspot.com/static/lp10016456456456/build/css/lp.css" />
+        <link rel="stylesheet" href="https://4-0-2-dot-leadpage-test.appspot.com/static/lp10016456456456/min/jquery-ui-1.9.2.custom.min.css" type="text/css" />
+
+        <div class="lego-login__body" style="margin-left:-20px !important;">
+            <div class="lego-login lego-base">
+
+                <div class="lego-login__left">
+
+                    <div class="lp-login-asset" style="display:block !important;">
+                        <p class="intro">Introducing</p>
+                        <p class="heading">Center by Leadpages:<br>
+                            A Command Center For Your Digital Marketing</p>
+                        <hr>
+                        <p class="light-text sub-heading">Automate tasks across the tools you want use. Save time. Eliminate hassle. Grow your business.</p>
+                        <a href="https://www.center.io/blog/" target="_blank">
+                            <button class="lego-btn">SEE HOW</button>
+                        </a>
+                        <img class="sidebar-logo" src="https://4-0-2-dot-leadpage-test.appspot.com/static/lp10016456456456/img/center/center_white_2x.png">
+                    </div>
+                    <div class="center-login-asset">
+                        <p class="heading">Use Leadpages for Your Next Campaign.</p>
+                        <hr>
+
+                        <p class="light-text sub-heading">Take the guesswork out of creating great looking landing pages that drive results.</p>
+
+                        <a href="http://leadpages.net" target="_blank">
+                            <button class="lego-btn">SEE HOW</button>
+                        </a>
                     </div>
                 </div>
 
+                <div class="lego-login__right" style="flex-grow:0; margin-left:auto; margin-right:auto;">
 
-                <div class="row">
-                    <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 login-box" id="login-form">
-                        <form novalidate="novalidate" class="form" name="login-form" method="post" action="admin-post.php">
-                            <fieldset>
-                                <h2 class="text-center">Login to Your Account</h2>
-                                <div class="col-md-12">
-                                    <div name="alert"></div>
-                                    <br>
+                    <!-- MOCK OBJECT FOR FLEXBOX HACK -->
+                    <div></div>
+                    <!-- END MOCK OBJECT -->
+                    <div>
+                        <img class="lp-logo center-login-asset" src="https://4-0-2-dot-leadpage-test.appspot.com/static/lp10016456456456/img/logos/center_logo_beta.svg" />
+
+                        <img class="lp-logo lp-login-asset" src="https://4-0-2-dot-leadpage-test.appspot.com/static/lp10016456456456/img/logos/logo_standard.svg" />
+                        <div id="login-form">
+                            <form novalidate="novalidate" class="form" name="login-form" method="post" action="admin-post.php">
+
+                                <br/>
+                                <!-- FORM FIELDS -->
+                                <div class="form__field-container">
+                                    <label class="form__label">Username</label>
+                                    <input class="required email form__field" type="email" name="username" placeholder="Email" required/>
                                 </div>
-                                <div class="form-group col-md-12">
-                                    <input type="email" required="" placeholder="Email" name="username" class="form-control required email" aria-required="true" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAALZJREFUOBFjYKAANDQ0rGWiQD9IqzgL0BQ3IKMXiB8AcSKQ/waIrYDsKUD8Fir2pKmpSf/fv3+zgPxfzMzMSbW1tbeBbAaQC+b+//9fB4h9gOwikCAQTAPyDYHYBciuBQkANfcB+WZAbPP37992kBgIUOoFBiZGRsYkIL4ExJvZ2NhAXmFgYmLKBPLPAfFuFhaWJpAYEBQC+SeA+BDQC5UQIQpJYFgdodQLLyh0w6j20RCgUggAAEREPpKMfaEsAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
+                                <div class="form__field-container">
+                                    <label class="form__label">Password</label>
+                                    <input class="required form__field" type="password" name="password" placeholder="Password" />
                                     <span class="form-control-feedback"></span>
                                 </div>
-                                <div class="form-group col-md-12">
-                                    <input type="password" placeholder="Password" name="password" class="form-control required" aria-required="true" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAALZJREFUOBFjYKAANDQ0rGWiQD9IqzgL0BQ3IKMXiB8AcSKQ/waIrYDsKUD8Fir2pKmpSf/fv3+zgPxfzMzMSbW1tbeBbAaQC+b+//9fB4h9gOwikCAQTAPyDYHYBciuBQkANfcB+WZAbPP37992kBgIUOoFBiZGRsYkIL4ExJvZ2NhAXmFgYmLKBPLPAfFuFhaWJpAYEBQC+SeA+BDQC5UQIQpJYFgdodQLLyh0w6j20RCgUggAAEREPpKMfaEsAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
-                                    <span class="form-control-feedback"></span>
+                                <!-- both of these need to be added to make login form work in wordpress -->
+                                <input type="hidden" name="action" value="leadpages_login_form" />
+                                <?php wp_nonce_field( 'leadpages_login' ); ?>
+
+                                <!-- FORM FIELDS END -->
+
+                                <!-- SIGN IN CONTAINER -->
+                                <div class="lego-login__button-container">
+                                    <button name="form-submit" class="lego-btn lego-btn--icon-right" type="submit" id="lego-login-submit" data-lp-icon="&#xe204;" data-loading-text="Logging in &hellip;">Sign In</button>
                                 </div>
-                            </fieldset>
-                            <div class="col-md-12">
-                                <input type="submit" value="Login" class="btn btn-large btn-primary btn-block" name="form-submit">
+                                <!-- SIGN IN END -->
+                                <hr/>
+
+                                <!-- GET LEADPAGES  -->
+                                <div class="lego-login__button-container">
+                                    <a href="#">Need an Account?</a>
+                                    <a href="http://www.leadpages.net/pricing?utm_source=testing_page&utm_medium=link&utm_campaign=test_from_engineering" class="lego-btn lego-btn--outlined" target="_blank">Get Leadpages&reg;</a>
+                                </div>
+
+                            </form>
+                            <!-- GET LEADPAGES END -->
+                        </div>
+                    </div>
+                    <div class="lego-login__message">
+                        <div class="lp-login-asset">
+                            <img class="img-responsive" src="https://4-0-2-dot-leadpage-test.appspot.com/static/lp10016456456456/img/login/sidebar_center-ad@thumb.jpg"/>
+                            <div>
+                        <span>Introducing Center by Leadpages:<br>
+                        A Command Center For Your Digital Marketing</span>
+                                <p>Automate tasks across the tools you want to use. Save time. Eliminate hassles. Grow your business.</p>
+                                <div class="see-how">
+                                    <a href="https://www.center.io/blog/" target="_blank" class="link link--alt">See How</a>
+                                </div>
                             </div>
-                            <input type="hidden" name="action" value="leadpages_login_form" />
-                            <?php wp_nonce_field( 'leadpages_login' ); ?>
-                        </form>
+                        </div>
                     </div>
-                </div>
 
 
-                <div class="footer-content text-center">
-                    <ul class="list-inline text-uppercase text-reduced nav-links">
-                        <li><a id="blog" target="_blank" href="http://blog.leadpages.net">Blog</a></li>
-                        <li><a id="getting-started" target="_blank" href="https://my.leadpages.net/getting-started/">Getting Started</a></li>
-                        <li><a id="support" href="https://my/leadpages.net/support/">Support</a></li>
-                        <li><a id="terms-of-service" href="http://www.leadpages.net/legal/">Terms of Service</a></li>
-                    </ul>
-            <span class="copy-block">
-                &copy; <?php echo date('Y'); ?> LeadPages.net. <a id="legal-info" class="hi" target="_blank" href="http://www.leadpages.net/legal/">Legal Information</a>
-            </span>
+                    <div class="lego-login__footer">
+                <span class="lp-login-asset copyright">&copy; 2010-2016 Avenue 81 Inc. d/b/a Leadpages, all rights reserved. <a href="http://www.leadpages.net/legal/" target="_blank">Terms of Service</a><br>
+Leadpages&reg;, Leadbox&reg;, Leadboxes&reg;, Leadlinks&reg;, Leaddigits&reg; are registered trademarks of Avenue 81 Inc. d/b/a Leadpages.<br></span>
+                        <span class="center-login-asset copyright">&copy; 2010-2016 Avenue 81 Inc., all rights reserved.<br> Center&reg; is a registered trademark of Avenue 81 Inc.</span>
+                    </div>
                 </div>
             </div>
         </div>
+        <script type="text/javascript" src="https://4-0-2-dot-leadpage-test.appspot.com/static/lp10016456456456/min/dist/jquery.js"></script>
+        <!-- LEADPAGES LOGIN PAGE -->
+
         <?php
     }
 
