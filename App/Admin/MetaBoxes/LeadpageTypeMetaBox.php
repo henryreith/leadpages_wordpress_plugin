@@ -11,7 +11,6 @@ class LeadpageTypeMetaBox extends LeadpagesPostType implements MetaBox {
 
     public function defineMetaBox(){
         add_meta_box("leadpage-type", "Select Page Type", array($this, 'callback'), $this->postTypeName, "normal", "high", null);
-        add_meta_box("leadpage-type", "Select Page Type", array($this, 'callback'), 'page', "normal", "high", null);
     }
 
     public function callBack($post, $box){
