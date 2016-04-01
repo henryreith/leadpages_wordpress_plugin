@@ -51,6 +51,7 @@ class AdminBootstrap
          */
         apply_filters('http_request_timeout', 20);
         add_action( 'admin_enqueue_scripts', array($this, 'loadJS') );
+
         $this->auth->login();
 
         if(!$this->auth->isLoggedIn()){
@@ -59,17 +60,17 @@ class AdminBootstrap
             CustomPostType::create(LeadpagesPostType::class);
             Metaboxes::create(LeadpageTypeMetaBox::class);
             Metaboxes::create(LeadpageSelect::class);
+            $this->saveLeadPage();
         }
 
-        $this->saveLeadPage();
+
+
 
     }
 
-    //todo this needs refactored as it probably shouldn't be here plus hard
-    //depdency on Model
     protected function saveLeadPage(){
 
-        $LeadpagesModel = new LeadPagesPostTypeModel($this->ioc['pagesApi'], $this->ioc['leadpagesPostType']);
+        $LeadpagesModel = $this->ioc['leadpagesModel'];
         $LeadpagesModel->save();
     }
 
