@@ -33,11 +33,7 @@ class LeadPageTypeController
 
             //if $post is > 0 that means one exists and we need to display it
             if ($post > 0){
-                $pageID = get_post_meta($post, 'leadpages_page_id');
-                $pageID = $pageID[0];
-                //TODO check if is split tested and if so dont use cache version
-                //non cache version
-                $html = $this->ioc['leadpagesModel']->getHtml($pageID);
+                $html = $this->ioc['leadpagesModel']->getHtml($post);
                 echo $html; die();
             }
         }
@@ -66,13 +62,8 @@ class LeadPageTypeController
             $pageID = $pageID[0];
             //TODO check if is split tested and if so dont use cache version
             //non cache version
-            $html = $this->ioc['leadpagesModel']->getHtml($pageID);
+            $html = $this->ioc['leadpagesModel']->getHtml($post->ID);
             echo $html; die();
-
-            //cached version
-            //$html = get_post_meta($obj->ID, 'leadpages_my_selected_page');
-            //return $html[0];
-
         }
     }
 

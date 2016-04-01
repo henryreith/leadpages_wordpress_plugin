@@ -50,7 +50,8 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
           'has_archive'          => true,
           'supports'             => array(),
           'rewrite'         => array(
-            'with_front'	=> true
+            'with_front'	=> true,
+            'slug'          => ''
           ),
         );
 
@@ -269,6 +270,7 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
         $this->defineLabels();
         add_action('init', array($this, 'registerPostType'));
         add_filter( 'post_type_link', array($this,'remove_cpt_slug'), 10, 3 );
+        add_action( 'pre_get_posts', array($this, 'parse_request_trick' ));
         add_action( 'admin_notices', array($this, 'checkErrorDisplay') );
         $this->addColumns();
     }

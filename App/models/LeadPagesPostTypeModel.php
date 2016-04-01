@@ -35,10 +35,21 @@ class LeadPagesPostTypeModel
             return $post_id;
         }
 
-        //echo '<pre>';print_r($_POST);die();
-
         // check if this is our type
         IsLeadPage::checkByPost($post, $post_id);
+
+        if($post->post_status = "trash" && !isset($_POST['post_status'])){
+            $postType = $this->getMetaPageType($post_id);
+            $this->removePageType($post_id, $postType);
+            return $post_id;
+        }
+
+        //setup all vars for inserting or deleting posts
+        $permalink = get_permalink($post_id);
+        $postType = sanitize_text_field($_POST['leadpages-post-type']);
+        $this->LeadPageId = sanitize_text_field($_POST['leadpages_my_selected_page']);
+
+
 
         //set cache
         if(isset($_POST['cache_this'])){
@@ -47,23 +58,13 @@ class LeadPagesPostTypeModel
             update_post_meta($post_id, 'cache_page', 'false');
         }
 
-        //save slug for backwards compatibiltiy
-        $permalink = get_permalink($post_id);
         update_post_meta($post_id, 'leadpages_slug', $permalink);
-
-        //check to see if this page type already exists
-        //save html for page
-        /*$html = $this->getLeadPageHtml();
-        update_post_meta($post_id, 'leadpages_my_selected_page', $html);*/
 
         //save post name in meta for backwards compatibility
         update_post_meta($post_id, 'leadpages_name', $post->post_name);
 
-        $this->LeadPageId = sanitize_text_field($_POST['leadpages_my_selected_page']);
-
         update_post_meta($post_id, 'leadpages_page_id', $this->LeadPageId);
 
-        $postType = sanitize_text_field($_POST['leadpages-post-type']);
         update_post_meta($post_id, 'leadpages_post_type', $postType);
         //TODO add in split test when its avaiable
 
@@ -79,8 +80,8 @@ class LeadPagesPostTypeModel
         /**
          * only update these items if the post is actually being published
          */
-
-        if ($post->post_status == 'publish') {
+        //echo '<pre>'; print_r($_POST);die();
+        if ($_POST['post_status'] == 'publish') {
             $this->removePageType($post_id, $postType);
             $this->saveLeadPageOptions($post_id, $postType);
         }
@@ -90,9 +91,6 @@ class LeadPagesPostTypeModel
     public function saveLeadPageOptions($post_id, $postType)
     {
         switch ($postType) {
-            case 'lp':
-                //echo 'Normal';
-                break;
             case 'fp':
                 LeadpageType::set_front_lead_page($post_id);
                 break;
@@ -135,6 +133,13 @@ class LeadPagesPostTypeModel
      */
     public function removePageType($post_id, $postType)
     {
+        global $wpdb;
+        if(!$wpdb){
+            return;
+        }
+       // wp_delete_post( $post_id, false );
+        $tablePrefix =  $wpdb->base_prefix;
+        $wpdb->delete( $tablePrefix.'postmeta', array( 'post_id' => $post_id ) );
         $frontpage   = LeadpageType::get_front_lead_page();
         $welcomeGate = LeadpageType::get_wg_lead_page();
         $nf          = LeadpageType::get_404_lead_page();
