@@ -69,7 +69,6 @@ class AdminBootstrap
     }
 
     protected function saveLeadPage(){
-
         $LeadpagesModel = $this->ioc['leadpagesModel'];
         $LeadpagesModel->save();
     }

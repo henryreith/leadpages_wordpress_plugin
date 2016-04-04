@@ -36,8 +36,10 @@ class LeadPagesPostTypeModel
         }
 
         // check if this is our type
-        IsLeadPage::checkByPost($post, $post_id);
-
+        $isLeadPage = IsLeadPage::checkByPost($post, $post_id);
+        if(!$isLeadPage){
+            return $post_id;
+        }
         if($post->post_status = "trash" && !isset($_POST['post_status'])){
             $this->deletePost($post_id);
             return $post_id;
