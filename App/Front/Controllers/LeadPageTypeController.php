@@ -4,6 +4,7 @@ namespace Leadpages\Front\Controllers;
 
 use Leadpages\Helpers\isLeadPage;
 use Leadpages\Helpers\LeadpageType;
+use Leadpages\Front\Providers\PasswordProtected;
 use TheLoop\ServiceContainer\ServiceContainerTrait;
 
 class LeadPageTypeController
@@ -16,6 +17,7 @@ class LeadPageTypeController
     public function __construct()
     {
         $this->ioc = $this->getContainer();
+        $this->passwordChecker = $this->ioc['passwordProtected'];
 
     }
 
@@ -69,16 +71,29 @@ class LeadPageTypeController
 
     public function initPage()
     {
+        global $config;
+        $post = get_queried_object();
+
+
 
         $this->displayNFPage();
         $this->displayWelcomeGate();
         $this->isFrontPage();
-        $post = get_queried_object();
+
         if($post) {
             if (!isLeadPage::checkByPost($post)) {
                 return;
             }
-        $this->normalPage($post);
+            if($this->passwordChecker->getPostPassword($post)) {
+                $passwordEntered = $this->passwordChecker->checkWPPasswordHash($post, COOKIEHASH);
+                if($passwordEntered){
+                    $this->normalPage($post);
+                }else{
+                    return;
+                }
+            }
+
+            $this->normalPage($post);
         }
     }
 }

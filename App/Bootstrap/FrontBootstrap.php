@@ -34,10 +34,23 @@ class FrontBootstrap
     {
         CustomPostType::create(LeadpagesPostType::class);
         add_action( 'pre_get_posts', array($this->leadpagesPostType, 'parse_request_trick' ));
+        add_action( 'wp_enqueue_scripts', array($this, 'loadJS') );
         $controller = new LeadPageTypeController();
         add_action('wp', array($controller, 'initPage'));
     }
 
+
+    public function loadJS()
+    {
+        global $config;
+        wp_enqueue_script('LeadpagesPostPassword',
+          $config['admin_assets'] . '/js/LeadpagesPostPassword.js',
+          array('jquery'));
+        wp_localize_script('LeadpagesPostPassword', 'ajax_object', array(
+          'ajax_url' => admin_url('admin-ajax.php'),
+          'id'       => get_the_ID()
+        ));
+    }
 
 
 }

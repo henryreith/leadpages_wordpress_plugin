@@ -1,5 +1,6 @@
 <?php
 
+use Leadpages\Front\Providers\PasswordProtected;
 use Leadpages\Helpers\Security;
 use Leadpages\Front\Providers\NF;
 use Leadpages\Bootstrap\AdminBootstrap;
@@ -70,6 +71,12 @@ $ioc['welcomeGate'] = function($c){
 
 $ioc['nfPage'] = function($c){
     return new NF();
+};
+
+
+$ioc['passwordProtected'] = function($c){
+  global $wpdb;
+    return new PasswordProtected($wpdb);
 };
 
 /**
