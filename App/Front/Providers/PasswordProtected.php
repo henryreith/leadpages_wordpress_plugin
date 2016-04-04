@@ -17,9 +17,9 @@ class PasswordProtected
     public function getPostPassword($post){
 
         $postId = $post->ID;
-        $this->postPassword = $this->db->get_row( "SELECT post_password FROM {$this->db->posts} WHERE ID = {$postId}" );
-        if(strlen($this->postPassword->post_password) > 0 || !is_null($this->postPassword->post_password)){
-            return $this->postPassword->post_password;
+        $this->postPassword = $post->post_password;
+        if(strlen($this->postPassword) > 0 || !is_null($this->postPassword)){
+            return $this->postPassword;
         }else{
             return false;
         }
@@ -41,5 +41,5 @@ class PasswordProtected
             return false;
         }
     }
-    
+
 }
