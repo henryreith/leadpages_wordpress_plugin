@@ -15,7 +15,7 @@ extensions:
 modules:
     config:
         Db:
-            dsn: ''
-            user: ''
-            password: ''
-            dump: tests/_data/dump.sql
+            dsn: 'mysql:host=127.0.0.1;dbname=wordpress-multisite'
+            user: 'root'
+            password: 'root'
+            dump: tests/_data/wordpress-multisite.sql
