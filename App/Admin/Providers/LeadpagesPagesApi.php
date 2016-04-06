@@ -29,7 +29,8 @@ class LeadpagesPagesApi
         $this->client->setUrl($this->PagesUrl);
         $args            = array();
         $args['headers'] = array(
-          'LP-Security-Token' => $this->token
+          'LP-Security-Token' => $this->token,
+          'timeout' => 10
         );
         $this->client->setArgs($args);
         $response        = $this->client->get();
@@ -50,7 +51,7 @@ class LeadpagesPagesApi
                 unset($pages['_items'][$index]);
             }
         }
-        
+
         return $pages;
     }
 
@@ -58,7 +59,8 @@ class LeadpagesPagesApi
         $this->client->setUrl($this->PagesUrl.'/'.$pageId);
         $args            = array();
         $args['headers'] = array(
-          'LP-Security-Token' => $this->token
+          'LP-Security-Token' => $this->token,
+          'timeout' => 10
         );
         $this->client->setArgs($args);
         $response        = $this->client->get();
