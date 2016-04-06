@@ -30,6 +30,7 @@ class LeadpageSelect extends LeadpagesPostType implements MetaBox
     public function callBack($post, $box)
     {
         $useCache = LeadPagesPostTypeModel::getMetaCache($post->ID);
+        $this->generateSelectList($post);
         ?>
             <select name="leadpages_my_selected_page" id="leadpages_my_selected_page">
                 <option value="none">Select...</option>
@@ -50,7 +51,7 @@ class LeadpageSelect extends LeadpagesPostType implements MetaBox
 
     private function generateSelectList($post){
         $currentPage = LeadPagesPostTypeModel::getMetaPageId($post->ID);
-        $items = $this->ioc['pagesApi']->getAllUserPages();
+        $items = $this->ioc['pagesApi']->stripB3NonPublished();
         $optionString = '';
         foreach($items['_items'] as $page){
             $optionString .= "<option value=\"{$page['id']}\" ". ($currentPage == $page['id'] ? 'selected="selected"' : '')." >{$page['name']}</option>";

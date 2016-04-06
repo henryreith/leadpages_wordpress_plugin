@@ -41,6 +41,19 @@ class LeadpagesPagesApi
         return $this->client->getBody($response);
     }
 
+    public function stripB3NonPublished()
+    {
+        $pages = $this->getAllUserPages();
+        //unset index if b3 page is not published
+        foreach($pages['_items'] as $index => $page){
+            if($page['isBuilderThreePage'] && !$page['isBuilderThreePublished']){
+                unset($pages['_items'][$index]);
+            }
+        }
+        
+        return $pages;
+    }
+
     public function getSinglePage($pageId){
         $this->client->setUrl($this->PagesUrl.'/'.$pageId);
         $args            = array();
