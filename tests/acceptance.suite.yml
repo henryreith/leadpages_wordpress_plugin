@@ -1,12 +1,7 @@
-# Codeception Test Suite Configuration
-#
-# Suite for acceptance tests.
-# Perform tests in browser using the WebDriver or PhpBrowser.
-# If you need both WebDriver and PHPBrowser tests - create a separate suite.
-
 class_name: AcceptanceTester
 modules:
     enabled:
         - PhpBrowser:
-            url: http://localhost/myapp
+            url: http://localhost/wordpress-mu/
         - \Helper\Acceptance
+        - Db:
