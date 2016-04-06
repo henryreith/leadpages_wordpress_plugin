@@ -72,6 +72,10 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
 
         $post_link = str_replace( '/' . $post->post_type . '/', '/', $post_link );
 
+        global $wp_rewrite;
+        //Call flush_rules() as a method of the $wp_rewrite object
+        //this is for the way we remove leadpages_post from permalink
+        $wp_rewrite->flush_rules( false );
         return $post_link;
     }
 
