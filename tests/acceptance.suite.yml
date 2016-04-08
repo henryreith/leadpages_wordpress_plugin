@@ -1,7 +1,10 @@
 class_name: AcceptanceTester
 modules:
-    enabled:
-        - PhpBrowser:
-            url: http://localhost/wordpress-mu/
+   enabled:
+        - WebDriver:
         - \Helper\Acceptance
         - Db:
+   config:
+           WebDriver:
+               url: 'http://localhost/wordpress-mu'
+               browser: 'chrome'

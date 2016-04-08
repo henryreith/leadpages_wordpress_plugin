@@ -1,1 +1,1 @@
-tests/acceptance/loginCept.php
+tests/acceptance/LoginCest.php:CheckPagesExistInDropDown

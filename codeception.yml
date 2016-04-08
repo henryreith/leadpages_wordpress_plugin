@@ -19,3 +19,8 @@ modules:
             user: 'root'
             password: 'root'
             dump: tests/_data/wordpress-multisite.sql
+            populate: true
+            cleanup: false
+        WebDriver:
+            url: 'http://localhost/wordpress-mu'
+            browser: 'firefox'
