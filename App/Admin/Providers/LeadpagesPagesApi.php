@@ -23,10 +23,14 @@ class LeadpagesPagesApi
         $this->token       = $this->getAccessToken();
     }
 
-    public function getAllUserPages()
+    public function getUserPages($cursor = false)
     {
-
-        $this->client->setUrl($this->PagesUrl);
+        if(!$cursor) {
+            $url = $this->PagesUrl;
+        }else{
+            $url = $this->PagesUrl . '?cursor='.$cursor;
+        }
+        $this->client->setUrl($url);
         $args            = array();
         $args['headers'] = array(
           'LP-Security-Token' => $this->token,
@@ -39,12 +43,49 @@ class LeadpagesPagesApi
             return __('Error getting Pages. Please try again later',
               'leadpages');
         }
+
         return $this->client->getBody($response);
+    }
+
+    public function getAllUserPages($returnResponse = array(), $cursor = false){
+
+        $response = $this->getUserPages($cursor);
+
+        if($response['_meta']['hasMore'] == true){
+            $returnResponse[] = $response['_items'];
+            return $this->getAllUserPages($returnResponse, $response['_meta']['nextCursor']);
+        }
+
+        if (!$response['_meta']['hasMore']) {
+            /**
+             * add last result to return response
+             */
+            $returnResponse[] = $response['_items'];
+
+            /**
+             * this maybe a bit hacky but for recursive and compatibility with other functions
+             * needed all items to be under one array under _items array
+             */
+            //echo '<pre>';print_r($returnResponse);die();
+
+            if (isset($returnResponse) && sizeof($returnResponse) > 0) {
+                $pages = array(
+                  '_items' => array()
+                );
+                foreach ($returnResponse as $subarray) {
+                    $pages['_items'] = array_merge($pages['_items'], $subarray);
+                }
+                //echo '<pre>';print_r($pages);die();
+                return $pages;
+            }
+        }
     }
 
     public function stripB3NonPublished()
     {
         $pages = $this->getAllUserPages();
+        //echo '<pre>'; print_r($pages);die();
+
         //unset index if b3 page is not published
         foreach($pages['_items'] as $index => $page){
             if($page['isBuilderThreePage'] && !$page['isBuilderThreePublished']){
