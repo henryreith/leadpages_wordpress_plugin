@@ -10,10 +10,10 @@ use Leadpages\Admin\Factories\SettingsPage;
 use Leadpages\admin\MetaBoxes\LeadpageSelect;
 use Leadpages\Admin\Factories\CustomPostType;
 use Leadpages\Admin\Providers\LeadpagesLoginApi;
-use Leadpages\admin\SettingsPages\LeadpagesLoginPage;
-use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
 use Leadpages\admin\MetaBoxes\LeadpageTypeMetaBox;
 use TheLoop\ServiceContainer\ServiceContainerTrait;
+use Leadpages\admin\SettingsPages\LeadpagesLoginPage;
+use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
 
 class AdminBootstrap
 {
