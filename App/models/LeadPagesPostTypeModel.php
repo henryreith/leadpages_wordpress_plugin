@@ -53,10 +53,12 @@ class LeadPagesPostTypeModel
 
 
         //set cache
-        if(isset($_POST['cache_this'])){
+        if(isset($_POST['cache_this']) && $_POST['cache_this'] == "true"){
             update_post_meta($post_id, 'cache_page', 'true');
-        }else{
+        }elseif(isset($_POST['cache_this']) && $_POST['cache_this'] == "false"){
             update_post_meta($post_id, 'cache_page', 'false');
+        }else{
+
         }
 
         update_post_meta($post_id, 'leadpages_slug', $permalink);

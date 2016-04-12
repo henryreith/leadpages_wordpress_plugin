@@ -8,8 +8,8 @@ use TheLoop\Contracts\HttpClient;
 class WordPressHttpClient implements HttpClient
 {
 
-    protected $url;
-    protected $args =array();
+    public $url;
+    public $args =array();
 
     public function get()
     {

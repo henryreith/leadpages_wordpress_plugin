@@ -13,18 +13,21 @@ class LeadpagesPagesApi
     protected $allPagesUrl = '';
     protected $getPageUrl = '';
     protected $client = '';
-    protected $token;
+    public $token = null;
 
     public function __construct(HttpClient $client)
     {
         global $config;
         $this->client      = $client;
         $this->PagesUrl = $config['api']['pages'];
-        $this->token       = $this->getAccessToken();
     }
 
     public function getUserPages($cursor = false)
     {
+        if(is_null($this->token)) {
+            $this->token = $this->getAccessToken();
+        }
+
         if(!$cursor) {
             $url = $this->PagesUrl;
         }else{
@@ -38,7 +41,9 @@ class LeadpagesPagesApi
         );
         $this->client->setArgs($args);
         $response        = $this->client->get();
+
         $code            = $this->client->getResponseCode($response);
+
         if ($code > 299 || $code == 'error') {
             return __('Error getting Pages. Please try again later',
               'leadpages');

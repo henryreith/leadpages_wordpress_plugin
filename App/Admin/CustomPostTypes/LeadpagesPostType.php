@@ -97,7 +97,7 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
 
         // 'name' will be set if post permalinks are just post_name, otherwise the page rule will match
         if ( ! empty( $query->query['name'] ) ) {
-            $query->set( 'post_type', array( 'post', 'page', $this->postTypeName ) );
+            $query->set( 'post_type', array($this->postTypeName ) );
         }
     }
 

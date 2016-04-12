@@ -29,8 +29,11 @@ class LeadpageSelect extends LeadpagesPostType implements MetaBox
 
     public function callBack($post, $box)
     {
+
         $useCache = LeadPagesPostTypeModel::getMetaCache($post->ID);
-        //$this->generateSelectList($post); //here for testing
+
+
+        $this->generateSelectList($post); //here for testing
         ?>
             <select name="leadpages_my_selected_page" id="leadpages_my_selected_page">
                 <option value="none">Select...</option>
@@ -39,7 +42,11 @@ class LeadpageSelect extends LeadpagesPostType implements MetaBox
         <br />
         <br />
         <label for="cache_this">Cache this page?</label>
-        <input type="checkbox" name="cache_this" value="true" <?php echo ($useCache == 'true' ? 'checked="checked"': ''); ?> >
+        <br />
+        <br />
+
+        <input type="radio" name="cache_this" value="true"  <?php echo ($useCache == 'true') ? 'checked="checked"': ''; ?>> Yes, cache for improved performance. <br />
+        <input type="radio" name="cache_this" value="false"  <?php echo ($useCache != 'true') ? 'checked="checked"': ''; ?>> No, re-fetch on each visit; slower, but required for split testing.
         <?php
     }
 

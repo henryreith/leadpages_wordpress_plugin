@@ -61,6 +61,7 @@ class LeadpagesLoginApi
         $this->client->setArgs($args);
 
         $response = $this->client->get();
+        //echo '<pre>';print_r($response);die('12312');
 
         if ( is_wp_error( $response ) ) {
             $error_message = $response->get_error_message();
@@ -70,7 +71,7 @@ class LeadpagesLoginApi
             return false;
         } else {
             $currentToken = $this->parseTokenResponse($response);
-            if(!$token == $currentToken ){
+            if($token != $currentToken ){
                 return false;
             }else{
                 return true;
