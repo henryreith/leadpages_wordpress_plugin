@@ -4,6 +4,7 @@
 namespace Leadpages\Admin\Providers;
 
 use Leadpages\helpers\LPToken;
+use Mockery\CountValidator\Exception;
 use TheLoop\Contracts\HttpClient;
 
 class LeadpagesPagesApi
@@ -20,13 +21,21 @@ class LeadpagesPagesApi
         global $config;
         $this->client      = $client;
         $this->PagesUrl = $config['api']['pages'];
+
     }
 
     public function getUserPages($cursor = false)
     {
-        if(is_null($this->token)) {
-            $this->token = $this->getAccessToken();
+        //try to set user token(should be done in constructor but test wont allow it
+        try {
+            if (is_null($this->token)) {
+                $this->token = $this->getAccessToken();
+            }
+        }catch(Exception $e){
+            echo $e->getMessage();
         }
+
+
 
         if(!$cursor) {
             $url = $this->PagesUrl;
@@ -48,7 +57,6 @@ class LeadpagesPagesApi
             return __('Error getting Pages. Please try again later',
               'leadpages');
         }
-
         return $this->client->getBody($response);
     }
 
@@ -121,6 +129,14 @@ class LeadpagesPagesApi
     public function downloadPageHtml($pageId)
     {
         //TODO Janky way to do this but will work for now till APIS are updated
+        try {
+            if (is_null($this->token)) {
+                $this->token = $this->getAccessToken();
+            }
+        }catch(Exception $e){
+            echo $e->getMessage();
+        }
+
         $data = $this->getSinglePage($pageId);
         $data = $data['_meta'];
         $pageUrl = $data['publishUrl'];

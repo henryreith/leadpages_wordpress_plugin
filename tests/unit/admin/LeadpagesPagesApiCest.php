@@ -26,8 +26,10 @@ class LeadpagesPagesApiCest
     }
 
     // tests
-    public function getUserPagesTest(UnitTester $I)
+    public function getUserPagesTestSuccess(UnitTester $I)
     {
+        $I->wantTo('Make sure that getUserPages returns a proper response');
+
 
         //arrange
 
@@ -37,9 +39,10 @@ class LeadpagesPagesApiCest
                          ->andReturn(true);
 
         $this->api->shouldReceive('getAccessToken')
-                  ->andSet('token', 'leadpagesToken')
-                  ->andReturn(true);
-        echo $this->api->token;
+                  ->once()
+                  ->andSet('token', 'LeadpagesToken')
+                  ->andReturn('LeadpagesToken');
+
 
         $args['headers'] = array(
           'LP-Security-Token' => $this->api->token,
@@ -50,12 +53,13 @@ class LeadpagesPagesApiCest
                          ->andSet('args', $args)
                          ->andReturn(true);
 
-        //act
-
         $this->httpClient->shouldReceive('get')
                          ->andReturn($validPageResponse);
+        //act
+
 
         $response = $this->api->getUserPages();
+        //echo '<pre>';print_r($response);die();
 
 
         //assert
@@ -63,8 +67,11 @@ class LeadpagesPagesApiCest
         $I->assertTrue($this->httpClient->setUrl('https://my.leadpages.net/page/v1/pages'));
         $I->assertEquals('https://my.leadpages.net/page/v1/pages', $this->httpClient->url);
         $I->assertNotNull($this->api->token);
-
-
+        $I->assertNotEmpty($this->api->token);
+        //assert that you can find items
+        $I->assertEquals(1, array_key_exists('_items', $response), "Could not find _items in array");
+        //assert that the # of items is > 0
+        $I->assertTrue(sizeof($response['_items']) > 0);
 
 
     }

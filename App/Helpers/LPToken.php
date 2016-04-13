@@ -21,7 +21,11 @@ trait LPToken
     }
 
     public function getAccessToken() {
-        return get_option( 'leadpages_security_token', false );
+        $token = get_option( 'leadpages_security_token', false );
+        if(is_null($token) || empty($token) || !isset($token)){
+            throw New \Exception("Token is blank, you may need to log back in");
+        }
+        return $token;
     }
 
 }

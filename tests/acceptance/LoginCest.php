@@ -51,15 +51,5 @@ class LoginCest
         $I->selectOption('form select[name=leadpages-post-type]', '404 Page');
     }
 
-    /**
-     * @before login
-     */
-    public function CheckPagesExistInDropDown(AcceptanceTester $I){
-        $I->wantTo('Make sure that I see Leadpage in dropdown');
-        $I->amOnPage('wordpress-mu/wp-admin/edit.php?post_type=leadpages_post');
-        $I->see("LeadPages", "h1");
-        $I->click(".page-title-action");
-        $I->selectOption('form select[name=leadpages-post-type]', '~[^None](a-z)*~i');
 
-    }
 }

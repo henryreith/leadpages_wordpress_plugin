@@ -71,7 +71,9 @@ class WordPressHttpClient implements HttpClient
     }
 
     public function getBody($response){
+
         if(isset($response) && is_array($response)){
+
             $body = NULL;
             array_walk_recursive($response, function($value, $key) use(&$body){
                 if($key == 'body'){
