@@ -1,17 +1,18 @@
 <?php
 
-use Leadpages\Front\Providers\PasswordProtected;
 use Leadpages\Helpers\Security;
 use Leadpages\Front\Providers\NF;
 use Leadpages\Bootstrap\AdminBootstrap;
 use Leadpages\Bootstrap\FrontBootstrap;
 use Leadpages\Admin\Providers\AdminAuth;
+use Leadpages\Admin\Providers\LeadboxApi;
 use Leadpages\Front\Providers\WelcomeGate;
 use TheLoop\Providers\WordPressHttpClient;
 use Leadpages\models\LeadPagesPostTypeModel;
 use TheLoop\ServiceContainer\ServiceContainer;
 use Leadpages\Admin\Providers\LeadpagesLoginApi;
 use Leadpages\Admin\Providers\LeadpagesPagesApi;
+use Leadpages\Front\Providers\PasswordProtected;
 use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
 
 
@@ -54,6 +55,10 @@ $ioc['adminAuth'] = function ($c) {
 
 $ioc['pagesApi'] = function($c){
     return new LeadpagesPagesApi($c['httpClient']);
+};
+
+$ioc['leadboxApi'] = function($c){
+  return new LeadboxApi($c['httpClient']);
 };
 
 $ioc['leadpagesPostType'] = function($c){

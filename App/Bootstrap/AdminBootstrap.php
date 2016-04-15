@@ -7,6 +7,7 @@ use TheLoop\Contracts\HttpClient;
 use Leadpages\Admin\Factories\Metaboxes;
 use Leadpages\Admin\Providers\AdminAuth;
 use Leadpages\Admin\Factories\SettingsPage;
+use Leadpages\admin\SettingsPages\Leadboxes;
 use Leadpages\admin\MetaBoxes\LeadpageSelect;
 use Leadpages\Admin\Factories\CustomPostType;
 use Leadpages\Admin\Providers\LeadpagesLoginApi;
@@ -60,6 +61,7 @@ class AdminBootstrap
             CustomPostType::create(LeadpagesPostType::getName());
             Metaboxes::create(LeadpageTypeMetaBox::getName());
             Metaboxes::create(LeadpageSelect::getName());
+            SettingsPage::create(Leadboxes::getName());
             $this->saveLeadPage();
         }
 
@@ -75,6 +77,8 @@ class AdminBootstrap
 
     public function loadJS(){
         global $config;
+        wp_enqueue_script('Leadboxes', $config['admin_assets'].'/js/Leadboxes.js', array('jquery'));
+
         wp_enqueue_script('LeadpagesPostType', $config['admin_assets'].'/js/LeadpagesPostType.js', array('jquery'));
         wp_localize_script( 'LeadpagesPostType', 'ajax_object', array(
           'ajax_url' => admin_url( 'admin-ajax.php' ),
