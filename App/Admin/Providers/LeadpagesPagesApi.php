@@ -21,7 +21,6 @@ class LeadpagesPagesApi
         global $config;
         $this->client      = $client;
         $this->PagesUrl = $config['api']['pages'];
-
     }
 
     public function getUserPages($cursor = false)

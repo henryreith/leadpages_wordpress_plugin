@@ -3,8 +3,8 @@
 
 namespace Leadpages\Admin\Providers;
 
-use TheLoop\Contracts\HttpClient;
 use Leadpages\Helpers\LPToken;
+use TheLoop\Contracts\HttpClient;
 
 class LeadpagesLoginApi
 {
@@ -55,7 +55,7 @@ class LeadpagesLoginApi
         $args = array();
 
         $args['headers'] = array(
-          'LP-Security-Token' => $this->getAccessToken()
+          'LP-Security-Token' => $token
         );
 
         $this->client->setArgs($args);
@@ -64,14 +64,14 @@ class LeadpagesLoginApi
         //echo '<pre>';print_r($response);die('12312');
 
         if ( is_wp_error( $response ) ) {
-            $error_message = $response->get_error_message();
             return false;
         }elseif($response['response']['code'] != '200'){
-            $error_message = $response['response']['message'];
+            $this->deleteAccessToken();
             return false;
         } else {
             $currentToken = $this->parseTokenResponse($response);
             if($token != $currentToken ){
+                $this->deleteAccessToken();
                 return false;
             }else{
                 return true;
