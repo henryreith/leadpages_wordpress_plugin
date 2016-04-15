@@ -9,6 +9,10 @@ use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
 
 class LeadpageTypeMetaBox extends LeadpagesPostType implements MetaBox {
 
+    public static function getName(){
+        return get_called_class();
+    }
+
     public function defineMetaBox(){
         add_meta_box("leadpage-type", "Select Page Type", array($this, 'callback'), $this->postTypeName, "normal", "high", null);
     }

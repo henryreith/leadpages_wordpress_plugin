@@ -7,6 +7,9 @@ use TheLoop\Contracts\SettingsPage;
 
 class LeadpagesLoginPage implements SettingsPage
 {
+    public static function getName(){
+        return get_called_class();
+    }
 
     public function definePage() {
         global $config;

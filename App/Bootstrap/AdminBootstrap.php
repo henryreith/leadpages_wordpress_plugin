@@ -55,11 +55,11 @@ class AdminBootstrap
         $this->auth->login();
 
         if(!$this->auth->isLoggedIn()){
-            SettingsPage::create(LeadpagesLoginPage::class);
+            SettingsPage::create(LeadpagesLoginPage::getName());
         }else{
-            CustomPostType::create(LeadpagesPostType::class);
-            Metaboxes::create(LeadpageTypeMetaBox::class);
-            Metaboxes::create(LeadpageSelect::class);
+            CustomPostType::create(LeadpagesPostType::getName());
+            Metaboxes::create(LeadpageTypeMetaBox::getName());
+            Metaboxes::create(LeadpageSelect::getName());
             $this->saveLeadPage();
         }
 

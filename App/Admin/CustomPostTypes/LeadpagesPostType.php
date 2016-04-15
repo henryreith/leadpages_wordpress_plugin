@@ -15,6 +15,10 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
     private $args   = array();
     public $postTypeName = 'leadpages_post';
 
+    public static function getName(){
+        return get_called_class();
+    }
+
     public function defineLabels()
     {
         $this->labels = array(
