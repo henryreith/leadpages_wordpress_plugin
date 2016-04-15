@@ -32,7 +32,7 @@ class FrontBootstrap
 
     public function initFront()
     {
-        CustomPostType::create(LeadpagesPostType::class);
+        CustomPostType::create(LeadpagesPostType::getName());
         add_action( 'pre_get_posts', array($this->leadpagesPostType, 'parse_request_trick' ));
         add_action( 'wp_enqueue_scripts', array($this, 'loadJS') );
         $controller = new LeadPageTypeController();
