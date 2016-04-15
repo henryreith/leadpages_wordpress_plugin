@@ -150,7 +150,7 @@ use Symfony\Component\DomCrawler\Crawler;
  * * `window_size` - Initial window size. Set to `maximize` or a dimension in the format `640x480`.
  * * `clear_cookies` - Set to false to keep cookies, or set to true (default) to delete all cookies between tests.
  * * `wait` - Implicit wait (default 0 seconds).
- * * `capabilities` - Sets Selenium2 [desired capabilities](http://code.google.com/p/selenium/wiki/DesiredCapabilities). Should be a key-value array.
+ * * `capabilities` - Sets Selenium2 [desired capabilities](https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities). Should be a key-value array.
  * * `connection_timeout` - timeout for opening a connection to remote selenium server (30 seconds by default).
  * * `request_timeout` - timeout for a request to return something from remote selenium server (30 seconds by default).
  * * `http_proxy` - sets http proxy server url for testing a remote server.
@@ -340,9 +340,10 @@ class WebDriver extends CodeceptionModule implements
     {
         $this->debugWebDriverLogs();
         $filename = str_replace(['::', '\\', '/'], ['.', '', ''], TestCase::getTestSignature($test)) . '.fail';
-        $this->_saveScreenshot(codecept_output_dir() . $filename . '.png');
-        $this->_savePageSource(codecept_output_dir() . $filename . '.html');
-        $this->debug("Screenshot and page source were saved into '_output' dir");
+        $outputDir = codecept_output_dir();
+        $this->_saveScreenshot($outputDir . $filename . '.png');
+        $this->_savePageSource($outputDir . $filename . '.html');
+        $this->debug("Screenshot and page source were saved into '$outputDir' dir");
     }
 
     /**
@@ -706,9 +707,13 @@ class WebDriver extends CodeceptionModule implements
         }
 
         // try to match by CSS or XPath
-        $els = $this->match($page, $link, false);
-        if (!empty($els)) {
-            return reset($els);
+        try {
+            $els = $this->match($page, $link, false);
+            if (!empty($els)) {
+                return reset($els);
+            }
+        } catch (MalformedLocatorException $e) {
+            //ignore exception, link could still match on of the things below
         }
 
         $locator = Crawler::xpathLiteral(trim($link));
@@ -965,8 +970,10 @@ class WebDriver extends CodeceptionModule implements
                     break;
 
                 case 'textarea':
+                    // we include trimmed and real value of textarea for check
+                    $currentValues[] = $el->getText(); // trimmed value
                 default:
-                    $currentValues[] = $el->getAttribute('value');
+                    $currentValues[] = $el->getAttribute('value'); // raw value
                     break;
             }
         }

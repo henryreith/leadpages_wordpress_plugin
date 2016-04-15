@@ -10,6 +10,8 @@ Author URI: http://leadpages.net
 License: GPL2
 */
 
+include 'c3.php';
+
 /**
  * Load plugin textdomain.
  */

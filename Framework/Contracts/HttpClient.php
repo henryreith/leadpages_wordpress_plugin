@@ -9,5 +9,7 @@ interface HttpClient
     public function post();
     public function patch();
     public function delete();
+    public function setUrl($url);
+
 }
 
