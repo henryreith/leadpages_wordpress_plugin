@@ -45,7 +45,7 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
           'public'               => true,
           'publicly_queryable'   => true,
           'show_ui'              => true,
-          'query_var'            => false,
+          'query_var'            => true,
           'menu_icon'            => $config['admin_images'].'/menu-icon.png',
           'capability_type'      => 'page',
           'menu_position'        => 10000,
@@ -53,15 +53,12 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
           'hierarchical'         => true,
           'has_archive'          => true,
           'supports'             => array(),
-          'rewrite'         => array(
-            'with_front'	=> true,
-            'slug'          => ''
-          ),
         );
 
         register_post_type( $this->postTypeName, $this->args );
         remove_post_type_support($this->postTypeName, 'editor');
-        //remove_post_type_support($this->postTypeName, 'title');
+        add_filter( 'post_type_link', array($this,'remove_cpt_slug'), 10, 3 );
+        add_action( 'pre_get_posts', array($this, 'parse_request_trick' ));
 
     }
 
@@ -76,10 +73,7 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
 
         $post_link = str_replace( '/' . $post->post_type . '/', '/', $post_link );
 
-        global $wp_rewrite;
-        //Call flush_rules() as a method of the $wp_rewrite object
-        //this is for the way we remove leadpages_post from permalink
-        $wp_rewrite->flush_rules( false );
+
         return $post_link;
     }
 
@@ -101,7 +95,7 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
 
         // 'name' will be set if post permalinks are just post_name, otherwise the page rule will match
         if ( ! empty( $query->query['name'] ) ) {
-            $query->set( 'post_type', array($this->postTypeName ) );
+            $query->set( 'post_type', array('page', 'post', 'leadpages_post' ) );
         }
     }
 
@@ -277,8 +271,6 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
     {
         $this->defineLabels();
         add_action('init', array($this, 'registerPostType'));
-        add_filter( 'post_type_link', array($this,'remove_cpt_slug'), 10, 3 );
-        add_action( 'pre_get_posts', array($this, 'parse_request_trick' ));
         add_action( 'admin_notices', array($this, 'checkErrorDisplay') );
         $this->addColumns();
     }

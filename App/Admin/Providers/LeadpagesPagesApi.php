@@ -62,6 +62,13 @@ class LeadpagesPagesApi
     public function getAllUserPages($returnResponse = array(), $cursor = false){
 
         $response = $this->getUserPages($cursor);
+        //print_r($response);
+
+        if(empty($response['_items'])){
+           echo'<p><strong>You appear to have no Leadpages created yet.</strong></p>';
+            echo '<p> Please login to <a href="https://my.leadpages.net" target="_blank">Leadpages</a> and create a Leadpage to continue.</p>';
+            die();
+        }
 
         if($response['_meta']['hasMore'] == true){
             $returnResponse[] = $response['_items'];

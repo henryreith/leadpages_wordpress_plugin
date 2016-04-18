@@ -180,8 +180,8 @@ class LeadPagesPostTypeModel
     public function save()
     {
         add_action('edit_post', array($this, 'saveLeadPageMeta'), 999, 2);
-
     }
+
 
     public static function getMetaPageType($post_id)
     {

@@ -4,6 +4,7 @@ namespace Leadpages\Bootstrap;
 
 use Leadpages\models\LeadPagesPostTypeModel;
 use TheLoop\Contracts\HttpClient;
+use Leadpages\models\LeadboxesModel;
 use Leadpages\Admin\Factories\Metaboxes;
 use Leadpages\Admin\Providers\AdminAuth;
 use Leadpages\Admin\Factories\SettingsPage;
@@ -46,11 +47,7 @@ class AdminBootstrap
 
     public function initAdmin()
     {
-        /**
-         * set http time out to 20 seconds as sometimes our request take
-         * a couple seconds longer than the default 5 seconds
-         */
-        apply_filters('http_request_timeout', 20);
+
         add_action( 'admin_enqueue_scripts', array($this, 'loadJS') );
 
         $this->auth->login();
@@ -58,26 +55,32 @@ class AdminBootstrap
         if(!$this->auth->isLoggedIn()){
             SettingsPage::create(LeadpagesLoginPage::getName());
         }else{
-            CustomPostType::create(LeadpagesPostType::getName());
-            Metaboxes::create(LeadpageTypeMetaBox::getName());
-            Metaboxes::create(LeadpageSelect::getName());
-            SettingsPage::create(Leadboxes::getName());
+            $this->registerRequiredItems();
             $this->saveLeadPage();
+            LeadboxesModel::init();
         }
 
 
 
 
     }
-
+    public function registerRequiredItems(){
+        CustomPostType::create(LeadpagesPostType::getName());
+        Metaboxes::create(LeadpageTypeMetaBox::getName());
+        Metaboxes::create(LeadpageSelect::getName());
+        SettingsPage::create(Leadboxes::getName());
+    }
     protected function saveLeadPage(){
         $LeadpagesModel = $this->ioc['leadpagesModel'];
         $LeadpagesModel->save();
     }
+    protected function saveLeadboxes()
+    {
 
+    }
     public function loadJS(){
         global $config;
-        wp_enqueue_script('Leadboxes', $config['admin_assets'].'/js/Leadboxes.js', array('jquery'));
+        wp_enqueue_style( 'leadpagesStles', $config['admin_assets'].'/css/styles.css', false );
 
         wp_enqueue_script('LeadpagesPostType', $config['admin_assets'].'/js/LeadpagesPostType.js', array('jquery'));
         wp_localize_script( 'LeadpagesPostType', 'ajax_object', array(

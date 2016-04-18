@@ -2,9 +2,7 @@
 
 namespace Leadpages\Front\Controllers;
 
-use Leadpages\Helpers\isLeadPage;
 use Leadpages\Helpers\LeadpageType;
-use Leadpages\Front\Providers\PasswordProtected;
 use TheLoop\ServiceContainer\ServiceContainerTrait;
 
 class LeadPageTypeController
@@ -16,7 +14,7 @@ class LeadPageTypeController
 
     public function __construct()
     {
-        $this->ioc = $this->getContainer();
+        $this->ioc             = $this->getContainer();
         $this->passwordChecker = $this->ioc['passwordProtected'];
 
     }
@@ -34,15 +32,17 @@ class LeadPageTypeController
             $post = LeadpageType::get_front_lead_page();
 
             //if $post is > 0 that means one exists and we need to display it
-            if ($post > 0){
+            if ($post > 0) {
                 $html = $this->ioc['leadpagesModel']->getHtml($post);
-                echo $html; die();
+                echo $html;
+                die();
             }
         }
     }
 
 
-    public function displayWelcomeGate(){
+    public function displayWelcomeGate()
+    {
         $welcomeGate = $this->ioc['welcomeGate'];
         $welcomeGate->displayWelcomeGate();
     }
@@ -53,47 +53,57 @@ class LeadPageTypeController
      * @param $post
      */
 
-    public function displayNFPage(){
+    public function displayNFPage()
+    {
         $nfPage = $this->ioc['nfPage'];
         $nfPage->displaynfPage($this->ioc);
     }
+
     public function normalPage($post)
     {
-        if($post->post_type == 'leadpages_post'){
+        if ($post->post_type == 'leadpages_post') {
             $pageID = get_post_meta($post->ID, 'leadpages_page_id');
             $pageID = $pageID[0];
             //TODO check if is split tested and if so dont use cache version
             //non cache version
             $html = $this->ioc['leadpagesModel']->getHtml($post->ID);
-            echo $html; die();
+            echo $html;
+            die();
         }
     }
 
     public function initPage()
     {
         global $config;
-        $post = get_queried_object();
 
+        //permalinks appear unreliable, have to get the page id by the url
+        global $wpdb;
+        $current = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $prefix  = $wpdb->prefix;
+        $query   = "SELECT post_id FROM {$prefix}postmeta where meta_value = '{$current}'";
+        $result  = $wpdb->get_row($query);
+        if (empty($result)) {
+            return;
+        }
+        $post = get_post($result->post_id);
 
 
         $this->displayNFPage();
         $this->displayWelcomeGate();
         $this->isFrontPage();
 
-        if($post) {
-            if (!isLeadPage::checkByPost($post)) {
+
+        if ($this->passwordChecker->getPostPassword($post)) {
+            $passwordEntered = $this->passwordChecker->checkWPPasswordHash($post, COOKIEHASH);
+            if ($passwordEntered) {
+                $this->normalPage($post);
+            } else {
                 return;
             }
-            if($this->passwordChecker->getPostPassword($post)) {
-                $passwordEntered = $this->passwordChecker->checkWPPasswordHash($post, COOKIEHASH);
-                if($passwordEntered){
-                    $this->normalPage($post);
-                }else{
-                    return;
-                }
-            }
-
-            $this->normalPage($post);
         }
+
+        $this->normalPage($post);
+
     }
+
 }

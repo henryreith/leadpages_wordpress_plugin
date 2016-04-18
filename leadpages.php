@@ -10,6 +10,8 @@ Author URI: http://leadpages.net
 License: GPL2
 */
 
+use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
+
 include 'c3.php';
 
 /**
@@ -43,6 +45,7 @@ require('App/Config/App.php');
   */
 
 require $config['basePath'] . 'Framework/ServiceContainer/ServiceContainer.php';
+
 
 /*
   |--------------------------------------------------------------------------
