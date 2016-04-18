@@ -2,10 +2,45 @@
 
 namespace Leadpages\Helpers;
 
+use Leadpages\models\LeadboxesModel;
+
 trait LeadboxDisplay
 {
 
     protected $postTypesForLeadboxes;
+    protected $currentTimedLeadbox;
+    protected $currentExitLeadbox;
+
+
+    public function setCurrentLeadboxes(){
+        $this->currentTimedLeadbox = LeadboxesModel::getCurrentTimedLeadbox();
+        $this->currentExitLeadbox = LeadboxesModel::getCurrentExitLeadbox();
+    }
+
+    protected function currentTimedLeadbox($leadboxId){
+        $this->setCurrentLeadboxes();
+        if($this->currentTimedLeadbox[0] == $leadboxId){
+            return 'selected="selected"';
+        }
+    }
+
+    protected function currentTimedLeadboxDisplayPostType($PostType){
+        if($this->currentTimedLeadbox[1] == $PostType){
+            return 'checked="checked"';
+        }
+    }
+
+    protected function currentExitLeadbox($leadboxId){
+        if($this->currentExitLeadbox[0] == $leadboxId){
+            return 'selected="selected"';
+        }
+    }
+
+    protected function currentExitLeadboxDisplayPostType($PostType){
+        if($this->currentExitLeadbox[1] == $PostType){
+            return 'checked="checked"';
+        }
+    }
 
     /**
      * create a dropdown of every timed leadbox
@@ -16,9 +51,8 @@ trait LeadboxDisplay
      */
     public function timedDropDown($leadboxArray)
     {
-        //echo '<pre>';print_r($leadboxArray);die();
         $select = "<select name='lp_select_field_0' id='leadboxesTime'>";
-        $select .= "<option name='none' value='none'>None...</option>";
+        $select .= "<option name='none' value='none'". $this->currentTimedLeadbox('none') ." >None...</option>";
 
         foreach($leadboxArray['_items'] as $leadbox){
 
@@ -26,7 +60,9 @@ trait LeadboxDisplay
                 $select .= "<option value=\"{$leadbox['id']}\"
                 data-timeAppear=\"{$leadbox['publish_settings']['time']['seconds']}\"
                 data-pageView=\"{$leadbox['publish_settings']['time']['views']}\"
-                data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\">{$leadbox['name']}</option>";
+                data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\"
+                ".$this->currentTimedLeadbox($leadbox['id'])."
+                >{$leadbox['name']}</option>";
             }
         }
         $select .="</select>";
@@ -34,6 +70,8 @@ trait LeadboxDisplay
         //echo $select;
         return $select;
     }
+
+
 
     /**
      * make a dropdown of every leadbox that has an exit time set on it
@@ -46,12 +84,13 @@ trait LeadboxDisplay
     {
         //echo '<pre>';print_r($leadboxArray);die();
         $select = "<select name='lp_select_field_2' id='leadboxesExit'>";
-        $select .= "<select name='none' value='none'>None...</select>";
+        $select .= "<option name='none' value='none' ". $this->currentExitLeadbox('none') .">None...</option>";
         foreach($leadboxArray['_items'] as $leadbox){
 
             if($leadbox['publish_settings']['exit']['days'] > 0){
                 $select .= "<option value=\"{$leadbox['id']}\"
-                data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\">{$leadbox['name']}</option>";
+                data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\"
+                ".$this->currentExitLeadbox($leadbox['id']).">{$leadbox['name']}</option>";
             }
         }
         $select .="</select>";
@@ -73,25 +112,59 @@ trait LeadboxDisplay
     }
 
     /**
-     *generate raido buttons for timed buttons
+     *generate radio buttons for timed buttons
      */
     public function postTypesForTimedLeadboxes(){
         $this->getPostTypesForLeadboxes();
         $options = '<br />';
-        $options .= '<input type="radio" id="timed_radio_all" name="leadboxes_timed_display_radio" value="all"> <label for="exit_radio_all">Every WordPress page, including homepage, 404 and posts</label>';
+        $options .= '<input type="radio" id="timed_radio_all" name="leadboxes_timed_display_radio" value="all" '.$this->currentTimedLeadboxDisplayPostType('all').'> <label for="exit_radio_all">Every WordPress page, including homepage, 404 and posts</label>';
 
         foreach($this->postTypesForLeadboxes as $postType){
+            if($postType =='leadpages_post'){
+                continue;
+            }
             $options .="<br />";
-            $options .= '<input type="radio" id="timed_radio_'.$postType.'" name="leadboxes_timed_display_radio" value="'.$postType.'"> <label for="exit_'.$postType.'">Display on '.ucfirst($postType).'</label>';
+            $options .= '<input type="radio" id="timed_radio_'.$postType.'" name="leadboxes_timed_display_radio" value="'.$postType.'" '.$this->currentTimedLeadboxDisplayPostType($postType).'> <label for="exit_'.$postType.'">Display on '.ucfirst($postType).'</label>';
         }
 
         return $options;
     }
 
-    public function timedSettings(){
+    /**
+     *generate radio buttons for timed buttons
+     */
+    public function postTypesForExitLeadboxes(){
+        $this->getPostTypesForLeadboxes();
+        $options = '<br />';
+        $options .= '<input type="radio" id="timed_radio_all" name="leadboxes_exit_display_radio" value="all" '.$this->currentExitLeadboxDisplayPostType('all').'> <label for="exit_radio_all">Every WordPress page, including homepage, 404 and posts</label>';
 
+        foreach($this->postTypesForLeadboxes as $postType){
+            if($postType =='leadpages_post'){
+                continue;
+            }
+            $options .="<br />";
+            $options .= '<input type="radio" id="timed_radio_'.$postType.'" name="leadboxes_exit_display_radio" value="'.$postType.'" '.$this->currentExitLeadboxDisplayPostType($postType).'> <label for="exit_'.$postType.'">Display on '.ucfirst($postType).'</label>';
+        }
+
+        return $options;
     }
 
 
+    public function leadboesLoading(){
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -15 120 120" width="150" height="150" fill="#14283a">
+  <circle transform="translate(14 0)" cx="0" cy="14" r="0">
+    <animate attributeName="r" values="0; 20; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0"
+      keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+  </circle>
+  <circle transform="translate(50 0)" cx="0" cy="14" r="0">
+    <animate attributeName="r" values="0; 20; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.3"
+      keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+  </circle>
+  <circle transform="translate(80 0)" cx="0" cy="14" r="0">
+    <animate attributeName="r" values="0; 20; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.6"
+      keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+  </circle>
+</svg>';
+    }
 
 }

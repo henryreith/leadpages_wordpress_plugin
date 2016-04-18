@@ -22,7 +22,8 @@ class LeadboxApi
         $this->client = $client;
     }
 
-    public function getLeadBoxes(){
+    public function getLeadBoxes()
+    {
         global $config;
 
         $this->token = $this->getAccessToken();
@@ -30,25 +31,53 @@ class LeadboxApi
         $this->client->setUrl($config['api']['leadboxes']);
         $args['headers'] = array(
           'LP-Security-Token' => $this->token,
-          'timeout' => 10
+          'timeout'           => 10
         );
         $this->client->setArgs($args);
         $response = $this->client->get();
+        if (is_wp_error($response)) {
+            $error_string = $response->get_error_message();
+            echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
+            exit();
+        }
         $body = $this->client->getBody($response);
 
+        foreach ($body['_items'] as $index => $result) {
 
-        foreach($body['_items'] as $index => $result){
-
-                //if embed is not set it is not published so it must be removed
-                if(empty($result['publish_settings']['embed'])){
-                    unset($body['_items'][$index]);
-                    continue;
-                }
-                $body['_items'][$index]['publish_settings']['embed'] = htmlentities($result['publish_settings']['embed']);
+            //if embed is not set it is not published so it must be removed
+            if (empty($result['publish_settings']['embed'])) {
+                unset($body['_items'][$index]);
+                continue;
+            }
+            $body['_items'][$index]['publish_settings']['embed'] = htmlentities($result['publish_settings']['embed']);
 
         }
 
         return $body;
+    }
+
+    public function getSingleLeadbox($id)
+    {
+        global $config;
+
+        $this->token = $this->getAccessToken();
+
+        $this->client->setUrl($config['api']['leadboxes']."/{$id}");
+        $args['headers'] = array(
+          'LP-Security-Token' => $this->token,
+          'timeout'           => 10
+        );
+        $this->client->setArgs($args);
+
+        $response = $this->client->get();
+        if (is_wp_error($response)) {
+            $error_string = $response->get_error_message();
+            echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
+            exit();
+        }
+        $body = $this->client->getBody($response);
+        return $body['leadbox']['publish_settings']['embed'];
+
 
     }
 

@@ -10,12 +10,17 @@ Class Security
     public function userPrivilege($role){
         if ( ! \current_user_can( $role ) )
         {
-            die( 'You are not allowed to be on this page.' );
+            return;
         }
     }
 
     public function checkAdminReferer( $nonce ){
+        check_admin_referer( $nonce );
+    }
 
-        check_admin_referer( 'leadpages_login' );
+    public static function checkAdminRefererStatic( $nonce ){
+           if(!check_admin_referer( $nonce )){
+           //    return;
+           }
     }
 }

@@ -57,6 +57,10 @@ $ioc['pagesApi'] = function($c){
     return new LeadpagesPagesApi($c['httpClient']);
 };
 
+$ioc['security'] = function($c){
+  return new Security();
+};
+
 $ioc['leadboxApi'] = function($c){
   return new LeadboxApi($c['httpClient']);
 };
@@ -88,7 +92,7 @@ $ioc['passwordProtected'] = function($c){
  * Front Bootstrap
  */
 $ioc['frontBootStrap'] = $ioc->factory(function($c){
-    return new FrontBootstrap($c['pagesApi'], $c['leadpagesPostType']);
+    return new FrontBootstrap($c['pagesApi'], $c['leadpagesPostType'], $c['leadboxApi']);
 });
 
 /**
