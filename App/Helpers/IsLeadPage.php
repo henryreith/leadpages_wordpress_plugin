@@ -25,6 +25,18 @@ class IsLeadPage
         }
     }
 
+    public static function isLeadPageUrlQuery(){
+        global $wpdb;
+        $current = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $prefix  = $wpdb->prefix;
+        $query   = "SELECT post_id FROM {$prefix}postmeta where meta_value = '{$current}'";
+        $result  = $wpdb->get_row($query);
+        if (empty($result)) {
+            return false;
+        }
+        return get_post($result->post_id);
+    }
+
 
 
 }

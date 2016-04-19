@@ -2,6 +2,7 @@
 
 namespace Leadpages\Front\Controllers;
 
+use Leadpages\Helpers\IsLeadPage;
 use Leadpages\Helpers\LeadpageType;
 use TheLoop\ServiceContainer\ServiceContainerTrait;
 
@@ -76,22 +77,17 @@ class LeadPageTypeController
     {
         global $config;
 
-        //permalinks appear unreliable, have to get the page id by the url
-        global $wpdb;
-        $current = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-        $prefix  = $wpdb->prefix;
-        $query   = "SELECT post_id FROM {$prefix}postmeta where meta_value = '{$current}'";
-        $result  = $wpdb->get_row($query);
-        if (empty($result)) {
-            return;
-        }
-        $post = get_post($result->post_id);
-
-
+        //check all special pagetypes first, then go to a normal leadpage if not matched
+        //if any resource is a 404 it will try to load this as well, causing page load latency
         $this->displayNFPage();
         $this->displayWelcomeGate();
         $this->isFrontPage();
 
+        //permalinks appear unreliable, have to get the page id by the url
+        $post = IsLeadPage::isLeadPageUrlQuery();
+        if(!$post){
+            return;
+        }
 
         if ($this->passwordChecker->getPostPassword($post)) {
             $passwordEntered = $this->passwordChecker->checkWPPasswordHash($post, COOKIEHASH);
