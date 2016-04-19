@@ -45,8 +45,8 @@ class LeadpagesPagesApi
         $args            = array();
         $args['headers'] = array(
           'LP-Security-Token' => $this->token,
-          'timeout' => 10
         );
+        $args['timeout'] = 10;
         $this->client->setArgs($args);
         $response        = $this->client->get();
 
