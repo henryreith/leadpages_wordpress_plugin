@@ -67,4 +67,13 @@ if (!is_admin() && !is_network_admin()) {
 }
 
 
+//deactivation
+
+function deactivateLeadpages(){
+    delete_option('leadpages_security_token');
+}
+
+register_deactivation_hook(__FILE__,'deactivateLeadpages');
+
+
 
