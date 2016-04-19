@@ -2,20 +2,19 @@
 
 namespace Leadpages\Bootstrap;
 
-use Leadpages\admin\MetaBoxes\LeadboxMetaBox;
-use Leadpages\models\LeadPagesPostTypeModel;
+use Leadpages\Admin\MetaBoxes\LeadboxMetaBox;
 use TheLoop\Contracts\HttpClient;
 use Leadpages\models\LeadboxesModel;
 use Leadpages\Admin\Factories\Metaboxes;
 use Leadpages\Admin\Providers\AdminAuth;
 use Leadpages\Admin\Factories\SettingsPage;
-use Leadpages\admin\SettingsPages\Leadboxes;
-use Leadpages\admin\MetaBoxes\LeadpageSelect;
+use Leadpages\Admin\SettingsPages\Leadboxes;
+use Leadpages\Admin\MetaBoxes\LeadpageSelect;
 use Leadpages\Admin\Factories\CustomPostType;
 use Leadpages\Admin\Providers\LeadpagesLoginApi;
-use Leadpages\admin\MetaBoxes\LeadpageTypeMetaBox;
+use Leadpages\Admin\MetaBoxes\LeadpageTypeMetaBox;
 use TheLoop\ServiceContainer\ServiceContainerTrait;
-use Leadpages\admin\SettingsPages\LeadpagesLoginPage;
+use Leadpages\Admin\SettingsPages\LeadpagesLoginPage;
 use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
 
 class AdminBootstrap
@@ -83,7 +82,7 @@ class AdminBootstrap
     }
     public function loadJS(){
         global $config;
-        wp_enqueue_style( 'leadpagesStles', $config['admin_assets'].'/css/styles.css', false );
+        wp_enqueue_style( 'leadpagesStyles', $config['admin_assets'].'/css/styles.css', false );
 
         wp_enqueue_script('LeadpagesPostType', $config['admin_assets'].'/js/LeadpagesPostType.js', array('jquery'));
         wp_localize_script( 'LeadpagesPostType', 'ajax_object', array(

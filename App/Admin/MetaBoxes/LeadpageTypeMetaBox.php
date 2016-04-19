@@ -1,6 +1,6 @@
 <?php
 
-namespace Leadpages\admin\MetaBoxes;
+namespace Leadpages\Admin\MetaBoxes;
 
 use TheLoop\Contracts\MetaBox;
 use Leadpages\models\LeadPagesPostTypeModel;
