@@ -49,7 +49,10 @@ class LeadpagesLoginApi
 
     public function checkUserToken($token){
         global $config;
-
+        //check a session to keep it form having to do this on every page.
+        if(isset($_COOKIE['leadpagesLoginCookieGood'])){
+            return true;
+        }
         $this->client->setUrl($config['api']['sessions']['current']);
 
         $args = array();
@@ -74,10 +77,16 @@ class LeadpagesLoginApi
                 $this->deleteAccessToken();
                 return false;
             }else{
+
+                $this->setAccessTokenCookie();
                 return true;
             }
         }
 
+    }
+
+    public function setAccessTokenCookie(){
+       setcookie('leadpagesLoginCookieGood', true, time()+60*60*12); //set cookie for 1 hr
     }
 
 }
