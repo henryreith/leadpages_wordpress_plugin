@@ -24,6 +24,13 @@
 
         });
 
+        if($("#leadboxesTime").val() != 'none'){
+            populateTimedStats($("#leadboxesTime"));
+        }
+        if($("#leadboxesExit").val() != 'none'){
+            populateExitStats($("#leadboxesExit"));
+        }
+
         $body.on('change', '#leadboxesExit', function () {
             if($(this).val() == 'none'){
                 $('#selectedExitLeadboxSettings').hide();
