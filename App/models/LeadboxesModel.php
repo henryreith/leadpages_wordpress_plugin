@@ -62,4 +62,21 @@ class LeadboxesModel
         return $currentExitLeadbox;
     }
 
+
+    public static function savePageSpecificLeadboxes($post_id, $post){
+        $timedLeadbox = $_POST['pageTimedLeadbox'];
+        $exitLeadbox  = $_POST['pageExitLeadbox'];
+        if($timedLeadbox != 'none') {
+            update_post_meta($post_id, 'pageTimedLeadbox', $timedLeadbox);
+        }
+        if($exitLeadbox !='none') {
+            update_post_meta($post_id, 'pageExitLeadbox', $exitLeadbox);
+        }
+    }
+
+    public static function saveLeadboxMeta()
+    {
+        add_action('edit_post', array(get_called_class(), 'savePageSpecificLeadboxes'), 999, 2);
+    }
+
 }

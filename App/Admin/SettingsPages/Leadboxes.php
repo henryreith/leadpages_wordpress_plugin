@@ -80,7 +80,7 @@ class Leadboxes implements SettingsPage
     public function leadboxScripts(){
         global $config;
         $ioc = $this->getContainer();
-        $leadboxes = $leadboxes = $ioc['leadboxApi']->getLeadBoxes();
+        $leadboxes = $ioc['leadboxApi']->getLeadBoxes();
         wp_enqueue_script('Leadboxes', $config['admin_assets'] . '/js/Leadboxes.js', array('jquery'));
         wp_localize_script('Leadboxes', 'leadboxes_object', array(
           'ajax_url'  => admin_url('admin-ajax.php'),
@@ -91,8 +91,5 @@ class Leadboxes implements SettingsPage
     ));
     }
 
-    public function getCurrentTimedLeadbox(){
-
-    }
 
 }

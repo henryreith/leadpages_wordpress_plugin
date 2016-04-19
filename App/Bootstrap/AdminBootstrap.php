@@ -2,6 +2,7 @@
 
 namespace Leadpages\Bootstrap;
 
+use Leadpages\admin\MetaBoxes\LeadboxMetaBox;
 use Leadpages\models\LeadPagesPostTypeModel;
 use TheLoop\Contracts\HttpClient;
 use Leadpages\models\LeadboxesModel;
@@ -47,7 +48,6 @@ class AdminBootstrap
 
     public function initAdmin()
     {
-
         add_action( 'admin_enqueue_scripts', array($this, 'loadJS') );
 
         $this->auth->login();
@@ -56,8 +56,9 @@ class AdminBootstrap
             SettingsPage::create(LeadpagesLoginPage::getName());
         }else{
             $this->registerRequiredItems();
-            $this->saveLeadPage();
             LeadboxesModel::init();
+            $this->saveLeadPage();
+            $this->saveLeadboxes();
         }
 
 
@@ -68,6 +69,8 @@ class AdminBootstrap
         CustomPostType::create(LeadpagesPostType::getName());
         Metaboxes::create(LeadpageTypeMetaBox::getName());
         Metaboxes::create(LeadpageSelect::getName());
+        Metaboxes::create(LeadboxMetaBox::getName());
+
         SettingsPage::create(Leadboxes::getName());
     }
     protected function saveLeadPage(){
@@ -76,7 +79,7 @@ class AdminBootstrap
     }
     protected function saveLeadboxes()
     {
-
+        LeadboxesModel::saveLeadboxMeta();
     }
     public function loadJS(){
         global $config;

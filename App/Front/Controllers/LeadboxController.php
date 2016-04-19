@@ -14,6 +14,11 @@ class LeadboxController
      */
     private $leadboxApi;
 
+    private $hasSpecificTimed;
+    private $hasSpecificExit;
+    private $pageSpecificTimedLeadboxId;
+    private $pageSpecificExitdLeadboxId;
+
 
     public function __construct(LeadboxApi $leadboxApi)
     {
@@ -23,6 +28,8 @@ class LeadboxController
     public function initLeadboxes(){
         global $post;
         $this->setPageType($post);
+        $this->getPageSpecificTimedLeadbox($post);
+        $this->getExitSpecifiExitLeadbox($post);
         $this->addEmbedToContent();
     }
 
@@ -60,8 +67,46 @@ class LeadboxController
     }
 
     public function addEmbedToContent(){
-        add_filter('the_content', array($this, 'getTimedLeadboxCode'));
-        add_filter('the_content', array($this, 'getExitLeadboxCode'));
+        if($this->hasSpecificTimed){
+            add_filter('the_content', array($this, 'displayPageSpecificTimedLeadbox'));
+        }else {
+            add_filter('the_content', array($this, 'getTimedLeadboxCode'));
+        }
+
+        if($this->hasSpecificExit) {
+            add_filter('the_content', array($this, 'displayPageSpecificExitLeadbox'));
+        }else{
+            add_filter('the_content', array($this, 'getExitLeadboxCode'));
+        }
+    }
+
+
+    /*
+     * Page Specific Leadboxes
+     */
+
+    protected function getPageSpecificTimedLeadbox($post){
+        $this->pageSpecificTimedLeadboxId = get_post_meta($post->ID, 'pageTimedLeadbox', true);
+        if(!empty($this->pageSpecificTimedLeadboxId)){
+            $this->hasSpecificTimed = true;
+        }
+    }
+
+    public function displayPageSpecificTimedLeadbox(){
+        $timed_embed_code = $this->leadboxApi->getSingleLeadbox($this->pageSpecificTimedLeadboxId);
+        echo $timed_embed_code;
+    }
+
+    protected function getExitSpecifiExitLeadbox($post){
+        $this->pageSpecificExitdLeadboxId = get_post_meta($post->ID, 'pageExitLeadbox', true);
+        if(!empty($this->pageSpecificExitdLeadboxId)){
+            $this->hasSpecificExit = true;
+        }
+    }
+
+    public function displayPageSpecificExitLeadbox(){
+        $exit_embed_code = $this->leadboxApi->getSingleLeadbox($this->pageSpecificExitdLeadboxId);
+        echo $exit_embed_code;
     }
 
 }

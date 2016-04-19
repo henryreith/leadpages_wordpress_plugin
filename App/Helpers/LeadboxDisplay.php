@@ -87,7 +87,7 @@ trait LeadboxDisplay
         $select .= "<option name='none' value='none' ". $this->currentExitLeadbox('none') .">None...</option>";
         foreach($leadboxArray['_items'] as $leadbox){
 
-            if($leadbox['publish_settings']['exit']['days'] > 0){
+            if($leadbox['publish_settings']['exit']['days'] >= 0){
                 $select .= "<option value=\"{$leadbox['id']}\"
                 data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\"
                 ".$this->currentExitLeadbox($leadbox['id']).">{$leadbox['name']}</option>";
@@ -148,6 +148,83 @@ trait LeadboxDisplay
 
         return $options;
     }
+
+
+
+
+        /*
+      |--------------------------------------------------------------------------
+      | Page Specific Leadbox methods
+      |--------------------------------------------------------------------------
+
+    */
+    public function timedDropDownPageSpecific($leadboxArray, $post)
+    {
+        $select = "<select name='pageTimedLeadbox' id='leadboxesTime'>";
+        $select .= "<option name='none' value='none'". $this->currentTimedLeadboxPageSpecific('none', $post->ID) ." >None...</option>";
+
+        foreach($leadboxArray['_items'] as $leadbox){
+
+            if($leadbox['publish_settings']['time']['seconds'] > 0){
+                $select .= "<option value=\"{$leadbox['id']}\"
+                data-timeAppear=\"{$leadbox['publish_settings']['time']['seconds']}\"
+                data-pageView=\"{$leadbox['publish_settings']['time']['views']}\"
+                data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\"
+                ".$this->currentTimedLeadboxPageSpecific($leadbox['id'], $post->ID)."
+                >{$leadbox['name']}</option>";
+            }
+        }
+        $select .="</select>";
+
+        //echo $select;
+        return $select;
+    }
+
+    protected function currentTimedLeadboxPageSpecific($leadboxId, $postId){
+        $pageSpecificLeadbox = get_post_meta($postId, 'pageTimedLeadbox', true);
+        if($pageSpecificLeadbox == $leadboxId){
+            return 'selected="selected"';
+        }
+    }
+
+    public function exitDropDownPageSpecific($leadboxArray, $post)
+    {
+        $select = "<select name='pageExitLeadbox' id='leadboxesExit'>";
+        $select .= "<option name='none' value='none' ". $this->currentExitLeadboxPageSpecific('none', $post->ID) .">None...</option>";
+        foreach($leadboxArray['_items'] as $leadbox){
+
+            if($leadbox['publish_settings']['exit']['days'] >= 0){
+                $select .= "<option value=\"{$leadbox['id']}\"
+                data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\"
+                ".$this->currentExitLeadboxPageSpecific($leadbox['id'], $post->ID).">{$leadbox['name']}</option>";
+            }
+        }
+        $select .="</select>";
+
+        //echo $select;
+        return $select;
+    }
+
+    protected function currentExitLeadboxPageSpecific($leadboxId, $postId){
+        $pageSpecificLeadbox = get_post_meta($postId, 'pageExitLeadbox', true);
+
+        if($pageSpecificLeadbox == $leadboxId){
+            return 'selected="selected"';
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public function leadboesLoading(){
