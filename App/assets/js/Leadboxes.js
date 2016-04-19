@@ -45,23 +45,24 @@
             var pageView = $($this).find(':selected').data('pageview');
             var daysTillAppear = $($this).find(':selected').data('daysappear');
 
-            var stats = stat_row("Time before it appears:", timeTillAppear + ' seconds') +
-                stat_row("Page views before it appears:", pageView + ' views') +
-                stat_row("Don't reshow for the next ", daysTillAppear + ' days');
+            var stats ="<h4 style='background:#E4E4EB'>Timed LeadBox&trade; Pop-Up Settings (from publish settings) <a style='margin-left:50px;' href=\"https://my.leadpages.net\" target=\"_blank\"> Go to LeadPages to change </a></h4>"+
+                stat_row("Time before it appears: ", timeTillAppear + ' seconds') +
+                stat_row("Page views before it appears: ", pageView + ' views') +
+                stat_row("Don't reshow for the next: ", daysTillAppear + ' days');
             $("#selectedLeadboxSettings").html(stats);
         }
 
         function populateExitStats($this) {
             var daysTillAppear = $($this).find(':selected').data('daysappear');
-            var stats = stat_row("Don't reshow for the next ", daysTillAppear + ' days');
+            var stats ="<h4 style='background:#E4E4EB'>Exit LeadBox&trade; Pop-Up Settings (from publish settings)<a style='margin-left:50px;' href=\"https://my.leadpages.net\" target=\"_blank\"> Go to LeadPages to change </a></h4>"+
+                stat_row("Don't reshow for the next ", daysTillAppear + ' days');
             $("#selectedExitLeadboxSettings").html(stats);
         }
 
         function stat_row(label, value) {
-            return '<div class="row-fluid">' +
-                '<div class="span3">' + label + '</div>' +
-                '<div class="span4">' + value + '</div>' +
-                '</div>';
+            return '<ul>' +
+                '<li><strong>' + label +'</strong> '+ value+'</li>' +
+                '</ul>';
         }
 
         function timedLeadBoxes() {

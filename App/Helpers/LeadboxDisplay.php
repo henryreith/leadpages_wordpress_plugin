@@ -52,7 +52,7 @@ trait LeadboxDisplay
     public function timedDropDown($leadboxArray)
     {
         $select = "<select name='lp_select_field_0' id='leadboxesTime'>";
-        $select .= "<option name='none' value='none'". $this->currentTimedLeadbox('none') ." >None...</option>";
+        $select .= "<option name='none' value='none'". $this->currentTimedLeadbox('none') ." >None</option>";
 
         foreach($leadboxArray['_items'] as $leadbox){
 
@@ -84,7 +84,7 @@ trait LeadboxDisplay
     {
         //echo '<pre>';print_r($leadboxArray);die();
         $select = "<select name='lp_select_field_2' id='leadboxesExit'>";
-        $select .= "<option name='none' value='none' ". $this->currentExitLeadbox('none') .">None...</option>";
+        $select .= "<option name='none' value='none' ". $this->currentExitLeadbox('none') .">None</option>";
         foreach($leadboxArray['_items'] as $leadbox){
 
             if($leadbox['publish_settings']['exit']['days'] >= 0){
@@ -161,7 +161,7 @@ trait LeadboxDisplay
     public function timedDropDownPageSpecific($leadboxArray, $post)
     {
         $select = "<select name='pageTimedLeadbox' id='leadboxesTime'>";
-        $select .= "<option name='none' value='none'". $this->currentTimedLeadboxPageSpecific('none', $post->ID) ." >None...</option>";
+        $select .= "<option name='none' value='none'". $this->currentTimedLeadboxPageSpecific('none', $post->ID) ." >None</option>";
 
         foreach($leadboxArray['_items'] as $leadbox){
 
@@ -190,7 +190,7 @@ trait LeadboxDisplay
     public function exitDropDownPageSpecific($leadboxArray, $post)
     {
         $select = "<select name='pageExitLeadbox' id='leadboxesExit'>";
-        $select .= "<option name='none' value='none' ". $this->currentExitLeadboxPageSpecific('none', $post->ID) .">None...</option>";
+        $select .= "<option name='none' value='none' ". $this->currentExitLeadboxPageSpecific('none', $post->ID) .">None</option>";
         foreach($leadboxArray['_items'] as $leadbox){
 
             if($leadbox['publish_settings']['exit']['days'] >= 0){
