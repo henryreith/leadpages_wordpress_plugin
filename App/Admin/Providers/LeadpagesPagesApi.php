@@ -3,8 +3,7 @@
 
 namespace Leadpages\Admin\Providers;
 
-use Leadpages\helpers\LPToken;
-use Mockery\CountValidator\Exception;
+use Leadpages\Helpers\LPToken;
 use TheLoop\Contracts\HttpClient;
 
 class LeadpagesPagesApi

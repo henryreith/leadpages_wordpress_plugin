@@ -46,7 +46,10 @@ class LeadboxMetaBox implements MetaBox
         echo "</div>";
 
     }
-
+    //TODO Needs implemented somewhere
+    public function removeMetaBoxFromLeadpagePostType(){
+      remove_meta_box( 'leadbox-select' , 'leadpages_post'  );
+    }
 
     public function registerMetaBox()
     {

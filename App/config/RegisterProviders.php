@@ -51,38 +51,77 @@ $ioc['adminAuth'] = function ($c) {
 
 /**
  * pagesApi
+ *
+ * @param $c
+ *
+ * @return \Leadpages\Admin\Providers\LeadpagesPagesApi
  */
 
 $ioc['pagesApi'] = function($c){
     return new LeadpagesPagesApi($c['httpClient']);
 };
 
+/**
+ * @param $c
+ *
+ * @return \Leadpages\Helpers\Security
+ */
 $ioc['security'] = function($c){
   return new Security();
 };
 
+/**
+ * @param $c
+ *
+ * @return \Leadpages\Admin\Providers\LeadboxApi
+ */
 $ioc['leadboxApi'] = function($c){
   return new LeadboxApi($c['httpClient']);
 };
 
+/**
+ * @param $c
+ *
+ * @return \Leadpages\Admin\CustomPostTypes\LeadpagesPostType
+ */
 $ioc['leadpagesPostType'] = function($c){
   return new LeadpagesPostType();
 };
 
 
+/**
+ * @param $c
+ *
+ * @return \Leadpages\models\LeadPagesPostTypeModel
+ */
 $ioc['leadpagesModel'] = function($c){
     return new LeadPagesPostTypeModel($c['pagesApi'], $c['leadpagesPostType']);
 };
 
+/**
+ * @param $c
+ *
+ * @return \Leadpages\Front\Providers\WelcomeGate
+ */
 $ioc['welcomeGate'] = function($c){
     return new WelcomeGate();
 };
 
+/**
+ * @param $c
+ *
+ * @return \Leadpages\Front\Providers\NF
+ */
 $ioc['nfPage'] = function($c){
     return new NF();
 };
 
 
+/**
+ * @param $c
+ *
+ * @return \Leadpages\Front\Providers\PasswordProtected
+ */
 $ioc['passwordProtected'] = function($c){
   global $wpdb;
     return new PasswordProtected($wpdb);

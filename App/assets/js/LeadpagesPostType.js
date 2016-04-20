@@ -98,7 +98,7 @@
                         if(response == 'error'){
                             e.preventDefault();
                         }
-                    })*/;
+                    });*/
             }
         });
 

@@ -57,6 +57,7 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
 
         register_post_type( $this->postTypeName, $this->args );
         remove_post_type_support($this->postTypeName, 'editor');
+
         add_filter( 'post_type_link', array($this,'remove_cpt_slug'), 10, 3 );
         add_action( 'pre_get_posts', array($this, 'parse_request_trick' ));
 

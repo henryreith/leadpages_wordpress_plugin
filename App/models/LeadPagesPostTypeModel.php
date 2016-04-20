@@ -4,7 +4,7 @@
 namespace Leadpages\models;
 
 use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
-use Leadpages\helpers\IsLeadPage;
+use Leadpages\Helpers\IsLeadPage;
 use Leadpages\Helpers\LeadpageType;
 use Leadpages\Helpers\LeadpageErrorHandlers;
 use Leadpages\Admin\Providers\LeadpagesPagesApi;
@@ -78,7 +78,7 @@ class LeadPagesPostTypeModel
         $error = $this->postType->checkError($postType, $post_id);
 
         if($error == 'error'){
-            return;
+            return $post_id;
         }
         /**
          * only update these items if the post is actually being published
