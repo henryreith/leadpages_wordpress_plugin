@@ -27,7 +27,6 @@ class LeadboxApi
         global $config;
 
         $this->token = $this->getAccessToken();
-
         $this->client->setUrl($config['api']['leadboxes']);
         $args['headers'] = array(
           'LP-Security-Token' => $this->token,
@@ -41,6 +40,7 @@ class LeadboxApi
             exit();
         }
         $body = $this->client->getBody($response);
+       //echo '<pre>';print_r($response);die();
 
         foreach ($body['_items'] as $index => $result) {
 
@@ -76,7 +76,7 @@ class LeadboxApi
             exit();
         }
         $body = $this->client->getBody($response);
-        return $body['leadbox']['publish_settings']['embed'];
+        return $body['_items']['publish_settings']['publish_settings']['embed'];
 
 
     }
