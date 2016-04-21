@@ -57,11 +57,11 @@ trait LeadboxDisplay
         foreach($leadboxArray['_items'] as $leadbox){
 
             if($leadbox['publish_settings']['time']['seconds'] > 0){
-                $select .= "<option value=\"{$leadbox['id']}\"
+                $select .= "<option value=\"{$leadbox['xor_hex_id']}\"
                 data-timeAppear=\"{$leadbox['publish_settings']['time']['seconds']}\"
                 data-pageView=\"{$leadbox['publish_settings']['time']['views']}\"
                 data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\"
-                ".$this->currentTimedLeadbox($leadbox['id'])."
+                ".$this->currentTimedLeadbox($leadbox['xor_hex_id'])."
                 >{$leadbox['name']}</option>";
             }
         }
@@ -88,9 +88,9 @@ trait LeadboxDisplay
         foreach($leadboxArray['_items'] as $leadbox){
 
             if($leadbox['publish_settings']['exit']['days'] >= 0){
-                $select .= "<option value=\"{$leadbox['id']}\"
+                $select .= "<option value=\"{$leadbox['xor_hex_id']}\"
                 data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\"
-                ".$this->currentExitLeadbox($leadbox['id']).">{$leadbox['name']}</option>";
+                ".$this->currentExitLeadbox($leadbox['xor_hex_id']).">{$leadbox['name']}</option>";
             }
         }
         $select .="</select>";
@@ -166,11 +166,11 @@ trait LeadboxDisplay
         foreach($leadboxArray['_items'] as $leadbox){
 
             if($leadbox['publish_settings']['time']['seconds'] > 0){
-                $select .= "<option value=\"{$leadbox['id']}\"
+                $select .= "<option value=\"{$leadbox['xor_hex_id']}\"
                 data-timeAppear=\"{$leadbox['publish_settings']['time']['seconds']}\"
                 data-pageView=\"{$leadbox['publish_settings']['time']['views']}\"
                 data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\"
-                ".$this->currentTimedLeadboxPageSpecific($leadbox['id'], $post->ID)."
+                ".$this->currentTimedLeadboxPageSpecific($leadbox['xor_hex_id'], $post->ID)."
                 >{$leadbox['name']}</option>";
             }
         }
@@ -194,9 +194,9 @@ trait LeadboxDisplay
         foreach($leadboxArray['_items'] as $leadbox){
 
             if($leadbox['publish_settings']['exit']['days'] >= 0){
-                $select .= "<option value=\"{$leadbox['id']}\"
+                $select .= "<option value=\"{$leadbox['xor_hex_id']}\"
                 data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\"
-                ".$this->currentExitLeadboxPageSpecific($leadbox['id'], $post->ID).">{$leadbox['name']}</option>";
+                ".$this->currentExitLeadboxPageSpecific($leadbox['xor_hex_id'], $post->ID).">{$leadbox['name']}</option>";
             }
         }
         $select .="</select>";
