@@ -17,6 +17,7 @@ class LeadPagesPostTypeModel
      */
     private $PagesApi;
     public $LeadPageId;
+    public $LeadpageXORId;
     /**
      * @var \Leadpages\Admin\CustomPostTypes\LeadpagesPostType
      */
@@ -30,6 +31,7 @@ class LeadPagesPostTypeModel
 
     public function saveLeadPageMeta($post_id, $post)
     {
+
         // check autosave
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return $post_id;
@@ -48,8 +50,13 @@ class LeadPagesPostTypeModel
         //setup all vars for inserting or deleting posts
         $permalink = get_permalink($post_id);
         $postType = sanitize_text_field($_POST['leadpages-post-type']);
-        $this->LeadPageId = sanitize_text_field($_POST['leadpages_my_selected_page']);
 
+        //maybe a better way to do this? but sending the xor_id as the # before : and leadpage id after :
+        //so $ids[0] is the xor id for backward compatibility and $ids[1] is the leadpage id
+        $ids= explode(':', $_POST['leadpages_my_selected_page']);
+
+        $this->LeadPageId = sanitize_text_field($ids[1]);
+        $this->LeadpageXORId = sanitize_text_field($ids[0]);
 
 
         //set cache
@@ -67,6 +74,7 @@ class LeadPagesPostTypeModel
         update_post_meta($post_id, 'leadpages_name', $post->post_name);
 
         update_post_meta($post_id, 'leadpages_page_id', $this->LeadPageId);
+        update_post_meta($post_id, 'leadpages_my_selected_page', $this->LeadpageXORId);
 
         update_post_meta($post_id, 'leadpages_post_type', $postType);
         //TODO add in split test when its avaiable
@@ -187,7 +195,7 @@ class LeadPagesPostTypeModel
     {
         $meta = get_post_meta($post_id, 'leadpages_post_type');
         if (sizeof($meta) == 0) {
-            return false;
+            return 'lp';
         } else {
             return $meta[0];
         }
@@ -209,6 +217,11 @@ class LeadPagesPostTypeModel
         if (sizeof($meta) == 0) {
             return false;
         } else {
+
+            //make sure its the full url from new plugin if not get permalink
+            if(!strpos($meta[0], 'http')){
+                return get_permalink($post_id);
+            }
             return $meta[0];
         }
     }
@@ -232,7 +245,14 @@ class LeadPagesPostTypeModel
 
     public function getHtml($pageId){
         //check to see if we need to return cached version
+
         $LeadpageId = get_post_meta($pageId, 'leadpages_page_id', true);
+
+        //if $LeadpageId does not exist try to get it from the xor id...once again maybe something that should be done
+        //TODO in the api like getPageByXor call
+        if(empty($LeadpageId)) {
+            $LeadPageId = $this->getPageByXORId($pageId);
+        }
         $getCache = get_post_meta($pageId, 'cache_page', true);
         if($getCache == 'true'){
             //check if cache exist
@@ -251,6 +271,15 @@ class LeadPagesPostTypeModel
         //if we don't fall into cache just echo $html
         $html = $this->PagesApi->downloadPageHtml($LeadpageId);
         echo $html; die();
+    }
 
+    public function getPageByXORId($pageId){
+        $xorId = get_post_meta($pageId, 'leadpages_my_selected_page', true);
+        $pages = $this->PagesApi->getUserPages();
+       foreach($pages['_items'] as $page){
+            if($page['_meta']['xor_hex_id'] == $xorId){
+                return $page['_meta']['id'];
+            }
+       }
     }
 }
