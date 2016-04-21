@@ -71,6 +71,7 @@ if (!is_admin() && !is_network_admin()) {
 
 function deactivateLeadpages(){
     delete_option('leadpages_security_token');
+    setcookie("leadpagesLoginCookieGood", "", time()-3600);
 }
 
 register_deactivation_hook(__FILE__,'deactivateLeadpages');
