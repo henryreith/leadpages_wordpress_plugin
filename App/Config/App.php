@@ -3,7 +3,7 @@
 $test = true;
 
 if($test){
-    $currentTestBranchUrl = "https://as-382-dot-leadpage-test.appspot.com";
+    $currentTestBranchUrl = "https://as-382-451-dot-leadpage-test.appspot.com";
     $config = array(
 
         /*
@@ -21,7 +21,7 @@ if($test){
           'current' => 'https://stargate-dot-leadpage-test.appspot.com/auth/v1/sessions/current'
         ),
         'pages'    => $currentTestBranchUrl.'/page/v1/pages',
-        'leadboxes' => $currentTestBranchUrl."//leadbox/v1/leadboxes"
+        'leadboxes' => $currentTestBranchUrl."/leadbox/v1/leadboxes"
       )
     );
 

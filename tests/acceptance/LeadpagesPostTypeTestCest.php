@@ -24,14 +24,17 @@ class LeadpagesPostTypeTestCest
         $I->selectOption('form select[name=leadpages-post-type]', 'Home Page');
         $I->selectOption('form select[name=leadpages-post-type]', 'Welcome Gate™');
         $I->selectOption('form select[name=leadpages-post-type]', '404 Page');
+
+        $I->wantTo('Make sure that I see Leadpage pages dropdown');
+        $I->selectOption('form select[name=leadpages_my_selected_page]', 'E2E Test Page Do Not Remove');
+
     }
 
-    public function CheckLeadpagesInDropdown(AcceptanceTester $I)
+    protected function CheckLeadpagesInDropdown(AcceptanceTester $I)
     {
-        $I->wantTo('Make sure that I see Leadpage pages dropdown');
+
         $I->login($this->testdata['leadpagesUsername'], $this->testdata['leadpagesPassword']);
         $I->goToLeadpagesPostType();
-        $I->selectOption('form select[name=leadpages_my_selected_page]', 'E2E Test Page Do Not Remove');
     }
 
     /**
