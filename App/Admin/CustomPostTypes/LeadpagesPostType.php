@@ -164,6 +164,9 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
 
         if ( $this->postTypeName.'_type' == $column ) {
             $type    = LeadPagesPostTypeModel::getMetaPageType( $id );
+            if(empty($type)){
+                $type = 'lp';
+            }
             switch($type){
                 case 'lp':
                     echo 'Normal';

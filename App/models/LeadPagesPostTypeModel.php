@@ -4,10 +4,10 @@
 namespace Leadpages\models;
 
 use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
-use Leadpages\Helpers\IsLeadPage;
-use Leadpages\Helpers\LeadpageType;
-use Leadpages\Helpers\LeadpageErrorHandlers;
 use Leadpages\Admin\Providers\LeadpagesPagesApi;
+use Leadpages\Helpers\IsLeadPage;
+use Leadpages\Helpers\LeadpageErrorHandlers;
+use Leadpages\Helpers\LeadpageType;
 
 class LeadPagesPostTypeModel
 {
@@ -39,32 +39,32 @@ class LeadPagesPostTypeModel
 
         // check if this is our type
         $isLeadPage = IsLeadPage::checkByPost($post, $post_id);
-        if(!$isLeadPage){
+        if (!$isLeadPage) {
             return $post_id;
         }
-        if($post->post_status = "trash" && !isset($_POST['post_status'])){
+        if ($post->post_status = "trash" && !isset($_POST['post_status'])) {
             $this->deletePost($post_id);
             return $post_id;
         }
 
         //setup all vars for inserting or deleting posts
         $permalink = get_permalink($post_id);
-        $postType = sanitize_text_field($_POST['leadpages-post-type']);
+        $postType  = sanitize_text_field($_POST['leadpages-post-type']);
 
         //maybe a better way to do this? but sending the xor_id as the # before : and leadpage id after :
         //so $ids[0] is the xor id for backward compatibility and $ids[1] is the leadpage id
-        $ids= explode(':', $_POST['leadpages_my_selected_page']);
+        $ids = explode(':', $_POST['leadpages_my_selected_page']);
 
-        $this->LeadPageId = sanitize_text_field($ids[1]);
+        $this->LeadPageId    = sanitize_text_field($ids[1]);
         $this->LeadpageXORId = sanitize_text_field($ids[0]);
 
 
         //set cache
-        if(isset($_POST['cache_this']) && $_POST['cache_this'] == "true"){
+        if (isset($_POST['cache_this']) && $_POST['cache_this'] == "true") {
             update_post_meta($post_id, 'cache_page', 'true');
-        }elseif(isset($_POST['cache_this']) && $_POST['cache_this'] == "false"){
+        } elseif (isset($_POST['cache_this']) && $_POST['cache_this'] == "false") {
             update_post_meta($post_id, 'cache_page', 'false');
-        }else{
+        } else {
 
         }
 
@@ -80,12 +80,11 @@ class LeadPagesPostTypeModel
         //TODO add in split test when its avaiable
 
 
-
         //return here as if there was an error saving the page because the type
         //already exists (ErrorHandlerAjax.php on page save)
         $error = $this->postType->checkError($postType, $post_id);
 
-        if($error == 'error'){
+        if ($error == 'error') {
             return $post_id;
         }
         /**
@@ -134,18 +133,19 @@ class LeadPagesPostTypeModel
     }
 
 
-    public function deletePost($post_id){
+    public function deletePost($post_id)
+    {
         global $wpdb;
-        $postType = $this->getMetaPageType($post_id);
-        $tablePrefix =  $wpdb->base_prefix;
-        $wpdb->delete( $tablePrefix.'postmeta', array( 'post_id' => $post_id ) );
+        $postType    = $this->getMetaPageType($post_id);
+        $tablePrefix = $wpdb->base_prefix;
+        $wpdb->delete($tablePrefix . 'postmeta', array('post_id' => $post_id));
         if ($postType == 'fp') {
             delete_option('leadpages_front_page_id');
         }
-        if ($postType ==  'wg') {
+        if ($postType == 'wg') {
             delete_option('leadpages_wg_page_id');
         }
-        if ($postType ==  'nf') {
+        if ($postType == 'nf') {
             delete_option('leadpages_404_page_id');
         }
     }
@@ -195,9 +195,38 @@ class LeadPagesPostTypeModel
     {
         $meta = get_post_meta($post_id, 'leadpages_post_type');
         if (sizeof($meta) == 0) {
-            return 'lp';
+            $meta = static::getTypeFromOptions($post_id);
+	    //would be empty if its just alp ad those types were not saved as a type in old plugin
+            if(empty($meta)){
+                return 'lp';
+            }
+            return $meta;
         } else {
             return $meta[0];
+        }
+    }
+
+    public static function getTypeFromOptions($postId)
+    {
+        global $wpdb;
+        $prefix = $wpdb->prefix;
+        $query = "SELECT option_value, option_name from {$prefix}options where option_name in ('leadpages_front_page_id', 'leadpages_wg_page_id', 'leadpages_404_page_id')";
+	
+        $results = $wpdb->get_results($query, 'ARRAY_A');
+        foreach($results as $result){
+            if($result['option_value'] == $postId){
+                switch($result['option_name']){
+                    case('leadpages_front_page_id'):
+                        return 'fp';
+                    break;
+                    case('leadpages_wg_page_id'):
+                        return 'wg';
+                    break;
+                    case('leadpages_404_page_id'):
+                        return 'nf';
+                        break;
+                }
+            }
         }
     }
 
@@ -217,24 +246,13 @@ class LeadPagesPostTypeModel
 
         if (sizeof($meta) == 0) {
             return false;
-        } else {
-
-            //make sure its the full url from new plugin if not get permalink
-            if(!strpos($meta[0], 'http')){
-                $title = get_the_title($post_id);
-                //add / to start of title to properly build url below. Adding this because titles from old plugin
-                // contain a / a the start and need to account of it a user removes them
-                if(strpos($title, '/') != 0){
-                    $title = '/'.$title;
-                }
-                $url = get_site_url();
-                return $url . $title;
-            }
+        } else{
             return $meta[0];
         }
     }
 
-    public static function getMetaCache($post_id){
+    public static function getMetaCache($post_id)
+    {
         $meta = get_post_meta($post_id, 'cache_page');
         if (sizeof($meta) == 0) {
             return false;
@@ -243,50 +261,57 @@ class LeadPagesPostTypeModel
         }
     }
 
-    public function setCacheForPage($pageId, $html){
-        set_transient('leadpages_page_html_cache_'.$pageId, $html, 600);
+    public function setCacheForPage($pageId, $html)
+    {
+        set_transient('leadpages_page_html_cache_' . $pageId, $html, 600);
     }
 
-    public function getCacheForPage($pageId){
-       return get_transient('leadpages_page_html_cache_'.$pageId);
+    public function getCacheForPage($pageId)
+    {
+        return get_transient('leadpages_page_html_cache_' . $pageId);
     }
 
-    public function getHtml($pageId){
+    public function getHtml($pageId)
+    {
         //try to get leadpages_page_id if it is set(version 2 plugin pages)
         $LeadpageId = get_post_meta($pageId, 'leadpages_page_id', true);
 
         //if $LeadpageId does not exist try to get it from the xor id...once again maybe something that should be done
         //TODO in the api like getPageByXor call
-        if(empty($LeadpageId)) {
+        if (empty($LeadpageId)) {
             $LeadpageId = $this->getPageByXORId($pageId);
         }
 
         $getCache = get_post_meta($pageId, 'cache_page', true);
-        if($getCache == 'true'){
+        if ($getCache == 'true') {
             //check if cache exist
             $currentCache = $this->getCacheForPage($LeadpageId);
-            if($currentCache){
-                echo $currentCache;die();
-            }else{
+            if ($currentCache) {
+                echo $currentCache;
+                die();
+            } else {
                 //if no cache get the html then set the cache for next time
                 //then return html
                 $html = $this->PagesApi->downloadPageHtml($LeadpageId);
                 $this->setCacheForPage($LeadpageId, $html);
-                echo $html; die();
+                echo $html;
+                die();
             }
         }
         //if we don't fall into cache just echo $html
         $html = $this->PagesApi->downloadPageHtml($LeadpageId);
-        echo $html; die();
+        echo $html;
+        die();
     }
 
-    public function getPageByXORId($pageId){
+    public function getPageByXORId($pageId)
+    {
         $xorId = get_post_meta($pageId, 'leadpages_my_selected_page', true);
         $pages = $this->PagesApi->getUserPages();
-       foreach($pages['_items'] as $page){
-            if($page['_meta']['xor_hex_id'] == $xorId){
+        foreach ($pages['_items'] as $page) {
+            if ($page['_meta']['xor_hex_id'] == $xorId) {
                 return $page['_meta']['id'];
             }
-       }
+        }
     }
 }

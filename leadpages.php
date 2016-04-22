@@ -3,7 +3,7 @@
 /*
 Plugin Name: Leadpages Connector
 Plugin URI: http://leadpages.net
-Description: A brief description of the Plugin.
+Description:LeadPages connector plugin
 Version: 2.0
 Author: Leadpages
 Author URI: http://leadpages.net
@@ -81,14 +81,34 @@ function activateLeadpages(){
     global $wpdb;
 
     $prefix = $wpdb->prefix;
+    //update urls in options table
     $results = $wpdb->get_results( "SELECT * FROM {$prefix}posts WHERE post_type = 'leadpages_post'", OBJECT );
 
     foreach($results as $leadpage){
         $ID = $leadpage->ID;
         $newUrl = get_site_url().$leadpage->post_title;
         update_post_meta($ID, 'leadpages_slug', $newUrl);
+
     }
+
+    foreach($results as $leadpage){
+        $newTitle = implode('', explode('/', $leadpage->post_title, 2));
+        $wpdb->update($prefix.'posts', array('post_title' => $newTitle), array('ID' => $ID));
+    }
+
+    //update leadbox settings to match new plugin
+    $lp_settings = get_option('lp_settings');
+    if($lp_settings['leadboxes_timed_display_radio'] == 'posts'){
+        $lp_settings['leadboxes_timed_display_radio'] ='post';
+    }
+    if($lp_settings['leadboxes_exit_display_radio'] == 'posts'){
+        $lp_settings['leadboxes_exit_display_radio'] = 'post';
+    }
+
+    update_option('lp_settings', $lp_settings);
+
 }
+
 register_activation_hook(__FILE__, 'activateLeadpages');
 
 

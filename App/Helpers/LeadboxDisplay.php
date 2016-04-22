@@ -19,7 +19,7 @@ trait LeadboxDisplay
 
     protected function currentTimedLeadbox($leadboxId){
         $this->setCurrentLeadboxes();
-        if($this->currentTimedLeadbox[0] == $leadboxId){
+        if($this->currentTimedLeadbox[0] == $leadboxId ){
             return 'selected="selected"';
         }
     }
