@@ -214,13 +214,21 @@ class LeadPagesPostTypeModel
     public static function getMetaPagePath($post_id)
     {
         $meta = get_post_meta($post_id, 'leadpages_slug');
+
         if (sizeof($meta) == 0) {
             return false;
         } else {
 
             //make sure its the full url from new plugin if not get permalink
             if(!strpos($meta[0], 'http')){
-                return get_permalink($post_id);
+                $title = get_the_title($post_id);
+                //add / to start of title to properly build url below. Adding this because titles from old plugin
+                // contain a / a the start and need to account of it a user removes them
+                if(strpos($title, '/') != 0){
+                    $title = '/'.$title;
+                }
+                $url = get_site_url();
+                return $url . $title;
             }
             return $meta[0];
         }
@@ -244,15 +252,15 @@ class LeadPagesPostTypeModel
     }
 
     public function getHtml($pageId){
-        //check to see if we need to return cached version
-
+        //try to get leadpages_page_id if it is set(version 2 plugin pages)
         $LeadpageId = get_post_meta($pageId, 'leadpages_page_id', true);
 
         //if $LeadpageId does not exist try to get it from the xor id...once again maybe something that should be done
         //TODO in the api like getPageByXor call
         if(empty($LeadpageId)) {
-            $LeadPageId = $this->getPageByXORId($pageId);
+            $LeadpageId = $this->getPageByXORId($pageId);
         }
+
         $getCache = get_post_meta($pageId, 'cache_page', true);
         if($getCache == 'true'){
             //check if cache exist
@@ -267,7 +275,6 @@ class LeadPagesPostTypeModel
                 echo $html; die();
             }
         }
-
         //if we don't fall into cache just echo $html
         $html = $this->PagesApi->downloadPageHtml($LeadpageId);
         echo $html; die();

@@ -32,7 +32,17 @@ class IsLeadPage
         $query   = "SELECT post_id FROM {$prefix}postmeta where meta_value = '{$current}'";
         $result  = $wpdb->get_row($query);
         if (empty($result)) {
-            return false;
+            //try to grab page from old slug if not a current page
+            $post = get_post();
+            $postName = get_query_var('pagename');
+            $query   = "SELECT ID, post_type FROM {$prefix}posts where post_name = '{$postName}'";
+            $result = $wpdb->get_row($query);
+            if($result->post_type == 'leadpages_post'){
+                return get_post($result->ID);
+            }
+        }
+        if(empty($result)){
+            return;
         }
         return get_post($result->post_id);
     }

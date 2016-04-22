@@ -76,5 +76,20 @@ function deactivateLeadpages(){
 
 register_deactivation_hook(__FILE__,'deactivateLeadpages');
 
+//update all old slugs to match new structure
+function activateLeadpages(){
+    global $wpdb;
+
+    $prefix = $wpdb->prefix;
+    $results = $wpdb->get_results( "SELECT * FROM {$prefix}posts WHERE post_type = 'leadpages_post'", OBJECT );
+
+    foreach($results as $leadpage){
+        $ID = $leadpage->ID;
+        $newUrl = get_site_url().$leadpage->post_title;
+        update_post_meta($ID, 'leadpages_slug', $newUrl);
+    }
+}
+register_activation_hook(__FILE__, 'activateLeadpages');
+
 
 

@@ -63,10 +63,7 @@ class LeadPageTypeController
     public function normalPage($post)
     {
         if ($post->post_type == 'leadpages_post') {
-            $pageID = get_post_meta($post->ID, 'leadpages_page_id');
-            $pageID = $pageID[0];
-            //TODO check if is split tested and if so dont use cache version
-            //non cache version
+
             $html = $this->ioc['leadpagesModel']->getHtml($post->ID);
             echo $html;
             die();
