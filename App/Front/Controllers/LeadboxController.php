@@ -69,17 +69,26 @@ class LeadboxController
     public function addEmbedToContent(){
         if($this->hasSpecificTimed){
             add_filter('the_content', array($this, 'displayPageSpecificTimedLeadbox'));
+            $this->woocommerce_specific_hook('displayPageSpecificTimedLeadbox');
         }else {
             add_filter('the_content', array($this, 'getTimedLeadboxCode'));
+            $this->woocommerce_specific_hook('getTimedLeadboxCode');
         }
 
         if($this->hasSpecificExit) {
             add_filter('the_content', array($this, 'displayPageSpecificExitLeadbox'));
+            $this->woocommerce_specific_hook('displayPageSpecificExitLeadbox');
         }else{
             add_filter('the_content', array($this, 'getExitLeadboxCode'));
+            $this->woocommerce_specific_hook('getExitLeadboxCode');
         }
     }
 
+    protected function woocommerce_specific_hook($method){
+        if($this->postType == 'product'){
+            add_action('woocommerce_after_main_content', array($this, $method));
+        }
+    }
 
     /*
      * Page Specific Leadboxes
