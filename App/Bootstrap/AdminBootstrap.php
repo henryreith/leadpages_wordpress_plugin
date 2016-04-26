@@ -2,13 +2,14 @@
 
 namespace Leadpages\Bootstrap;
 
-use Leadpages\Admin\MetaBoxes\LeadboxMetaBox;
 use TheLoop\Contracts\HttpClient;
 use Leadpages\models\LeadboxesModel;
+use Leadpages\Admin\Providers\Update;
 use Leadpages\Admin\Factories\Metaboxes;
 use Leadpages\Admin\Providers\AdminAuth;
 use Leadpages\Admin\Factories\SettingsPage;
 use Leadpages\Admin\SettingsPages\Leadboxes;
+use Leadpages\Admin\MetaBoxes\LeadboxMetaBox;
 use Leadpages\Admin\MetaBoxes\LeadpageSelect;
 use Leadpages\Admin\Factories\CustomPostType;
 use Leadpages\Admin\Providers\LeadpagesLoginApi;
@@ -34,8 +35,12 @@ class AdminBootstrap
     private $auth;
 
     private $ioc;
+    /**
+     * @var \Leadpages\Admin\Providers\Update
+     */
+    private $update;
 
-    public function __construct(HttpClient $httpClient, LeadpagesLoginApi $leadpagesLoginApi, AdminAuth $auth)
+    public function __construct(HttpClient $httpClient, LeadpagesLoginApi $leadpagesLoginApi, AdminAuth $auth, Update $update)
     {
 
         $this->httpClient = $httpClient;
@@ -43,6 +48,7 @@ class AdminBootstrap
         $this->auth = $auth;
         $this->ioc = $this->getContainer();
         $this->initAdmin();
+        $this->update = $update;
     }
 
     public function initAdmin()
@@ -50,6 +56,7 @@ class AdminBootstrap
         add_action( 'admin_enqueue_scripts', array($this, 'loadJS') );
 
         $this->auth->login();
+        $this->ioc['update']->silent_update_check();
 
         if(!$this->auth->isLoggedIn()){
             SettingsPage::create(LeadpagesLoginPage::getName());
@@ -59,8 +66,6 @@ class AdminBootstrap
             $this->saveLeadPage();
             $this->saveLeadboxes();
         }
-
-
 
 
     }

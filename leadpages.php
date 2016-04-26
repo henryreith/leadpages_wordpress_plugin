@@ -10,13 +10,11 @@ Author URI: http://leadpages.net
 License: GPL2
 */
 
-use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
-
-include 'c3.php';
-
 /**
  * Load plugin textdomain.
  */
+
+use Leadpages\Admin\Providers\Update;
 
 load_plugin_textdomain('leadpages', false,
   plugin_basename(dirname(__FILE__)) . '/App/Languages');
@@ -79,8 +77,14 @@ register_deactivation_hook(__FILE__,'deactivateLeadpages');
 //update all old slugs to match new structure
 
 function activateLeadpages(){
-    global $wpdb;
 
+    //register activation cron
+    global $ioc;
+    $ioc['update']->register_auto_update();
+
+
+    //update old plugin info to work with new plugin
+    global $wpdb;
     $prefix = $wpdb->prefix;
     //update urls in options table
     $results = $wpdb->get_results( "SELECT * FROM {$prefix}posts WHERE post_type = 'leadpages_post'", OBJECT );

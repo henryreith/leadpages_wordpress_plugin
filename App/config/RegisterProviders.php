@@ -1,5 +1,6 @@
 <?php
 
+use Leadpages\Admin\Providers\Update;
 use Leadpages\Helpers\Security;
 use Leadpages\Front\Providers\NF;
 use Leadpages\Bootstrap\AdminBootstrap;
@@ -134,9 +135,19 @@ $ioc['frontBootStrap'] = $ioc->factory(function($c){
     return new FrontBootstrap($c['pagesApi'], $c['leadpagesPostType'], $c['leadboxApi']);
 });
 
+
+/**
+ * Update Provider
+ */
+
+$ioc['update'] = function($c){
+    return new Update();
+};
+
 /**
  * Admin Bootstrap
  */
 $ioc['adminBootStrap'] = $ioc->factory(function($c){
-    return new AdminBootstrap($c['httpClient'], $c['loginApi'], $c['adminAuth']);
+    return new AdminBootstrap($c['httpClient'], $c['loginApi'], $c['adminAuth'], $c['update']);
 });
+
