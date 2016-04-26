@@ -111,16 +111,30 @@ trait LeadboxDisplay
         $this->postTypesForLeadboxes = array_diff($postTypes, $unneededTypes);
     }
 
+    protected function disallowedPostTypes(){
+        $disallowedTypes = [
+            'leadpages_post',
+            //woocomerce
+            'product_variation',
+            'shop_order',
+            'shop_order_refund',
+            'shop_coupon',
+            'shop_webhook',
+        ];
+        return $disallowedTypes;
+    }
+
     /**
      *generate radio buttons for timed buttons
      */
     public function postTypesForTimedLeadboxes(){
         $this->getPostTypesForLeadboxes();
+        $disallowedPostTypes = $this->disallowedPostTypes();
         $options = '<br />';
         $options .= '<input type="radio" id="timed_radio_all" name="leadboxes_timed_display_radio" value="all" '.$this->currentTimedLeadboxDisplayPostType('all').'> <label for="exit_radio_all">Every WordPress page, including homepage, 404 and posts</label>';
 
         foreach($this->postTypesForLeadboxes as $postType){
-            if($postType =='leadpages_post'){
+            if(in_array($postType, $disallowedPostTypes)){
                 continue;
             }
             $options .="<br />";
@@ -135,11 +149,12 @@ trait LeadboxDisplay
      */
     public function postTypesForExitLeadboxes(){
         $this->getPostTypesForLeadboxes();
+        $disallowedPostTypes = $this->disallowedPostTypes();
         $options = '<br />';
         $options .= '<input type="radio" id="timed_radio_all" name="leadboxes_exit_display_radio" value="all" '.$this->currentExitLeadboxDisplayPostType('all').'> <label for="exit_radio_all">Every WordPress page, including homepage, 404 and posts</label>';
 
         foreach($this->postTypesForLeadboxes as $postType){
-            if($postType =='leadpages_post'){
+            if(in_array($postType, $disallowedPostTypes)){
                 continue;
             }
             $options .="<br />";
@@ -161,8 +176,8 @@ trait LeadboxDisplay
     public function timedDropDownPageSpecific($leadboxArray, $post)
     {
         $select = "<select name='pageTimedLeadbox' id='leadboxesTime'>";
+        $select .= "<option name='select' value='select'". $this->currentTimedLeadboxPageSpecific('select', $post->ID) ." >Select</option>";
         $select .= "<option name='none' value='none'". $this->currentTimedLeadboxPageSpecific('none', $post->ID) ." >None</option>";
-
         foreach($leadboxArray['_items'] as $leadbox){
 
             if($leadbox['publish_settings']['time']['seconds'] > 0){
@@ -190,6 +205,7 @@ trait LeadboxDisplay
     public function exitDropDownPageSpecific($leadboxArray, $post)
     {
         $select = "<select name='pageExitLeadbox' id='leadboxesExit'>";
+        $select .= "<option name='select' value='select'". $this->currentTimedLeadboxPageSpecific('select', $post->ID) ." >Select</option>";
         $select .= "<option name='none' value='none' ". $this->currentExitLeadboxPageSpecific('none', $post->ID) .">None</option>";
         foreach($leadboxArray['_items'] as $leadbox){
 

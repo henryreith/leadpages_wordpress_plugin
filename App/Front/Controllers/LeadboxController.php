@@ -51,7 +51,6 @@ class LeadboxController
     public function getTimedLeadboxCode(){
         $leadboxes = $this->getGlobalLeadBoxes();
         if($leadboxes['timed'][1] == $this->postType || $leadboxes['timed'][1] == 'all'){
-
             $timed_embed_code = $this->leadboxApi->getSingleLeadbox($leadboxes['timed'][0]);
             echo $timed_embed_code;
         }
@@ -102,8 +101,12 @@ class LeadboxController
     }
 
     public function displayPageSpecificTimedLeadbox(){
-        $timed_embed_code = $this->leadboxApi->getSingleLeadbox($this->pageSpecificTimedLeadboxId);
-        echo $timed_embed_code;
+        //only display a leadbox if the id selected is not none.
+        //if none is selected nothing will show.
+        if($this->pageSpecificTimedLeadboxId != 'none') {
+            $timed_embed_code = $this->leadboxApi->getSingleLeadbox($this->pageSpecificTimedLeadboxId);
+            echo $timed_embed_code;
+        }
     }
 
     protected function getExitSpecifiExitLeadbox($post){
@@ -114,8 +117,12 @@ class LeadboxController
     }
 
     public function displayPageSpecificExitLeadbox(){
-        $exit_embed_code = $this->leadboxApi->getSingleLeadbox($this->pageSpecificExitdLeadboxId);
-        echo $exit_embed_code;
+        //only display a leadbox if the id selected is not none.
+        //if none is selected nothing will show.
+        if($this->pageSpecificExitdLeadboxId != 'none') {
+            $exit_embed_code = $this->leadboxApi->getSingleLeadbox($this->pageSpecificExitdLeadboxId);
+            echo $exit_embed_code;
+        }
     }
 
 }

@@ -64,19 +64,48 @@ class LeadboxesModel
 
 
     public static function savePageSpecificLeadboxes($post_id, $post){
-        $timedLeadbox = $_POST['pageTimedLeadbox'];
-        $exitLeadbox  = $_POST['pageExitLeadbox'];
-        if($timedLeadbox != 'none') {
-            update_post_meta($post_id, 'pageTimedLeadbox', $timedLeadbox);
-        }
-        if($exitLeadbox !='none') {
-            update_post_meta($post_id, 'pageExitLeadbox', $exitLeadbox);
-        }
+
+        self::savePageSpecificTimedLeadbox($post_id);
+
+        self::savePageSpecificExitLeadbox($post_id);
     }
+
 
     public static function saveLeadboxMeta()
     {
         add_action('edit_post', array(get_called_class(), 'savePageSpecificLeadboxes'), 999, 2);
+    }
+
+    /**
+     * @param $post_id
+     * @param $timedLeadbox
+     */
+    public static function savePageSpecificTimedLeadbox($post_id, $timedLeadbox)
+    {
+        $timedLeadbox = $_POST['pageTimedLeadbox'];
+
+        if ($timedLeadbox != 'select') {
+            update_post_meta($post_id, 'pageTimedLeadbox', $timedLeadbox);
+        } else {
+            //if switched back to select delete the post meta so global leadboxs will display again
+            delete_post_meta($post_id, 'pageTimedLeadbox');
+        }
+    }
+
+    /**
+     * @param $post_id
+     * @param $exitLeadbox
+     */
+    public static function savePageSpecificExitLeadbox($post_id, $exitLeadbox)
+    {
+        $exitLeadbox  = $_POST['pageExitLeadbox'];
+
+        if ($exitLeadbox != 'select') {
+            update_post_meta($post_id, 'pageExitLeadbox', $exitLeadbox);
+        } else {
+            //if switched back to select delete the post meta so global leadboxs will display again
+            delete_post_meta($post_id, 'pageExitLeadbox');
+        }
     }
 
 }
