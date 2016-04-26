@@ -218,10 +218,10 @@ class LeadPagesPostTypeModel
                 switch($result['option_name']){
                     case('leadpages_front_page_id'):
                         return 'fp';
-                    break;
+                        break;
                     case('leadpages_wg_page_id'):
                         return 'wg';
-                    break;
+                        break;
                     case('leadpages_404_page_id'):
                         return 'nf';
                         break;

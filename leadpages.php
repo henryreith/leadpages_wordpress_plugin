@@ -77,6 +77,7 @@ function deactivateLeadpages(){
 register_deactivation_hook(__FILE__,'deactivateLeadpages');
 
 //update all old slugs to match new structure
+
 function activateLeadpages(){
     global $wpdb;
 
