@@ -41,7 +41,8 @@ class IsLeadPage
                 return get_post($result->ID);
             }
         }
-        if(empty($result)){
+
+        if(empty($result) || isset($result->post_type) && $result->post_type != 'leadpages_post'){
             return;
         }
         return get_post($result->post_id);
