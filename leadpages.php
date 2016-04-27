@@ -85,6 +85,7 @@ function activateLeadpages(){
 
     //update old plugin info to work with new plugin
     global $wpdb;
+
     $prefix = $wpdb->prefix;
     //update urls in options table
     $results = $wpdb->get_results( "SELECT * FROM {$prefix}posts WHERE post_type = 'leadpages_post'", OBJECT );

@@ -48,21 +48,23 @@ class LeadboxController
         );
     }
 
-    public function getTimedLeadboxCode(){
+    public function getTimedLeadboxCode($content){
         $leadboxes = $this->getGlobalLeadBoxes();
         if($leadboxes['timed'][1] == $this->postType || $leadboxes['timed'][1] == 'all'){
             $timed_embed_code = $this->leadboxApi->getSingleLeadbox($leadboxes['timed'][0]);
-            echo $timed_embed_code;
         }
+
+        return $content . $timed_embed_code;
     }
 
-    public function getExitLeadboxCode(){
+    public function getExitLeadboxCode($content){
         $leadboxes = $this->getGlobalLeadBoxes();
 
         if($leadboxes['exit'][1] == $this->postType || $leadboxes['exit'][1] == 'all'){
             $exit_embed_code = $this->leadboxApi->getSingleLeadbox($leadboxes['exit'][0]);
-            echo $exit_embed_code;
         }
+        return $content . $exit_embed_code;
+
     }
 
     public function addEmbedToContent(){
@@ -100,13 +102,13 @@ class LeadboxController
         }
     }
 
-    public function displayPageSpecificTimedLeadbox(){
+    public function displayPageSpecificTimedLeadbox($content){
         //only display a leadbox if the id selected is not none.
         //if none is selected nothing will show.
         if($this->pageSpecificTimedLeadboxId != 'none') {
             $timed_embed_code = $this->leadboxApi->getSingleLeadbox($this->pageSpecificTimedLeadboxId);
-            echo $timed_embed_code;
         }
+        return $content . $timed_embed_code;
     }
 
     protected function getExitSpecifiExitLeadbox($post){
@@ -116,13 +118,13 @@ class LeadboxController
         }
     }
 
-    public function displayPageSpecificExitLeadbox(){
+    public function displayPageSpecificExitLeadbox($content){
         //only display a leadbox if the id selected is not none.
         //if none is selected nothing will show.
         if($this->pageSpecificExitdLeadboxId != 'none') {
             $exit_embed_code = $this->leadboxApi->getSingleLeadbox($this->pageSpecificExitdLeadboxId);
-            echo $exit_embed_code;
         }
+        return $content . $exit_embed_code;
     }
 
 }
