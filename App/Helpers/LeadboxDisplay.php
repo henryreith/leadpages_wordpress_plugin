@@ -86,10 +86,10 @@ trait LeadboxDisplay
         $select = "<select name='lp_select_field_2' id='leadboxesExit'>";
         $select .= "<option name='none' value='none' ". $this->currentExitLeadbox('none') .">None</option>";
         foreach($leadboxArray['_items'] as $leadbox){
-
             if(isset($leadbox['publish_settings']['exit']['days']) && $leadbox['publish_settings']['exit']['days'] >= 0){
+                $days = $leadbox['publish_settings']['exit']['days'];
                 $select .= "<option value=\"{$leadbox['xor_hex_id']}\"
-                data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\"
+                data-daysAppear=\"{$days}\"
                 ".$this->currentExitLeadbox($leadbox['xor_hex_id']).">{$leadbox['name']}</option>";
             }else{
                 $select .= "<option value=\"{$leadbox['xor_hex_id']}\"
@@ -98,7 +98,6 @@ trait LeadboxDisplay
             }
         }
         $select .="</select>";
-
         //echo $select;
         return $select;
     }
@@ -184,7 +183,7 @@ trait LeadboxDisplay
         $select .= "<option name='none' value='none'". $this->currentTimedLeadboxPageSpecific('none', $post->ID) ." >None</option>";
         foreach($leadboxArray['_items'] as $leadbox){
 
-            if($leadbox['publish_settings']['time']['seconds'] > 0){
+            if(isset($leadbox['publish_settings']['time']) && $leadbox['publish_settings']['time']['seconds'] > 0){
                 $select .= "<option value=\"{$leadbox['xor_hex_id']}\"
                 data-timeAppear=\"{$leadbox['publish_settings']['time']['seconds']}\"
                 data-pageView=\"{$leadbox['publish_settings']['time']['views']}\"
@@ -213,10 +212,15 @@ trait LeadboxDisplay
         $select .= "<option name='none' value='none' ". $this->currentExitLeadboxPageSpecific('none', $post->ID) .">None</option>";
         foreach($leadboxArray['_items'] as $leadbox){
 
-            if($leadbox['publish_settings']['exit']['days'] >= 0){
+            if(isset($leadbox['publish_settings']['exit']['days']) && $leadbox['publish_settings']['exit']['days'] >= 0){
+                $days = $leadbox['publish_settings']['exit']['days'];
                 $select .= "<option value=\"{$leadbox['xor_hex_id']}\"
-                data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\"
+                data-daysAppear=\"{$days}\"
                 ".$this->currentExitLeadboxPageSpecific($leadbox['xor_hex_id'], $post->ID).">{$leadbox['name']}</option>";
+            }else{
+                $select .= "<option value=\"{$leadbox['xor_hex_id']}\"
+                data-daysAppear=\"0\"
+                ".$this->currentExitLeadbox($leadbox['xor_hex_id']).">{$leadbox['name']}</option>";
             }
         }
         $select .="</select>";

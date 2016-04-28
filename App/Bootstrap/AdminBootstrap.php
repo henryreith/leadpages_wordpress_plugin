@@ -73,7 +73,7 @@ class AdminBootstrap
         CustomPostType::create(LeadpagesPostType::getName());
         Metaboxes::create(LeadpageTypeMetaBox::getName());
         Metaboxes::create(LeadpageSelect::getName());
-        //Metaboxes::create(LeadboxMetaBox::getName());
+        Metaboxes::create(LeadboxMetaBox::getName());
 
         SettingsPage::create(Leadboxes::getName());
     }
