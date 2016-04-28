@@ -56,7 +56,7 @@ trait LeadboxDisplay
 
         foreach($leadboxArray['_items'] as $leadbox){
 
-            if($leadbox['publish_settings']['time']['seconds'] > 0){
+            if(isset($leadbox['publish_settings']['time']) && $leadbox['publish_settings']['time']['seconds'] > 0){
                 $select .= "<option value=\"{$leadbox['xor_hex_id']}\"
                 data-timeAppear=\"{$leadbox['publish_settings']['time']['seconds']}\"
                 data-pageView=\"{$leadbox['publish_settings']['time']['views']}\"
@@ -87,9 +87,13 @@ trait LeadboxDisplay
         $select .= "<option name='none' value='none' ". $this->currentExitLeadbox('none') .">None</option>";
         foreach($leadboxArray['_items'] as $leadbox){
 
-            if($leadbox['publish_settings']['exit']['days'] >= 0){
+            if(isset($leadbox['publish_settings']['exit']['days']) && $leadbox['publish_settings']['exit']['days'] >= 0){
                 $select .= "<option value=\"{$leadbox['xor_hex_id']}\"
                 data-daysAppear=\"{$leadbox['publish_settings']['time']['days']}\"
+                ".$this->currentExitLeadbox($leadbox['xor_hex_id']).">{$leadbox['name']}</option>";
+            }else{
+                $select .= "<option value=\"{$leadbox['xor_hex_id']}\"
+                data-daysAppear=\"0\"
                 ".$this->currentExitLeadbox($leadbox['xor_hex_id']).">{$leadbox['name']}</option>";
             }
         }

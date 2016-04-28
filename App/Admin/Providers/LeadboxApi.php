@@ -41,28 +41,27 @@ class LeadboxApi
         }
         $body = $this->client->getBody($response);
        //echo '<pre>';print_r($response);die();
-
-        foreach ($body['_items'] as $index => $result) {
-
-            //if embed is not set it is not published so it must be removed
-            if (empty($result['publish_settings']['embed'])) {
-                unset($body['_items'][$index]);
-                continue;
-            }
-            $body['_items'][$index]['publish_settings']['embed'] = htmlentities($result['publish_settings']['embed']);
-
-        }
+        //echo '<pre>';print_r($body);die();
+//        foreach ($body['_items'] as $index => $result) {
+//
+//            //if embed is not set it is not published so it must be removed
+//            if (empty($result['publish_settings']['embed'])) {
+//                unset($body['_items'][$index]);
+//                continue;
+//            }
+//            $body['_items'][$index]['publish_settings']['embed'] = htmlentities($result['publish_settings']['embed']);
+//
+//        }
 
         return $body;
     }
 
-    public function getSingleLeadbox($id)
+    public function getSingleLeadbox($id, $type)
     {
         global $config;
 
         $this->token = $this->getAccessToken();
-
-        $this->client->setUrl($config['api']['leadboxes']."/{$id}");
+        $this->client->setUrl($config['api']['leadboxes']."/{$id}?{$type}");
         $args['headers'] = array(
           'LP-Security-Token' => $this->token,
           'timeout'           => 10
@@ -76,7 +75,7 @@ class LeadboxApi
             exit();
         }
         $body = $this->client->getBody($response);
-        return $body['_items']['publish_settings']['publish_settings']['embed'];
+        return $body['_items']['publish_settings']['embed_code'];
 
 
     }
