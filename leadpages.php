@@ -54,6 +54,9 @@ require $config['basePath'] . 'Framework/ServiceContainer/ServiceContainer.php';
   |
   */
 
+
+
+
 if (is_admin() || is_network_admin()) {
     $adminBootstrap = $ioc['adminBootStrap'];
     include('App/Helpers/ErrorHandlerAjax.php');

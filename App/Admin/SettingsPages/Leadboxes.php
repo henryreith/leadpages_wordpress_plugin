@@ -72,8 +72,7 @@ class Leadboxes implements SettingsPage
 
     public function registerPage(){
         add_action( 'admin_menu', array($this, 'definePage') );
-        add_action( 'wp_ajax_nopriv_leadboxForm', array($this, 'leadboxesForm') );
-        add_action( 'wp_ajax_leadboxForm', array($this, 'leadboxesForm') );
+
     }
 
 
@@ -92,4 +91,9 @@ class Leadboxes implements SettingsPage
     }
 
 
+    public function allLeadboxesAjax(){
+        $ioc = $this->getContainer();
+        $allLeadBoxes = $ioc['leadboxApi']->getLeadBoxes();
+
+    }
 }

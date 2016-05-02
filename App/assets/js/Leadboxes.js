@@ -39,6 +39,35 @@
 
         });
 
+        $body.on('click', '#timedLeadboxRefresh', function(){
+            $('#timedLoading').show();
+            $.ajax({
+                type : "GET",
+                url : leadboxes_object.ajax_url,
+                data : {action: "getLeadboxesAjax"},
+                success: function(response) {
+                    $('#timedLoading').hide();
+                    var leadboxes = $.parseJSON(response);
+                    $('.timeLeadBoxes').html(leadboxes.timedLeadboxes);
+                }
+            });
+
+        });
+
+        $body.on('click', '#exitLeadboxRefresh', function(){
+            $('#exitLoading').show();
+            $.ajax({
+                type : "GET",
+                url : leadboxes_object.ajax_url,
+                data : {action: "getLeadboxesAjax"},
+                success: function(response) {
+                    $('#exitLoading').hide();
+                    var leadboxes = $.parseJSON(response);
+                    $('.exitLeadBoxes').html(leadboxes.exitLeadboxes);
+                }
+            });
+
+        });
 
         function populateTimedStats($this) {
             var timeTillAppear = $($this).find(':selected').data('timeappear');

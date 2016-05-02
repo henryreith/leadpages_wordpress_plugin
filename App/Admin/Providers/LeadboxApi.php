@@ -3,6 +3,7 @@
 
 namespace Leadpages\Admin\Providers;
 
+use Leadpages\Helpers\LeadboxDisplay;
 use Leadpages\Helpers\LPToken;
 use TheLoop\Contracts\HttpClient;
 
@@ -10,6 +11,7 @@ class LeadboxApi
 {
 
     use LPToken;
+    use LeadboxDisplay;
     /**
      * @var \TheLoop\Contracts\HttpClient
      */
@@ -52,8 +54,19 @@ class LeadboxApi
             $body['_items'][$index]['publish_settings']['embed'] = htmlentities($result['publish_settings']['embed']);
 
         }
-
         return $body;
+    }
+
+    public function allLeadboxesAjax(){
+        $allLeadBoxes = $this->getLeadBoxes();
+        $timedBoxes = $this->timedDropDown($allLeadBoxes);
+        $exitLeadboxes = $this->exitDropDown($allLeadBoxes);
+        $data = array(
+          'timedLeadboxes' => $timedBoxes,
+          'exitLeadboxes' => $exitLeadboxes
+        );
+
+        die(json_encode($data));
     }
 
     public function getSingleLeadbox($id)
@@ -78,7 +91,8 @@ class LeadboxApi
         $body = $this->client->getBody($response);
         return $body['_items']['publish_settings']['publish_settings']['embed'];
 
-
     }
+
+
 
 }

@@ -39,3 +39,14 @@
     position:relative;
     top:1px;
 }
+
+#exitLeadboxRefresh, #timedLeadboxRefresh{
+    margin:5px 0 0 5px;
+}
+
+#timedLoading, #exitLoading{
+    display: none;
+}
+
+
+

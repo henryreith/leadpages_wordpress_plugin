@@ -67,7 +67,8 @@ trait LeadboxDisplay
         }
         $select .="</select>";
 
-        //echo $select;
+        $select .= '<span id="timedLeadboxRefresh" class="dashicons dashicons-image-rotate"></span><span id="timedLoading">'.$this->leadboxesLoadingSmall().'</span>';
+
         return $select;
     }
 
@@ -95,7 +96,7 @@ trait LeadboxDisplay
         }
         $select .="</select>";
 
-        //echo $select;
+        $select .= '<span id="exitLeadboxRefresh" class="dashicons dashicons-image-rotate"></span> <span id="exitLoading">'.$this->leadboxesLoadingSmall().'</span>';
         return $select;
     }
 
@@ -231,18 +232,6 @@ trait LeadboxDisplay
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     public function leadboesLoading(){
         return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -15 120 120" width="150" height="150" fill="#14283a">
   <circle transform="translate(14 0)" cx="0" cy="14" r="0">
@@ -254,6 +243,23 @@ trait LeadboxDisplay
       keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
   </circle>
   <circle transform="translate(80 0)" cx="0" cy="14" r="0">
+    <animate attributeName="r" values="0; 20; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.6"
+      keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+  </circle>
+</svg>';
+    }
+
+    public function leadboxesLoadingSmall(){
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -15 50 50" width="70" height="20" fill="#14283a">
+  <circle transform="translate(14 0)" cx="0" cy="8" r="0">
+    <animate attributeName="r" values="0; 20; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0"
+      keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+  </circle>
+  <circle transform="translate(50 0)" cx="0" cy="8" r="0">
+    <animate attributeName="r" values="0; 20; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.3"
+      keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+  </circle>
+  <circle transform="translate(80 0)" cx="0" cy="8" r="0">
     <animate attributeName="r" values="0; 20; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.6"
       keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
   </circle>

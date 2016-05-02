@@ -74,8 +74,12 @@ class AdminBootstrap
         Metaboxes::create(LeadpageTypeMetaBox::getName());
         Metaboxes::create(LeadpageSelect::getName());
         Metaboxes::create(LeadboxMetaBox::getName());
-
         SettingsPage::create(Leadboxes::getName());
+        $leadboxApi = $this->ioc['leadboxApi'];
+        add_action( 'wp_ajax_nopriv_getLeadboxesAjax', array($leadboxApi, 'allLeadboxesAjax') );
+        add_action( 'wp_ajax_getLeadboxesAjax', array($leadboxApi, 'allLeadboxesAjax') );
+
+
     }
     protected function saveLeadPage(){
         $LeadpagesModel = $this->ioc['leadpagesModel'];
