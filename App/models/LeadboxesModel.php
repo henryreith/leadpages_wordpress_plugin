@@ -73,7 +73,7 @@ class LeadboxesModel
 
     public static function saveLeadboxMeta()
     {
-        add_action('edit_post', array(get_called_class(), 'savePageSpecificLeadboxes'), 999, 2);
+        //add_action('edit_post', array(get_called_class(), 'savePageSpecificLeadboxes'), 999, 2);
     }
 
     /**

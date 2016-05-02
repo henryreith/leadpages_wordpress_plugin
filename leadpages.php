@@ -83,7 +83,7 @@ function activateLeadpages(){
 
     //register activation cron
     global $ioc;
-    $ioc['update']->register_auto_update();
+    //$ioc['update']->register_auto_update();
 
 
     //update old plugin info to work with new plugin

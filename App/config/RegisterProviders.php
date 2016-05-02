@@ -1,8 +1,8 @@
 <?php
 
-use Leadpages\Admin\Providers\Update;
 use Leadpages\Helpers\Security;
 use Leadpages\Front\Providers\NF;
+use Leadpages\Admin\Providers\Update;
 use Leadpages\Bootstrap\AdminBootstrap;
 use Leadpages\Bootstrap\FrontBootstrap;
 use Leadpages\Admin\Providers\AdminAuth;
