@@ -81,11 +81,6 @@ register_deactivation_hook(__FILE__,'deactivateLeadpages');
 
 function activateLeadpages(){
 
-    //register activation cron
-    global $ioc;
-    //$ioc['update']->register_auto_update();
-
-
     //update old plugin info to work with new plugin
     global $wpdb;
 

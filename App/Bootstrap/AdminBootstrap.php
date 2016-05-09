@@ -65,6 +65,8 @@ class AdminBootstrap
             LeadboxesModel::init();
             $this->saveLeadPage();
             $this->saveLeadboxes();
+            $this->ioc['update']->register_auto_update();
+            $this->ioc['update']->silent_update_check();
         }
 
 
