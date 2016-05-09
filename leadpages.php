@@ -79,7 +79,34 @@ register_deactivation_hook(__FILE__,'deactivateLeadpages');
 
 //update all old slugs to match new structure
 
+
+function checkPHPVersion()
+{
+    $php = '7.4';
+    if ( version_compare( PHP_VERSION, $php, '<' ) )
+        $flag = 'PHP';
+    else
+        return;
+    deactivate_plugins( basename( __FILE__ ) );
+    wp_die('<p>The <strong>Leadpages&reg;</strong> plugin requires php version <strong>'.$php.'</strong> or greater.</p> <p>You are currently using <strong>'.PHP_VERSION.'</strong></p>','Plugin Activation Error',  array( 'response'=>200, 'back_link'=>TRUE ) );
+
+}
+
+function my_error_notice() {
+    ?>
+    <div class="error notice">
+        <p><?php _e( 'There has been an error. Bummer!', 'my_plugin_textdomain' ); ?></p>
+    </div>
+    <?php
+}
+
+function leadpages_deactivate_self() {
+    deactivate_plugins( plugin_basename( __FILE__ ) );
+}
+
 function activateLeadpages(){
+
+    checkPHPVersion();
 
     //update old plugin info to work with new plugin
     global $wpdb;
