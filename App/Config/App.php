@@ -3,7 +3,7 @@
 $test = true;
 
 if($test){
-    $currentTestBranchUrl = "https://brandontesting-dot-leadpage-test.appspot.com";
+    $currentTestBranchUrl = "https://leadpage-test.appspot.com";
     $config = array(
 
         /*

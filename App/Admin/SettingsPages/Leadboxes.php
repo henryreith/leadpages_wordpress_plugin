@@ -91,9 +91,4 @@ class Leadboxes implements SettingsPage
     }
 
 
-    public function allLeadboxesAjax(){
-        $ioc = $this->getContainer();
-        $allLeadBoxes = $ioc['leadboxApi']->getLeadBoxes();
-
-    }
 }

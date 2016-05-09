@@ -65,6 +65,10 @@ class LeadPageTypeController
         if ($post->post_type == 'leadpages_post') {
 
             $html = $this->ioc['leadpagesModel']->getHtml($post->ID);
+            //if page no longer exist return and load normal page
+            if($html == false){
+                return;
+            }
             echo $html;
             die();
         }

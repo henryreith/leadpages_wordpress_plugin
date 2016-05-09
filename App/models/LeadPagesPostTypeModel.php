@@ -281,7 +281,9 @@ class LeadPagesPostTypeModel
         if (empty($LeadpageId)) {
             $LeadpageId = $this->getPageByXORId($pageId);
         }
-
+        if($LeadpageId == false){
+            return false;
+        }
         $getCache = get_post_meta($pageId, 'cache_page', true);
         if ($getCache == 'true') {
             //check if cache exist
@@ -311,6 +313,8 @@ class LeadPagesPostTypeModel
         foreach ($pages['_items'] as $page) {
             if ($page['_meta']['xor_hex_id'] == $xorId) {
                 return $page['_meta']['id'];
+            }else{
+                return false;
             }
         }
     }
