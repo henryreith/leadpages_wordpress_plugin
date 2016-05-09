@@ -82,7 +82,7 @@ register_deactivation_hook(__FILE__,'deactivateLeadpages');
 
 function checkPHPVersion()
 {
-    $php = '7.4';
+    $php = '5.4';
     if ( version_compare( PHP_VERSION, $php, '<' ) )
         $flag = 'PHP';
     else
