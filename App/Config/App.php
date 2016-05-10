@@ -1,6 +1,6 @@
 <?php
 
-$test = true;
+$test = false;
 
 if($test){
     $currentTestBranchUrl = "https://leadpage-test.appspot.com";
