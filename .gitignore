@@ -1,5 +1,4 @@
-!vendor/
-vendor/*
-
+vendor/
+node_modules/**/*
 !vendor/pimple
 testdata.php
