@@ -105,7 +105,10 @@ function leadpages_deactivate_self() {
 }
 
 function activateLeadpages(){
-
+    if(isset($_COOKIE['leadpagesLoginCookieGood'])){
+        setcookie('leadpagesLoginCookieGood', "", time()-3600);
+        unset($_COOKIE['leadpagesLoginCookieGood']);
+    }
     checkPHPVersion();
 
     //update old plugin info to work with new plugin
