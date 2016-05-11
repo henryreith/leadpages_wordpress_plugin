@@ -45,6 +45,7 @@ if($test){
           'current' => 'https://api.leadpages.io/auth/v1/sessions/current'
         ),
         'pages'    => 'https://my.leadpages.net/page/v1/pages'
+        'leadboxes' => "https://my.leadpages.net/leadbox/v1/leadboxes"
       )
     );
 
