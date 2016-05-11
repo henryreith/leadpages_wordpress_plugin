@@ -313,9 +313,9 @@ class LeadPagesPostTypeModel
         foreach ($pages['_items'] as $page) {
             if ($page['_meta']['xor_hex_id'] == $xorId) {
                 return $page['_meta']['id'];
-            }else{
-                return false;
             }
         }
+        //return false if page doesn't exist
+        return false;
     }
 }
