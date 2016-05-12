@@ -5,6 +5,11 @@ var runSequence = require('run-sequence');
 
 var releaseFolder = '/Users/brandonbraner/projects/releases/leadpages-wordpress-v2/beta/leadpages';
 
+gulp.task('removeallfiles',function(){
+    return del([releaseFolder+'/**/*'], {force: true});
+});
+
+
 gulp.task('runcomposer', function(){
     return composer("update --no-dev");
 });
@@ -25,6 +30,7 @@ gulp.task('runcomposer2', function(){
 
 gulp.task('deploy', function(){
     runSequence(
+        'removeallfiles',
         'runcomposer',
         'movetoreleases',
         'removenode',
