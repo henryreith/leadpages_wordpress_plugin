@@ -73,16 +73,17 @@ class LeadboxesModel
 
     public static function saveLeadboxMeta()
     {
-        //add_action('edit_post', array(get_called_class(), 'savePageSpecificLeadboxes'), 999, 2);
+        add_action('edit_post', array(get_called_class(), 'savePageSpecificLeadboxes'), 999, 2);
     }
 
     /**
      * @param $post_id
      * @param $timedLeadbox
      */
-    public static function savePageSpecificTimedLeadbox($post_id, $timedLeadbox)
+    public static function savePageSpecificTimedLeadbox($post_id)
     {
         $timedLeadbox = $_POST['pageTimedLeadbox'];
+
 
         if ($timedLeadbox != 'select') {
             update_post_meta($post_id, 'pageTimedLeadbox', $timedLeadbox);
@@ -96,7 +97,7 @@ class LeadboxesModel
      * @param $post_id
      * @param $exitLeadbox
      */
-    public static function savePageSpecificExitLeadbox($post_id, $exitLeadbox)
+    public static function savePageSpecificExitLeadbox($post_id)
     {
         $exitLeadbox  = $_POST['pageExitLeadbox'];
 
