@@ -83,7 +83,7 @@ class Update
             return;
         }
         $plugin_file = 'leadpages/leadpages.php';
-        $upgrade_url = wp_nonce_url('update.php?action=upgrade-plugin&amp;plugin=' . urlencode($plugin_file),
+        $upgrade_url = admin_url('update.php?action=upgrade-plugin&amp;plugin=' . urlencode($plugin_file),
           'upgrade-plugin_' . $plugin_file);
         $message     = 'There is a new version of LeadPages plugin available! ( ' . $nv . ' )<br>You can <a href="' . $upgrade_url . '">update</a> to the latest version automatically or <a href="' . $url . '">download</a> the update and install it manually.';
         self::show_message(true, $message);
@@ -108,7 +108,7 @@ class Update
         }
         $plugin_path = 'leadpages/leadpages.php';
         if (empty($option->response[$plugin_path])) {
-            $option->response[$plugin_path] = new stdClass();
+            $option->response[$plugin_path] = new \stdClass();
         }
         $option->response[$plugin_path]->url         = self::_plugin_get('AuthorURI');
         $option->response[$plugin_path]->slug        = 'leadpages';
@@ -209,6 +209,27 @@ class Update
         }
 
         return array($r, 'Everything is good!');
+    }
+
+    private static $message = false;
+
+    function show_message( $not_error, $message ) {
+        self::$message = $message;
+        if ( $not_error ) {
+            add_action( 'admin_notices', array( &$this, 'showMessage' ) );
+        } else {
+            add_action( 'admin_notices', array( &$this, 'showErrorMessage' ) );
+        }
+    }
+
+    function showMessage() {
+        echo '<div id="message" class="updated">';
+        echo '<p><strong>' . self::$message . '</strong></p></div>';
+    }
+
+    function showErrorMessage() {
+        echo '<div id="message" class="error">';
+        echo '<p><strong>' . self::$message . '</strong></p></div>';
     }
 
 

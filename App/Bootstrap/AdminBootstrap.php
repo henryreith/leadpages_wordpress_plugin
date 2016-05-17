@@ -56,7 +56,6 @@ class AdminBootstrap
         add_action( 'admin_enqueue_scripts', array($this, 'loadJS') );
 
         $this->auth->login();
-        //$this->ioc['update']->silent_update_check();
 
         if(!$this->auth->isLoggedIn()){
             SettingsPage::create(LeadpagesLoginPage::getName());
@@ -66,7 +65,7 @@ class AdminBootstrap
             $this->saveLeadPage();
             $this->saveLeadboxes();
             $this->ioc['update']->register_auto_update();
-            $this->ioc['update']->silent_update_check();
+            $this->update->silent_update_check();
         }
 
 
