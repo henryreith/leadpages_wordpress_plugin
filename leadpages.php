@@ -3,7 +3,7 @@
 /*
 Plugin Name: Leadpages Connector
 Plugin URI: http://leadpages.net
-Description:LeadPages connector plugin
+Description:Leadpages connector plugin
 Version: 2.0
 Author: Leadpages
 Author URI: http://leadpages.net
@@ -78,6 +78,12 @@ function deactivateLeadpages(){
 register_deactivation_hook(__FILE__,'deactivateLeadpages');
 
 //update all old slugs to match new structure
+
+//refresh page after user updates plugin to refresh the left hand menu
+add_action( 'user_meta_after_user_update', 'refreshPage' );
+function refreshPage() {
+    echo '<script>location.reload();</script>';
+}
 
 
 function checkPHPVersion()
