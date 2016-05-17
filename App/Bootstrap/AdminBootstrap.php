@@ -65,7 +65,7 @@ class AdminBootstrap
             $this->saveLeadPage();
             $this->saveLeadboxes();
             $this->ioc['update']->register_auto_update();
-            $this->update->silent_update_check();
+            $this->ioc['update']->silent_update_check();
         }
 
 

@@ -163,8 +163,9 @@ class Update
 
     public function lb_api_call($service)
     {
+        global $config;
         $licence_key = 'upUbSkfvYbd74rYnAl5hWczFlGbnYLCp';
-        $url         = 'http://leadbrite.appspot.com/service/leadpages/' . $service . '/';
+        $url         = $config['update_url'].'/service/leadpages/' . $service . '/';
         $current_ver = self::_plugin_get('Version');
         $response    = wp_remote_post(
           $url,

@@ -1,7 +1,10 @@
 <?php
 
-$test = false;
-
+if(strpos($_SERVER['HTTP_HOST'], 'localhost') >= 0){
+    $test = true;
+}else{
+    $test = false;
+}
 if($test){
     $currentTestBranchUrl = "https://leadpage-test.appspot.com";
     $config = array(
@@ -24,9 +27,7 @@ if($test){
         'leadboxes' => $currentTestBranchUrl."/leadbox/v1/leadboxes"
       )
     );
-
-    $config['admin_assets'] = plugin_dir_url((dirname(__FILE__))) . 'assets';
-    $config['admin_images'] = $config['admin_assets'] . '/images';
+    $config['update_url'] = "https://r213-dot-leadbrite.appspot.com";
 }else{
     $config = array(
 
@@ -49,7 +50,9 @@ if($test){
       )
     );
 
+
+    $config['update_url'] = "http://leadbrite.appspot.com";
+}
     $config['admin_assets'] = plugin_dir_url((dirname(__FILE__))) . 'assets';
     $config['admin_images'] = $config['admin_assets'] . '/images';
-}
 
