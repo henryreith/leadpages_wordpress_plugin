@@ -132,7 +132,7 @@ $ioc['passwordProtected'] = function($c){
  * Front Bootstrap
  */
 $ioc['frontBootStrap'] = $ioc->factory(function($c){
-    return new FrontBootstrap($c['pagesApi'], $c['leadpagesPostType'], $c['leadboxApi']);
+    return new FrontBootstrap($c['pagesApi'], $c['leadpagesPostType'], $c['leadboxApi'], $c['adminAuth']);
 });
 
 

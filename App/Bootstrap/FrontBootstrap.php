@@ -2,8 +2,9 @@
 
 namespace Leadpages\Bootstrap;
 
-use Leadpages\Admin\Factories\CustomPostType;
+use Leadpages\Admin\Providers\AdminAuth;
 use Leadpages\Admin\Providers\LeadboxApi;
+use Leadpages\Admin\Factories\CustomPostType;
 use Leadpages\Admin\Providers\LeadpagesPagesApi;
 use Leadpages\Front\Controllers\LeadboxController;
 use TheLoop\ServiceContainer\ServiceContainerTrait;
@@ -22,19 +23,24 @@ class FrontBootstrap
     public $postId;
     public $postType;
     public $leadpagesPostType;
+    public $auth;
     /**
      * @var \Leadpages\Admin\Providers\LeadboxApi
      */
     private $leadboxApi;
 
-    public function __construct(LeadpagesPagesApi $pageApi, LeadpagesPostType $leadpagesPostType, LeadboxApi $leadboxApi) {
+    public function __construct(LeadpagesPagesApi $pageApi, LeadpagesPostType $leadpagesPostType, LeadboxApi $leadboxApi, AdminAuth $auth) {
 
         $this->pagesApi   = $pageApi;
         $this->postId = get_the_ID();
         $this->postType = get_post_type($this->postId);
         $this->leadpagesPostType = $leadpagesPostType;
         $this->leadboxApi = $leadboxApi;
-        $this->initFront();
+        $this->auth = $auth;
+
+        if($this->auth->isLoggedIn()){
+            $this->initFront();
+        }
 
     }
 
