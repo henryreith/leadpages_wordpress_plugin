@@ -117,6 +117,13 @@ function activateLeadpages(){
     }
     checkPHPVersion();
 
+}
+
+function updateToVersion2x(){
+    $dbHasBeenUpdated = get_option('leadpages_version2_update');
+    if($dbHasBeenUpdated){
+        return;
+    }
     //update old plugin info to work with new plugin
     global $wpdb;
 
@@ -146,8 +153,24 @@ function activateLeadpages(){
     }
 
     update_option('lp_settings', $lp_settings);
+    update_option('leadpages_version2_update', true);
+}
+
+/**
+ *Need to refresh on update to refresh menu
+ */
+function refreshPageOnUpdateToVersion2x(){
+    $pageHasBeenRefreshed = get_option('leadpages_version2_refresh');
+    if($pageHasBeenRefreshed){
+        return;
+    }
+    update_option('leadpages_version2_refresh', true);
+    header("Refresh:0");
 
 }
+
+refreshPageOnUpdateToVersion2x();
+updateToVersion2x();
 
 register_activation_hook(__FILE__, 'activateLeadpages');
 
