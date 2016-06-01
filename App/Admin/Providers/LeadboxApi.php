@@ -26,10 +26,10 @@ class LeadboxApi
 
     public function getLeadBoxes()
     {
-        global $config;
+        global $leadpagesConfig;
 
         $this->token = $this->getAccessToken();
-        $this->client->setUrl($config['api']['leadboxes']);
+        $this->client->setUrl($leadpagesConfig['api']['leadboxes']);
         $args['headers'] = array(
           'LP-Security-Token' => $this->token,
         );
@@ -72,10 +72,10 @@ class LeadboxApi
 
     public function getSingleLeadbox($id, $type)
     {
-        global $config;
+        global $leadpagesConfig;
 
         $this->token = $this->getAccessToken();
-        $this->client->setUrl($config['api']['leadboxes']."/{$id}?popup_type={$type}");
+        $this->client->setUrl($leadpagesConfig['api']['leadboxes']."/{$id}?popup_type={$type}");
         $args['headers'] = array(
           'LP-Security-Token' => $this->token,
           'timeout'           => 10

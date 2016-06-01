@@ -19,11 +19,11 @@ class Leadboxes implements SettingsPage
     }
 
     public function definePage() {
-        global $config;
+        global $leadpagesConfig;
 
         add_action( 'admin_enqueue_scripts', array($this, 'leadboxScripts') );
 
-        add_menu_page('leadboxes', 'Leadboxes', 'manage_options', 'Leadboxes', array($this, 'displayCallback'), $config['admin_images'].'/leadboxes_sm.png' );
+        add_menu_page('leadboxes', 'Leadboxes', 'manage_options', 'Leadboxes', array($this, 'displayCallback'), $leadpagesConfig['admin_images'].'/leadboxes_sm.png' );
     }
 
     public function displayCallback(){
@@ -77,10 +77,10 @@ class Leadboxes implements SettingsPage
 
 
     public function leadboxScripts(){
-        global $config;
+        global $leadpagesConfig;
         $ioc = $this->getContainer();
         $leadboxes = $ioc['leadboxApi']->getLeadBoxes();
-        wp_enqueue_script('Leadboxes', $config['admin_assets'] . '/js/Leadboxes.js', array('jquery'));
+        wp_enqueue_script('Leadboxes', $leadpagesConfig['admin_assets'] . '/js/Leadboxes.js', array('jquery'));
         wp_localize_script('Leadboxes', 'leadboxes_object', array(
           'ajax_url'  => admin_url('admin-ajax.php'),
           'timedLeadboxes' => $this->timedDropDown($leadboxes),

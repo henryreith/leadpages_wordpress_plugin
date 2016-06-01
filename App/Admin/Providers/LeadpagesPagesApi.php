@@ -17,9 +17,9 @@ class LeadpagesPagesApi
 
     public function __construct(HttpClient $client)
     {
-        global $config;
+        global $leadpagesConfig;
         $this->client      = $client;
-        $this->PagesUrl = $config['api']['pages'];
+        $this->PagesUrl    = $leadpagesConfig['api']['pages'];
     }
 
     public function getUserPages($cursor = false)

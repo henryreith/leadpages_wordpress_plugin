@@ -76,8 +76,6 @@ class LeadPageTypeController
 
     public function initPage()
     {
-        global $config;
-
         //check all special pagetypes first, then go to a normal leadpage if not matched
         //if any resource is a 404 it will try to load this as well, causing page load latency
         $this->displayNFPage();

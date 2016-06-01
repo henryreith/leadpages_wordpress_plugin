@@ -163,9 +163,9 @@ class Update
 
     public function lb_api_call($service)
     {
-        global $config;
+        global $leadpagesConfig;
         $licence_key = 'upUbSkfvYbd74rYnAl5hWczFlGbnYLCp';
-        $url         = $config['update_url'].'/service/leadpages/' . $service . '/';
+        $url         = $leadpagesConfig['update_url'].'/service/leadpages/' . $service . '/';
         $current_ver = self::_plugin_get('Version');
         $response    = wp_remote_post(
           $url,

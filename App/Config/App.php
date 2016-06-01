@@ -1,6 +1,6 @@
 <?php
 
-$config = array(
+$leadpagesConfig = array(
 
     /*
   |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ $config = array(
 );
 
 
-$config['update_url'] = "http://leadbrite.appspot.com";
-$config['admin_assets'] = plugin_dir_url((dirname(__FILE__))) . 'assets';
-$config['admin_images'] = $config['admin_assets'] . '/images';
+$leadpagesConfig['update_url'] = "http://leadbrite.appspot.com";
+$leadpagesConfig['admin_assets'] = plugin_dir_url((dirname(__FILE__))) . 'assets';
+$leadpagesConfig['admin_images'] = $leadpagesConfig['admin_assets'] . '/images';
 

@@ -26,5 +26,4 @@ $ioc = $container->getContainer();
 /**
  * include providers from App
  */
-
-require_once($config['basePath'].'App/Config/RegisterProviders.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/App/Config/RegisterProviders.php');

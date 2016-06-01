@@ -91,10 +91,10 @@ class AdminBootstrap
         LeadboxesModel::saveLeadboxMeta();
     }
     public function loadJS(){
-        global $config;
-        wp_enqueue_style( 'leadpagesStyles', $config['admin_assets'].'/css/styles.css', false );
+        global $leadpagesConfig;
+        wp_enqueue_style( 'leadpagesStyles', $leadpagesConfig['admin_assets'].'/css/styles.css', false );
 
-        wp_enqueue_script('LeadpagesPostType', $config['admin_assets'].'/js/LeadpagesPostType.js', array('jquery'));
+        wp_enqueue_script('LeadpagesPostType', $leadpagesConfig['admin_assets'].'/js/LeadpagesPostType.js', array('jquery'));
         wp_localize_script( 'LeadpagesPostType', 'ajax_object', array(
           'ajax_url' => admin_url( 'admin-ajax.php' ),
           'id'       => get_the_ID()

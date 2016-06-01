@@ -19,10 +19,10 @@ class LeadpagesLoginApi
     }
 
     public function getUserToken($username, $password){
-        global $config;
+        global $leadpagesConfig;
 
         //set url for http client
-        $this->client->setUrl($config['api']['sessions']['new']);
+        $this->client->setUrl($leadpagesConfig['api']['sessions']['new']);
 
         $args['headers'] = array(
           'Authorization' => 'Basic ' . base64_encode( $username . ':' . $password)
@@ -48,12 +48,12 @@ class LeadpagesLoginApi
     }
 
     public function checkUserToken($token){
-        global $config;
+        global $leadpagesConfig;
         //check a session to keep it form having to do this on every page.
         if(isset($_COOKIE['leadpagesLoginCookieGood'])){
             return true;
         }
-        $this->client->setUrl($config['api']['sessions']['current']);
+        $this->client->setUrl($leadpagesConfig['api']['sessions']['current']);
 
         $args = array();
 

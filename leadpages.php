@@ -19,6 +19,20 @@ use Leadpages\Admin\Providers\Update;
 load_plugin_textdomain('leadpages', false,
   plugin_basename(dirname(__FILE__)) . '/App/Languages');
 
+//hopefully deactive plugin if updated via admin and php version is less that 5.4
+//this is ugly as we are now doing this twice here and on activation need to consolidate into one function
+if ( version_compare( PHP_VERSION, 5.4, '<' ) ){
+    $activePlugins = get_option('active_plugins', true);
+    foreach($activePlugins as $key => $plugin){
+        if($plugin == 'leadpages/leadpages.php'){
+            unset($activePlugins[$key]);
+        }
+    }
+    update_option('active_plugins', $activePlugins);
+    wp_die('<p>The <strong>Leadpages&reg;</strong> plugin requires php version <strong> 5.4 </strong> or greater.</p> <p>You are currently using <strong>'.PHP_VERSION.'</strong></p>','Plugin Activation Error',  array( 'response'=>200, 'back_link'=>TRUE ) );
+
+}
+
 /*
   |--------------------------------------------------------------------------
   | Application Entry Point
@@ -42,7 +56,7 @@ require('App/Config/App.php');
   |
   */
 
-require $config['basePath'] . 'Framework/ServiceContainer/ServiceContainer.php';
+require $leadpagesConfig['basePath'] . 'Framework/ServiceContainer/ServiceContainer.php';
 
 
 /*
@@ -84,7 +98,6 @@ add_action( 'user_meta_after_user_update', 'refreshPage' );
 function refreshPage() {
     echo '<script>location.reload();</script>';
 }
-
 
 function checkPHPVersion()
 {

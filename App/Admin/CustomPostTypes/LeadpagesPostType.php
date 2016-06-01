@@ -38,7 +38,7 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
 
     public function registerPostType()
     {
-        global $config;
+        global $leadpagesConfig;
         $this->args   = array(
           'labels'               => $this->labels,
           'description'          => 'Allows you to have Leadpages on your WordPress site.',
@@ -46,7 +46,7 @@ class LeadpagesPostType extends CustomPostType implements CustomPostTypeColumns
           'publicly_queryable'   => true,
           'show_ui'              => true,
           'query_var'            => true,
-          'menu_icon'            => $config['admin_images'].'/menu-icon.png',
+          'menu_icon'            => $leadpagesConfig['admin_images'].'/menu-icon.png',
           'capability_type'      => 'page',
           'menu_position'        => 10000,
           'can_export'           => false,
