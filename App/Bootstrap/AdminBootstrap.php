@@ -93,8 +93,10 @@ class AdminBootstrap
     public function loadJS(){
         global $leadpagesConfig;
         wp_enqueue_style( 'leadpagesStyles', $leadpagesConfig['admin_assets'].'/css/styles.css', false );
-
-        wp_enqueue_script('LeadpagesPostType', $leadpagesConfig['admin_assets'].'/js/LeadpagesPostType.js', array('jquery'));
+        if($leadpagesConfig['currentScreen'] == 'leadpages_post') {
+            wp_enqueue_script('LeadpagesPostType', $leadpagesConfig['admin_assets'] . '/js/LeadpagesPostType.js',
+              array('jquery'));
+        }
         wp_localize_script( 'LeadpagesPostType', 'ajax_object', array(
           'ajax_url' => admin_url( 'admin-ajax.php' ),
           'id'       => get_the_ID()

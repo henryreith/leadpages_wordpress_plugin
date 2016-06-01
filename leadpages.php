@@ -4,7 +4,7 @@
 Plugin Name: Leadpages Connector
 Plugin URI: http://leadpages.net
 Description:Leadpages connector plugin
-Version: 2.0
+Version: 2.0.1
 Author: Leadpages
 Author URI: http://leadpages.net
 License: GPL2
@@ -187,5 +187,13 @@ updateToVersion2x();
 
 register_activation_hook(__FILE__, 'activateLeadpages');
 
+function getScreen()
+{
+    global $leadpagesConfig;
+
+    $screen = get_current_screen();
+    $leadpagesConfig['currentScreen'] = $screen->post_type;
+}
 
 
+add_action('current_screen', 'getScreen');
