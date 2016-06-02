@@ -2,6 +2,7 @@
 
 namespace Leadpages\Bootstrap;
 
+use Leadpages\models\LeadPagesPostTypeModel;
 use TheLoop\Contracts\HttpClient;
 use Leadpages\models\LeadboxesModel;
 use Leadpages\Admin\Providers\Update;
@@ -39,16 +40,20 @@ class AdminBootstrap
      * @var \Leadpages\Admin\Providers\Update
      */
     private $update;
+    /**
+     * @var \Leadpages\models\LeadPagesPostTypeModel
+     */
+    private $leadpagesModel;
 
-    public function __construct(HttpClient $httpClient, LeadpagesLoginApi $leadpagesLoginApi, AdminAuth $auth, Update $update)
+    public function __construct(HttpClient $httpClient, LeadpagesLoginApi $leadpagesLoginApi, AdminAuth $auth, Update $update, LeadPagesPostTypeModel $leadpagesModel)
     {
-
         $this->httpClient = $httpClient;
         $this->leadpagesLoginApi = $leadpagesLoginApi;
         $this->auth = $auth;
         $this->ioc = $this->getContainer();
-        $this->initAdmin();
+        $this->leadpagesModel = $leadpagesModel;
         $this->update = $update;
+        $this->initAdmin();
     }
 
     public function initAdmin()
@@ -64,8 +69,7 @@ class AdminBootstrap
             LeadboxesModel::init();
             $this->saveLeadPage();
             $this->saveLeadboxes();
-            $this->ioc['update']->register_auto_update();
-            $this->ioc['update']->silent_update_check();
+            $this->update->silent_update_check();
         }
 
 
@@ -83,8 +87,7 @@ class AdminBootstrap
 
     }
     protected function saveLeadPage(){
-        $LeadpagesModel = $this->ioc['leadpagesModel'];
-        $LeadpagesModel->save();
+        $this->leadpagesModel->save();
     }
     protected function saveLeadboxes()
     {
