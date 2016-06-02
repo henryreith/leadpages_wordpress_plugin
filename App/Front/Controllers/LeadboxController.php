@@ -27,6 +27,10 @@ class LeadboxController
 
     public function initLeadboxes(){
         global $post;
+        
+        if(empty($post)){
+            return;
+        }
         $this->setPageType($post);
         $this->getPageSpecificTimedLeadbox($post);
         $this->getExitSpecifiExitLeadbox($post);

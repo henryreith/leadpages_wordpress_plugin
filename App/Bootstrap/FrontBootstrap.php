@@ -49,9 +49,9 @@ class FrontBootstrap
         CustomPostType::create(LeadpagesPostType::getName());
         //add_action( 'pre_get_posts', array($this->leadpagesPostType, 'parse_request_trick' ));
         $controller = new LeadPageTypeController();
-        add_action('the_posts', array($controller, 'initPage'));
+        add_filter('the_posts', array($controller, 'initPage'));
         $leadboxes = new LeadboxController($this->leadboxApi);
-        add_action('the_posts', array($leadboxes, 'initLeadboxes'));
+        add_filter('the_posts', array($leadboxes, 'initLeadboxes'));
     }
 
 

@@ -37,7 +37,7 @@ class IsLeadPage
             $postName = get_query_var('pagename');
             $query   = "SELECT ID, post_type FROM {$prefix}posts where post_name = '{$postName}'";
             $result = $wpdb->get_row($query);
-            if($result->post_type == 'leadpages_post'){
+            if(isset($result->post_type) && $result->post_type == 'leadpages_post'){
                 return get_post($result->ID);
             }
         }
