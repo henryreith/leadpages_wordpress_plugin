@@ -69,7 +69,13 @@ class LeadPageTypeController
             if($html == false){
                 return;
             }
-            echo $html;
+            ob_clean();//clear the output buffer
+            // flush previous cache
+
+            ob_start();//start output buffer
+            status_header( '200' );
+            print $html;
+            ob_end_flush();
             die();
         }
     }
