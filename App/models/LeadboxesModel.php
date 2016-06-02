@@ -73,7 +73,9 @@ class LeadboxesModel
 
     public static function saveLeadboxMeta()
     {
-        add_action('edit_post', array(get_called_class(), 'savePageSpecificLeadboxes'), 999, 2);
+        if(isset($_POST['post_type']) && $_POST['post_type'] != 'leadpages_post') {
+            add_action('edit_post', array(get_called_class(), 'savePageSpecificLeadboxes'), 999, 2);
+        }
     }
 
     /**
