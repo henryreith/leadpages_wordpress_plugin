@@ -2,13 +2,14 @@
 
 namespace Leadpages\Bootstrap;
 
-use Leadpages\models\LeadPagesPostTypeModel;
 use TheLoop\Contracts\HttpClient;
 use Leadpages\models\LeadboxesModel;
 use Leadpages\Admin\Providers\Update;
 use Leadpages\Admin\Factories\Metaboxes;
 use Leadpages\Admin\Providers\AdminAuth;
+use Leadpages\Admin\Providers\LeadboxApi;
 use Leadpages\Admin\Factories\SettingsPage;
+use Leadpages\models\LeadPagesPostTypeModel;
 use Leadpages\Admin\SettingsPages\Leadboxes;
 use Leadpages\Admin\MetaBoxes\LeadboxMetaBox;
 use Leadpages\Admin\MetaBoxes\LeadpageSelect;
@@ -44,15 +45,19 @@ class AdminBootstrap
      * @var \Leadpages\models\LeadPagesPostTypeModel
      */
     private $leadpagesModel;
+    /**
+     * @var \Leadpages\Admin\Providers\LeadboxApi
+     */
+    private $leadboxApi;
 
-    public function __construct(HttpClient $httpClient, LeadpagesLoginApi $leadpagesLoginApi, AdminAuth $auth, Update $update, LeadPagesPostTypeModel $leadpagesModel)
+    public function __construct(HttpClient $httpClient, LeadpagesLoginApi $leadpagesLoginApi, AdminAuth $auth, Update $update, LeadPagesPostTypeModel $leadpagesModel, LeadboxApi $leadboxApi)
     {
         $this->httpClient = $httpClient;
         $this->leadpagesLoginApi = $leadpagesLoginApi;
         $this->auth = $auth;
-        $this->ioc = $this->getContainer();
         $this->leadpagesModel = $leadpagesModel;
         $this->update = $update;
+        $this->leadboxApi = $leadboxApi;
         $this->initAdmin();
     }
 
@@ -80,9 +85,8 @@ class AdminBootstrap
         Metaboxes::create(LeadpageSelect::getName());
         Metaboxes::create(LeadboxMetaBox::getName());
         SettingsPage::create(Leadboxes::getName());
-        $leadboxApi = $this->ioc['leadboxApi'];
-        add_action( 'wp_ajax_nopriv_getLeadboxesAjax', array($leadboxApi, 'allLeadboxesAjax') );
-        add_action( 'wp_ajax_getLeadboxesAjax', array($leadboxApi, 'allLeadboxesAjax') );
+        add_action( 'wp_ajax_nopriv_getLeadboxesAjax', array($this->leadboxApi, 'allLeadboxesAjax') );
+        add_action( 'wp_ajax_getLeadboxesAjax', array($this->leadboxApi, 'allLeadboxesAjax') );
 
 
     }

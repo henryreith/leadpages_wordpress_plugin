@@ -148,6 +148,6 @@ $ioc['update'] = function($c){
  * Admin Bootstrap
  */
 $ioc['adminBootStrap'] = $ioc->factory(function($c){
-    return new AdminBootstrap($c['httpClient'], $c['loginApi'], $c['adminAuth'], $c['update'], $c['leadpagesModel']);
+    return new AdminBootstrap($c['httpClient'], $c['loginApi'], $c['adminAuth'], $c['update'], $c['leadpagesModel'], $c['leadboxApi']);
 });
 
