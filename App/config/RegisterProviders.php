@@ -18,17 +18,17 @@ use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
 
 
 $container = new ServiceContainer();
-$ioc = $container->getContainer();
+$ioc       = $container->getContainer();
 
 /**
  * HTTP CLIENT
  */
-$ioc['httpClient'] = $ioc->factory(function ($c) {
+$ioc['httpClient'] = function ($c) {
     return new WordPressHttpClient();
-});
+};
 
 
-$ioc['security'] = function($c){
+$ioc['security'] = function ($c) {
     return new Security();
 };
 
@@ -36,9 +36,9 @@ $ioc['security'] = function($c){
  * Login API
  */
 
-$ioc['loginApi'] = $ioc->factory(function($c){
-   return new LeadpagesLoginApi($c['httpClient']);
-});
+$ioc['loginApi'] = function ($c) {
+    return new LeadpagesLoginApi($c['httpClient']);
+};
 
 /**
  *
@@ -58,7 +58,7 @@ $ioc['adminAuth'] = function ($c) {
  * @return \Leadpages\Admin\Providers\LeadpagesPagesApi
  */
 
-$ioc['pagesApi'] = function($c){
+$ioc['pagesApi'] = function ($c) {
     return new LeadpagesPagesApi($c['httpClient']);
 };
 
@@ -67,8 +67,8 @@ $ioc['pagesApi'] = function($c){
  *
  * @return \Leadpages\Helpers\Security
  */
-$ioc['security'] = function($c){
-  return new Security();
+$ioc['security'] = function ($c) {
+    return new Security();
 };
 
 /**
@@ -76,8 +76,8 @@ $ioc['security'] = function($c){
  *
  * @return \Leadpages\Admin\Providers\LeadboxApi
  */
-$ioc['leadboxApi'] = function($c){
-  return new LeadboxApi($c['httpClient']);
+$ioc['leadboxApi'] = function ($c) {
+    return new LeadboxApi($c['httpClient']);
 };
 
 /**
@@ -85,8 +85,8 @@ $ioc['leadboxApi'] = function($c){
  *
  * @return \Leadpages\Admin\CustomPostTypes\LeadpagesPostType
  */
-$ioc['leadpagesPostType'] = function($c){
-  return new LeadpagesPostType();
+$ioc['leadpagesPostType'] = function ($c) {
+    return new LeadpagesPostType();
 };
 
 
@@ -95,7 +95,7 @@ $ioc['leadpagesPostType'] = function($c){
  *
  * @return \Leadpages\models\LeadPagesPostTypeModel
  */
-$ioc['leadpagesModel'] = function($c){
+$ioc['leadpagesModel'] = function ($c) {
     return new LeadPagesPostTypeModel($c['pagesApi'], $c['leadpagesPostType']);
 };
 
@@ -104,7 +104,7 @@ $ioc['leadpagesModel'] = function($c){
  *
  * @return \Leadpages\Front\Providers\WelcomeGate
  */
-$ioc['welcomeGate'] = function($c){
+$ioc['welcomeGate'] = function ($c) {
     return new WelcomeGate();
 };
 
@@ -113,7 +113,7 @@ $ioc['welcomeGate'] = function($c){
  *
  * @return \Leadpages\Front\Providers\NF
  */
-$ioc['nfPage'] = function($c){
+$ioc['nfPage'] = function ($c) {
     return new NF();
 };
 
@@ -123,31 +123,31 @@ $ioc['nfPage'] = function($c){
  *
  * @return \Leadpages\Front\Providers\PasswordProtected
  */
-$ioc['passwordProtected'] = function($c){
-  global $wpdb;
+$ioc['passwordProtected'] = function ($c) {
+    global $wpdb;
     return new PasswordProtected($wpdb);
 };
 
 /**
  * Front Bootstrap
  */
-$ioc['frontBootStrap'] = $ioc->factory(function($c){
+$ioc['frontBootStrap'] = function ($c) {
     return new FrontBootstrap($c['pagesApi'], $c['leadpagesPostType'], $c['leadboxApi'], $c['adminAuth']);
-});
+};
 
 
 /**
  * Update Provider
  */
 
-$ioc['update'] = function($c){
+$ioc['update'] = function ($c) {
     return new Update();
 };
 
 /**
  * Admin Bootstrap
  */
-$ioc['adminBootStrap'] = $ioc->factory(function($c){
-    return new AdminBootstrap($c['httpClient'], $c['loginApi'], $c['adminAuth'], $c['update'], $c['leadpagesModel'], $c['leadboxApi']);
-});
-
+$ioc['adminBootStrap'] = function ($c) {
+    return new AdminBootstrap($c['httpClient'], $c['loginApi'], $c['adminAuth'], $c['update'], $c['leadpagesModel'],
+      $c['leadboxApi']);
+};
