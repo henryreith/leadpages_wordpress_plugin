@@ -12,19 +12,10 @@ settings:
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
-coverage:
-    enabled: true
-    include:
-        - App/*
 modules:
     config:
         Db:
-            dsn: 'mysql:host=127.0.0.1;dbname=wordpress-multisite'
-            user: 'root'
-            password: 'root'
-            dump: tests/_data/wordpress-multisite.sql
-            populate: true
-            cleanup: true
-        WebDriver:
-            url: 'http://localhost/wordpress-mu'
-            browser: 'firefox'
+            dsn: ''
+            user: ''
+            password: ''
+            dump: tests/_data/dump.sql

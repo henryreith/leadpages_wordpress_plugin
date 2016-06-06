@@ -1,22 +1,23 @@
 {
-    "name": "theloopio/wpframework",
+    "name": "leadpages/leadpagesconnector",
+    "description": "Leadpages WordPress connector",
     "require": {
         "pimple/pimple": "^3.0"
     },
     "require-dev": {
-      "codeception/codeception": "*",
-      "codeception/mockery-module": "*"
+        "codeception/codeception": "^2.2",
+        "mockery/mockery": "^0.9.5"
     },
-  "autoload": {
-    "psr-4": {
-      "TheLoop\\": "Framework//",
-      "Leadpages\\": "App//"
-    }
-  },
+    "autoload": {
+        "psr-4": {
+            "TheLoop\\": "Framework//",
+            "Leadpages\\": "App//"
+        }
+    },
     "authors": [
         {
             "name": "Brandon Braner",
-            "email": "brandon.braner@gmail.com"
+            "email": "brandon.braner@ave81.com"
         }
     ]
 }

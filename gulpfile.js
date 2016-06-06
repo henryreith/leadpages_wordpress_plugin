@@ -1,39 +1,6 @@
-var gulp = require('gulp');
-var del = require('del');
-var composer = require('gulp-composer');
-var runSequence = require('run-sequence');
+var gulp  = require('gulp');
+var shell = require('gulp-shell');
 
-var releaseFolder = '/Users/brandonbraner/projects/releases/leadpages-wordpress-v2/beta/leadpages';
-
-gulp.task('removeallfiles',function(){
-    return del([releaseFolder+'/**/*'], {force: true});
-});
-
-
-gulp.task('runcomposer', function(){
-    return composer("update --no-dev");
-});
-
-gulp.task('movetoreleases', function(){
-
-    return gulp.src(['**/*'], {"base" : "."})
-            .pipe(gulp.dest(releaseFolder));
-});
-
-gulp.task('removenode',function(){
-    return del([releaseFolder+'/node_modules'], {force: true});
-});
-
-gulp.task('runcomposer2', function(){
-    return composer("update");
-});
-
-gulp.task('deploy', function(){
-    runSequence(
-        'removeallfiles',
-        'runcomposer',
-        'movetoreleases',
-        'removenode',
-        'runcomposer2'
-    );
-});
+gulp.task('setupTestEnv', shell.task([
+    "bash bin/install-wp-tests.sh wordpress2 root root 127.0.0.1 latest"
+]));

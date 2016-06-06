@@ -11,6 +11,9 @@ class LeadpagesLogin
 {
 
     use Security;
+    protected $username;
+    protected $password;
+
     /**
      * @var \TheLoop\Contracts\HttpClient
      */
@@ -44,6 +47,7 @@ class LeadpagesLogin
             $this->username = sanitize_email($_POST['username']);
             $this->password = sanitize_text_field($_POST['password']);
             $response = $this->getUserToken($this->username, $this->password);
+            $this->redirectOnLogin($response);
             return $response;
         }
 
@@ -70,15 +74,10 @@ class LeadpagesLogin
         $response        = $this->client->post($url);
         $responseHandler = $this->responseHandler->checkResponse($response);
         //if response is good(2xx message) store the token and redirect to the leadpages_post page
-        if ($responseHandler == 'success') {
-            $this->parseTokenResponse($response);
-            $this->storeToken();
-            \wp_redirect(admin_url('edit.php?post_type=leadpages_post'));
-        } else {
-            //if anything other than a 2xx response redirect to url where error will display
-            \wp_redirect(admin_url('admin.php?page=Leadpages&code='.$responseHandler));
-        }
-
+        return array(
+          'responseCode' => $responseHandler,
+          'response'     =>$response
+        );
     }
 
     public function parseTokenResponse($response)
@@ -125,5 +124,21 @@ class LeadpagesLogin
     public function deleteAccessToken()
     {
         delete_option('leadpages_security_token');
+    }
+
+    /**
+     * @param $responseHandler
+     * @param $response
+     */
+    public function redirectOnLogin($responseArray)
+    {
+        if ($responseArray['responseCode'] == 'success') {
+            $this->parseTokenResponse($responseArray['response']);
+            $this->storeToken();
+            \wp_redirect(admin_url('edit.php?post_type=leadpages_post'));
+        } else {
+            //if anything other than a 2xx response redirect to url where error will display
+            \wp_redirect(admin_url('admin.php?page=Leadpages&code=' . $responseArray['responseCode']));
+        }
     }
 }

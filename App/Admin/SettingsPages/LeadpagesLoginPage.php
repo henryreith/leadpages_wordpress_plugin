@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Leadpages\admin\SettingsPages;
+namespace Leadpages\Admin\SettingsPages;
 
 use TheLoop\Contracts\SettingsPage;
 
@@ -16,8 +16,12 @@ class LeadpagesLoginPage implements SettingsPage
         add_menu_page('leadpages', 'Leadpages', 'manage_options', 'Leadpages', array($this, 'displayCallback'), $leadpagesConfig['admin_images'].'/menu-icon.png' );
     }
 
-    public function displayCallback(){
 
+    public function displayCallback(){
+        if(isset($_GET['code'])){
+            $code = sanitize_text_field($_GET['code']);
+            echo '<div class="notice notice-error is-dismissible"><p>Login Failed Error Code: '. esc_html($code) .'</p></div>';
+        }
         ?>
         <link rel="stylesheet" href="https://4-0-2-dot-leadpage-test.appspot.com/static/lp10016456456456/bootstrap/lp3/css/bootstrap.min.css" />
         <link rel="stylesheet" href="https://4-0-2-dot-leadpage-test.appspot.com/static/lp10016456456456/build/css/lp.css" />

@@ -16,8 +16,8 @@ trait ServiceContainerTrait
 
     public function getContainer()
     {
-        global $ioc;
-        return $ioc;
+        global $app;
+        return $app;
     }
 
 }

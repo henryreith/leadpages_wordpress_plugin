@@ -5,11 +5,10 @@ namespace TheLoop\Contracts;
 
 interface HttpClient
 {
-    public function get();
-    public function post();
-    public function patch();
-    public function delete();
-    public function setUrl($url);
+    public function get($url);
+    public function post($url);
+    public function patch($url);
+    public function delete($url);
 
 }
 

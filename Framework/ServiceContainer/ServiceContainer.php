@@ -20,10 +20,3 @@ class ServiceContainer
     }
 }
 
-$container = new ServiceContainer();
-$ioc = $container->getContainer();
-
-/**
- * include providers from App
- */
-require_once(dirname(dirname(dirname(__FILE__))).'/App/Config/RegisterProviders.php');

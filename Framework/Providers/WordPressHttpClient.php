@@ -11,36 +11,28 @@ class WordPressHttpClient implements HttpClient
     public $url;
     public $args =array();
 
-    public function get()
+    public function get($url)
     {
-        $response = wp_remote_get($this->url, $this->args);
+        $response = wp_remote_get($url, $this->args);
         return $response;
     }
 
-    public function post()
+    public function post($url)
     {
-        $response = wp_remote_post($this->url, $this->args);
+        $response = wp_remote_post($url, $this->args);
         return $response;
     }
 
-    public function patch()
+    public function patch($url)
     {
         // TODO: Implement patch() method.
     }
 
-    public function delete()
+    public function delete($url)
     {
         // TODO: Implement delete() method.
     }
 
-
-    /**
-     * @param mixed $url
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    }
 
     /**
      * @param array $args
@@ -54,36 +46,6 @@ class WordPressHttpClient implements HttpClient
         return $this->args;
     }
 
-    public function getResponseCode($response)
-    {
-        if(isset($response) && is_array($response)){
-            $code = NULL;
-            array_walk_recursive($response, function($value, $key) use(&$code){
-                if($key == 'code'){
-                    $code = strval($value);
-                }
-            });
-            if($code == NULL){
-                return 'error';
-            }
-            return $code;
-        }
-    }
 
-    public function getBody($response){
-
-        if(isset($response) && is_array($response)){
-
-            $body = NULL;
-            array_walk_recursive($response, function($value, $key) use(&$body){
-                if($key == 'body'){
-                    if(! is_array($value)){
-                        $body = json_decode($value, true); //return as an array
-                    }
-                }
-            });
-            return $body;
-        }
-    }
 
 }

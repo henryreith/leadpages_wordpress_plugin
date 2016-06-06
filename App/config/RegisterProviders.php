@@ -1,153 +1,79 @@
 <?php
 
-use Leadpages\Helpers\Security;
-use Leadpages\Front\Providers\NF;
-use Leadpages\Admin\Providers\Update;
 use Leadpages\Bootstrap\AdminBootstrap;
-use Leadpages\Bootstrap\FrontBootstrap;
-use Leadpages\Admin\Providers\AdminAuth;
-use Leadpages\Admin\Providers\LeadboxApi;
-use Leadpages\Front\Providers\WelcomeGate;
+use Leadpages\Lib\ApiResponseHandler;
 use TheLoop\Providers\WordPressHttpClient;
-use Leadpages\models\LeadPagesPostTypeModel;
+use Leadpages\ServiceProviders\LeadpagesLogin;
 use TheLoop\ServiceContainer\ServiceContainer;
-use Leadpages\Admin\Providers\LeadpagesLoginApi;
-use Leadpages\Admin\Providers\LeadpagesPagesApi;
-use Leadpages\Front\Providers\PasswordProtected;
-use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
 
+/*
+|--------------------------------------------------------------------------
+| Instantiate Service Container
+|--------------------------------------------------------------------------
+|
+|
+*/
 
 $container = new ServiceContainer();
-$ioc       = $container->getContainer();
+$app       = $container->getContainer();
 
 /**
- * HTTP CLIENT
+ * register config into container
  */
-$ioc['httpClient'] = function ($c) {
+$app['config'] = $leadpagesConfig;
+
+/*
+|--------------------------------------------------------------------------
+| Base Providers
+|--------------------------------------------------------------------------
+|
+| Leadpages Base Service providers
+|
+*/
+
+/**
+ * HttpClient
+ * @param $app
+ *
+ * @return \TheLoop\Providers\WordPressHttpClient
+ */
+$app['httpClient'] = function ($app) {
     return new WordPressHttpClient();
 };
 
-
-$ioc['security'] = function ($c) {
-    return new Security();
+$app['adminBootstrap'] = function($app){
+    return new AdminBootstrap($app['leadpagesLogin']);
 };
 
-/**
- * Login API
- */
 
-$ioc['loginApi'] = function ($c) {
-    return new LeadpagesLoginApi($c['httpClient']);
-};
+/*
+|--------------------------------------------------------------------------
+| API Providers
+|--------------------------------------------------------------------------
+|
+| Leadpages API Service providers
+|
+*/
+
 
 /**
+ * response object for handling leadpages api calls
+ * @param $app
  *
- * @param $c
+ * @return \Leadpages\Lib\ApiResponseHandler
+ */
+$app['apiResponseHandler'] = function($app){
+    return new ApiResponseHandler();
+};
+
+/**
+ * Leadpages login api object
+ * @param $app
  *
- * @return \Leadpages\Admin\Providers\AdminAuth
+ * @return \Leadpages\ServiceProviders\LeadpagesLogin
  */
-$ioc['adminAuth'] = function ($c) {
-    return new AdminAuth($c['loginApi'], $c['security']);
-};
-
-/**
- * pagesApi
- *
- * @param $c
- *
- * @return \Leadpages\Admin\Providers\LeadpagesPagesApi
- */
-
-$ioc['pagesApi'] = function ($c) {
-    return new LeadpagesPagesApi($c['httpClient']);
-};
-
-/**
- * @param $c
- *
- * @return \Leadpages\Helpers\Security
- */
-$ioc['security'] = function ($c) {
-    return new Security();
-};
-
-/**
- * @param $c
- *
- * @return \Leadpages\Admin\Providers\LeadboxApi
- */
-$ioc['leadboxApi'] = function ($c) {
-    return new LeadboxApi($c['httpClient']);
-};
-
-/**
- * @param $c
- *
- * @return \Leadpages\Admin\CustomPostTypes\LeadpagesPostType
- */
-$ioc['leadpagesPostType'] = function ($c) {
-    return new LeadpagesPostType();
+$app['leadpagesLogin'] = function($app){
+  return new LeadpagesLogin($app['httpClient'], $app['apiResponseHandler'], $app['config']);
 };
 
 
-/**
- * @param $c
- *
- * @return \Leadpages\models\LeadPagesPostTypeModel
- */
-$ioc['leadpagesModel'] = function ($c) {
-    return new LeadPagesPostTypeModel($c['pagesApi'], $c['leadpagesPostType']);
-};
-
-/**
- * @param $c
- *
- * @return \Leadpages\Front\Providers\WelcomeGate
- */
-$ioc['welcomeGate'] = function ($c) {
-    return new WelcomeGate();
-};
-
-/**
- * @param $c
- *
- * @return \Leadpages\Front\Providers\NF
- */
-$ioc['nfPage'] = function ($c) {
-    return new NF();
-};
-
-
-/**
- * @param $c
- *
- * @return \Leadpages\Front\Providers\PasswordProtected
- */
-$ioc['passwordProtected'] = function ($c) {
-    global $wpdb;
-    return new PasswordProtected($wpdb);
-};
-
-/**
- * Front Bootstrap
- */
-$ioc['frontBootStrap'] = function ($c) {
-    return new FrontBootstrap($c['pagesApi'], $c['leadpagesPostType'], $c['leadboxApi'], $c['adminAuth']);
-};
-
-
-/**
- * Update Provider
- */
-
-$ioc['update'] = function ($c) {
-    return new Update();
-};
-
-/**
- * Admin Bootstrap
- */
-$ioc['adminBootStrap'] = function ($c) {
-    return new AdminBootstrap($c['httpClient'], $c['loginApi'], $c['adminAuth'], $c['update'], $c['leadpagesModel'],
-      $c['leadboxApi']);
-};

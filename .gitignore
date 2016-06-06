@@ -2,3 +2,5 @@ vendor/
 node_modules/**/*
 !vendor/pimple
 testdata.php
+
+tests/_output/*
