@@ -15,6 +15,13 @@ require_once dirname( __FILE__ ) . '/trac.php';
 class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 
 	protected static $forced_tickets = array();
+	public $badPassword;
+	public $badUserName;
+	public $goodPassword;
+	public $goodUserName;
+	public $matched_dirs;
+	public $app;
+
 	protected $expected_deprecated = array();
 	protected $caught_deprecated = array();
 	protected $expected_doing_it_wrong = array();
@@ -120,6 +127,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 		$this->start_transaction();
 		$this->expectDeprecated();
 		add_filter( 'wp_die_handler', array( $this, 'get_wp_die_handler' ) );
+		$this->leadpagesTestSetup();
 	}
 
 	/**
@@ -747,5 +755,16 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 		$id = wp_insert_attachment( $attachment, $upload[ 'file' ], $parent_post_id );
 		wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $upload['file'] ) );
 		return $id;
+	}
+
+	function leadpagesTestSetup()
+	{
+		global $testData;
+		global $app;
+		$this->app = $app;
+		$this->goodUserName = $testData['leadpagesGoodUsername'];
+		$this->goodPassword = $testData['leadpagesGoodPassword'];
+		$this->badUserName  = $testData['leadpagesBadUsername'];
+		$this->badPassword  = $testData['leadpagesBadPassword'];
 	}
 }
