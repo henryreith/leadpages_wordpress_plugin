@@ -19,7 +19,7 @@ class LeadpagesLogin
      */
     private $client;
     private $leadpagesConfig;
-    private $token;
+    public $token;
     /**
      * @var \Leadpages\Lib\ApiResponseHandler
      */
@@ -67,6 +67,9 @@ class LeadpagesLogin
         $args['headers'] = array(
           'Authorization' => 'Basic ' . base64_encode($username . ':' . $password)
         );
+        $args['body'] = array(
+            'clientType' => 'wp-plugin'
+        );
 
         //set args for http client
         $this->client->setArgs($args);
@@ -74,6 +77,10 @@ class LeadpagesLogin
         $response        = $this->client->post($url);
         $responseHandler = $this->responseHandler->checkResponse($response);
         //if response is good(2xx message) store the token and redirect to the leadpages_post page
+        if ($responseHandler == 'success') {
+            $this->parseTokenResponse($response);
+            $this->storeToken();
+        }
         return array(
           'responseCode' => $responseHandler,
           'response'     =>$response
@@ -133,8 +140,6 @@ class LeadpagesLogin
     public function redirectOnLogin($responseArray)
     {
         if ($responseArray['responseCode'] == 'success') {
-            $this->parseTokenResponse($responseArray['response']);
-            $this->storeToken();
             \wp_redirect(admin_url('edit.php?post_type=leadpages_post'));
         } else {
             //if anything other than a 2xx response redirect to url where error will display
