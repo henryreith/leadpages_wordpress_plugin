@@ -1,6 +1,6 @@
 <?php
 
-namespace Leadpages\Admin\Factories;
+namespace LeadpagesWP\Admin\Factories;
 
 use TheLoop\Contracts\Factory;
 

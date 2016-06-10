@@ -1,0 +1,99 @@
+<?php
+
+namespace LeadpagesWP\ServiceProviders;
+
+use Leadpages\Auth\LeadpagesLogin;
+
+class WordPressLeadpagesAuth extends LeadpagesLogin
+{
+
+    /**
+     * method to implement on extending class to store token in database
+     *
+     * @return mixed
+     */
+    public function storeToken()
+    {
+        update_option($this->tokenLabel, $this->token);
+    }
+
+    /**
+     * method to implement on extending class to get token from datastore
+     * should return token not set property of $this->token
+     * @return mixed
+     */
+    public function getToken()
+    {
+        $this->token = get_option('leadpages_security_token');
+    }
+
+    /**
+     * method to implement on extending class to remove token from database
+     * @return mixed
+     */
+    public function deleteToken()
+    {
+        delete_option($this->tokenLabel);
+    }
+
+
+    public function loginAndRedirect()
+    {
+        if (isset($_POST['username']) && isset($_POST['password'])) {
+            $response = $this->getUser(sanitize_email($_POST['username']), sanitize_text_field($_POST['password']))->parseResponse();
+        }
+
+        if ($response == 'success') {
+            $this->storeToken();
+            wp_redirect(admin_url('edit.php?post_type=leadpages_post'));
+            exit;
+        } else {
+            //redirect with error code to display error message
+            $response = json_decode($response, true);
+            $code = sanitize_text_field($response['code']);
+            wp_redirect(admin_url('admin.php?page=Leadpages&code='.$code.''));
+            exit;
+        }
+    }
+
+
+    public function loginHook()
+    {
+        add_action('admin_post_leadpages_login_form', array($this, 'loginAndRedirect'));
+    }
+
+    /**
+     * method to check if token is empty
+     *
+     * @return mixed
+     */
+    public function checkIfTokenIsEmpty()
+    {
+        $this->getToken();
+
+        if(empty($this->token)){
+            return [
+              'code'     => '500',
+              'response' => 'token not set in database',
+              'error'    => (bool)true
+            ];
+        }
+        else{
+            return [
+              'code'     => '200',
+              'response' => '',
+              'error'    => (bool)false
+            ];
+        }
+    }
+
+    public function isLoggedIn()
+    {
+        $isTokenEmpty = $this->checkIfTokenIsEmpty();
+        //verify that token in database was not empty, and ensure that token gets a response from Leadpages
+        if ($isTokenEmpty['error'] || !$this->checkCurrentUserToken()) {
+            return false;
+        }
+        return true;
+    }
+}

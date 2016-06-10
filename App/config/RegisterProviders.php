@@ -1,10 +1,10 @@
 <?php
 
-use Leadpages\Bootstrap\AdminBootstrap;
-use Leadpages\Lib\ApiResponseHandler;
-use TheLoop\Providers\WordPressHttpClient;
-use Leadpages\ServiceProviders\LeadpagesLogin;
+use GuzzleHttp\Client;
+use LeadpagesWP\Lib\ApiResponseHandler;
+use LeadpagesWP\Bootstrap\AdminBootstrap;
 use TheLoop\ServiceContainer\ServiceContainer;
+use LeadpagesWP\ServiceProviders\WordPressLeadpagesAuth;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ $app['config'] = $leadpagesConfig;
  * @return \TheLoop\Providers\WordPressHttpClient
  */
 $app['httpClient'] = function ($app) {
-    return new WordPressHttpClient();
+    return new Client();
 };
 
 $app['adminBootstrap'] = function($app){
@@ -73,7 +73,7 @@ $app['apiResponseHandler'] = function($app){
  * @return \Leadpages\ServiceProviders\LeadpagesLogin
  */
 $app['leadpagesLogin'] = function($app){
-  return new LeadpagesLogin($app['httpClient'], $app['apiResponseHandler'], $app['config']);
+  return new WordPressLeadpagesAuth($app['httpClient']);
 };
 
 

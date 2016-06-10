@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Leadpages\Admin\SettingsPages;
+namespace LeadpagesWP\Admin\SettingsPages;
 
 use TheLoop\Contracts\SettingsPage;
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Leadpages\Lib;
+namespace LeadpagesWP\Lib;
 
 
 Trait Security
