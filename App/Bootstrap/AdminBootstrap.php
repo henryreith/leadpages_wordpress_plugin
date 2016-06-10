@@ -33,6 +33,7 @@ class AdminBootstrap
             //register hook to listen for admin post of login form
             $this->login->loginHook();
         }else {
+            $this->login->setLoggedInCookie();
             $this->isLoggedIn = true;
         }
     }
