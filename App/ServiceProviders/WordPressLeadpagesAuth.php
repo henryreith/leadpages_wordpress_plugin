@@ -7,6 +7,11 @@ use Leadpages\Auth\LeadpagesLogin;
 class WordPressLeadpagesAuth extends LeadpagesLogin
 {
 
+    public static function getName()
+    {
+        return get_called_class();
+    }
+
     /**
      * method to implement on extending class to store token in database
      *
@@ -37,12 +42,17 @@ class WordPressLeadpagesAuth extends LeadpagesLogin
     }
 
 
-    public function loginAndRedirect()
+    public function login()
     {
         if (isset($_POST['username']) && isset($_POST['password'])) {
             $response = $this->getUser(sanitize_email($_POST['username']), sanitize_text_field($_POST['password']))->parseResponse();
+            return $response;
         }
+    }
 
+    public function redirectOnLogin()
+    {
+        $response = $this->login();
         if ($response == 'success') {
             $this->storeToken();
             wp_redirect(admin_url('edit.php?post_type=leadpages_post'));
@@ -59,7 +69,7 @@ class WordPressLeadpagesAuth extends LeadpagesLogin
 
     public function loginHook()
     {
-        add_action('admin_post_leadpages_login_form', array($this, 'loginAndRedirect'));
+        add_action('admin_post_leadpages_login_form', array($this, 'redirectOnLogin'));
     }
 
     /**
@@ -87,13 +97,44 @@ class WordPressLeadpagesAuth extends LeadpagesLogin
         }
     }
 
+    /**
+     * Check if user is logged in
+     * @return bool
+     */
     public function isLoggedIn()
     {
+        //if cookie is set and is true don't bother with http call
+        if($this->getLoggedInCookie()) return true;
+
         $isTokenEmpty = $this->checkIfTokenIsEmpty();
         //verify that token in database was not empty, and ensure that token gets a response from Leadpages
         if ($isTokenEmpty['error'] || !$this->checkCurrentUserToken()) {
             return false;
         }
+        //set cookie if they are logged in
         return true;
+    }
+
+    /**
+     * Set logged in cookie if it is not already set
+     */
+    public function setLoggedInCookie()
+    {
+        if(!$this->getLoggedInCookie()) {
+            setcookie('LeadpagesWordPress', true, time() + 3600);
+        }
+    }
+
+    /**
+     * Attempt to fetch login cookie for Leadpages
+     * @return bool
+     */
+    public function getLoggedInCookie()
+    {
+        if(isset($_COOKIE['LeadpagesWordPress']) && $_COOKIE['LeadpagesWordPress'] == true){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
