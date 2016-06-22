@@ -3,11 +3,9 @@
 
 namespace LeadpagesWP\models;
 
-use Leadpages\Admin\CustomPostTypes\LeadpagesPostType;
-use Leadpages\Admin\Providers\LeadpagesPagesApi;
-use Leadpages\Helpers\IsLeadPage;
-use Leadpages\Helpers\LeadpageErrorHandlers;
-use Leadpages\Helpers\LeadpageType;
+use Leadpages\Pages\LeadpagesPages;
+use LeadpagesWP\Helpers\LeadpageType;
+use LeadpagesWP\Admin\CustomPostTypes\LeadpagesPostType;
 
 class LeadPagesPostTypeModel
 {
@@ -19,11 +17,11 @@ class LeadPagesPostTypeModel
     public $LeadPageId;
     public $LeadpageXORId;
     /**
-     * @var \Leadpages\Admin\CustomPostTypes\LeadpagesPostType
+     * @var \LeadpagesWP\Admin\CustomPostTypes\LeadpagesPostType
      */
     private $postType;
 
-    public function __construct(LeadpagesPagesApi $pagesApi, LeadpagesPostType $postType)
+    public function __construct(LeadpagesPages $pagesApi, LeadpagesPostType $postType)
     {
         $this->PagesApi = $pagesApi;
         $this->postType = $postType;
@@ -36,19 +34,16 @@ class LeadPagesPostTypeModel
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return $post_id;
         }
+        //check if its a leadpage
+        if($post->post_type != 'leadpages_post') return $post_id;
 
-        // check if this is our type
-        $isLeadPage = IsLeadPage::checkByPost($post, $post_id);
-        if (!$isLeadPage) {
-            return $post_id;
-        }
+        //check to see if the status is trash if so delete it and return post_id
         if ($post->post_status = "trash" && !isset($_POST['post_status'])) {
             $this->deletePost($post_id);
             return $post_id;
         }
 
         //setup all vars for inserting or deleting posts
-        $permalink = get_permalink($post_id);
         $postType  = sanitize_text_field($_POST['leadpages-post-type']);
 
         //maybe a better way to do this? but sending the xor_id as the # before : and leadpage id after :
@@ -62,31 +57,31 @@ class LeadPagesPostTypeModel
         //set cache
         if (isset($_POST['cache_this']) && $_POST['cache_this'] == "true") {
             update_post_meta($post_id, 'cache_page', 'true');
+            $this->setCacheForPage($this->LeadPageId);
         } elseif (isset($_POST['cache_this']) && $_POST['cache_this'] == "false") {
             update_post_meta($post_id, 'cache_page', 'false');
         } else {
 
         }
 
-        update_post_meta($post_id, 'leadpages_slug', $permalink);
+        update_post_meta($post_id, 'leadpages_slug', sanitize_text_field($_POST['leadpages_slug']));
 
         //save post name in meta for backwards compatibility
-        update_post_meta($post_id, 'leadpages_name', $post->post_name);
+        //update_post_meta($post_id, 'leadpages_name', $post->post_name);
 
         update_post_meta($post_id, 'leadpages_page_id', $this->LeadPageId);
         update_post_meta($post_id, 'leadpages_my_selected_page', $this->LeadpageXORId);
 
         update_post_meta($post_id, 'leadpages_post_type', $postType);
-        //TODO add in split test when its avaiable
-
 
         //return here as if there was an error saving the page because the type
         //already exists (ErrorHandlerAjax.php on page save)
-        $error = $this->postType->checkError($postType, $post_id);
 
-        if ($error == 'error') {
-            return $post_id;
-        }
+//        $error = $this->postType->checkError($postType, $post_id);
+//
+//        if ($error == 'error') {
+//            return $post_id;
+//        }
         /**
          * only update these items if the post is actually being published
          */
@@ -188,6 +183,7 @@ class LeadPagesPostTypeModel
     public function save()
     {
         add_action('edit_post', array($this, 'saveLeadPageMeta'), 999, 2);
+        add_action( 'save_post', array( &$this, 'custom_post_type_title' ), 10 );
     }
 
 
@@ -261,14 +257,29 @@ class LeadPagesPostTypeModel
         }
     }
 
-    public function setCacheForPage($pageId, $html)
+    public function setCacheForPage($pageId)
     {
+        $html = $this->PagesApi->downloadPageHtml($pageId);
         set_transient('leadpages_page_html_cache_' . $pageId, $html, 600);
     }
 
     public function getCacheForPage($pageId)
     {
         return get_transient('leadpages_page_html_cache_' . $pageId);
+    }
+
+    public function getLeadpagePageId($pageId){
+        $LeadpageId = get_post_meta($pageId, 'leadpages_page_id', true);
+
+        //if $LeadpageId does not exist try to get it from the xor id...once again maybe something that should be done
+        if (empty($LeadpageId)) {
+            $LeadpageId = $this->getPageByXORId($pageId);
+        }
+        if($LeadpageId == false){
+            return false;
+        }
+
+        return $LeadpageId;
     }
 
     public function getHtml($pageId)
@@ -309,6 +320,9 @@ class LeadPagesPostTypeModel
     public function getPageByXORId($pageId)
     {
         $xorId = get_post_meta($pageId, 'leadpages_my_selected_page', true);
+
+        if(empty($xorId)) return false;
+
         $pages = $this->PagesApi->getUserPages();
         foreach ($pages['_items'] as $page) {
             if ($page['_meta']['xor_hex_id'] == $xorId) {
@@ -317,5 +331,45 @@ class LeadPagesPostTypeModel
         }
         //return false if page doesn't exist
         return false;
+    }
+
+    /**
+     * Update Post title to be the slug of the page
+     *
+     * @param $post_id
+     */
+    function custom_post_type_title( $post_id ) {
+        global $wpdb, $post_type;
+        if ( 'leadpages_post' == $post_type ) {
+            $slug  = get_post_meta( $post_id, 'leadpages_slug', true );
+            $where = array( 'ID' => $post_id );
+            $wpdb->update( $wpdb->posts, array( 'post_title' => $slug, 'post_name' => $slug ), $where );
+        }
+    }
+
+    public static function get_all_posts($requestedPage)
+    {
+        global $wpdb;
+        $query = $wpdb->prepare( "
+            SELECT
+            pm.*,
+            p.ID
+            from {$wpdb->prefix}postmeta as pm
+            INNER JOIN {$wpdb->prefix}posts as p
+            on p.ID = pm.post_id
+            where p.post_name = '%s'
+            ", [$requestedPage]
+        );
+
+        $result = $wpdb->get_results($query, ARRAY_A);
+
+        if(empty($result)) return false;
+
+        $lpPostArray = [];
+        foreach($result as $post){
+            $lpPostArray[$post['meta_key']] = $post['meta_value'];
+            $lpPostArray['post_id'] = $post['ID'];
+        }
+        return $lpPostArray;
     }
 }

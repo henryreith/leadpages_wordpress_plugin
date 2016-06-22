@@ -4,7 +4,7 @@
 namespace Leadpages\models;
 
 
-use Leadpages\Helpers\Security;
+use LeadpagesWP\Helpers\Security;
 
 class LeadboxesModel
 {

@@ -3,10 +3,7 @@
 
 namespace LeadpagesWP\Admin\CustomPostTypes;
 
-use LeadpagesWP\Lib\LeadpageType;
 use TheLoop\Contracts\CustomPostType;
-use LeadpagesWP\models\LeadPagesPostTypeModel;
-use TheLoop\Contracts\CustomPostTypeColumns;
 
 class LeadpagesPostType extends CustomPostType
 {
@@ -57,6 +54,8 @@ class LeadpagesPostType extends CustomPostType
 
         register_post_type( $this->postTypeName, $this->args );
         remove_post_type_support($this->postTypeName, 'editor');
+        remove_post_type_support($this->postTypeName, 'title');
+
 
     }
 

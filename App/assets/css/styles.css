@@ -48,5 +48,9 @@
     display: none;
 }
 
+.leadpagesSelect, .leadpagesSlug, .leadpageType{
+    display: none;
+}
+
 
 

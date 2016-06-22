@@ -27,6 +27,7 @@ require_once $leadpagesConfig['basePath'] . 'Framework/ServiceContainer/ServiceC
 require_once($leadpagesConfig['basePath'].'App/Config/RegisterProviders.php');
 
 
+
 /*
   |--------------------------------------------------------------------------
   | Admin Bootstrap
@@ -36,7 +37,38 @@ require_once($leadpagesConfig['basePath'].'App/Config/RegisterProviders.php');
   |
   */
 
+
+
 if (is_admin() || is_network_admin()) {
-    $adminBootstrap = $app['adminBootstrap'];
+    $adminBootstrap = $leadpagesApp['adminBootstrap'];
     //include('App/Helpers/ErrorHandlerAjax.php');
 }
+
+function getScreen()
+{
+    global $leadpagesConfig;
+
+    $screen = get_current_screen();
+    $leadpagesConfig['currentScreen'] = $screen->post_type;
+}
+
+
+add_action('current_screen', 'getScreen');
+
+
+/*
+  |--------------------------------------------------------------------------
+  | Front Bootstrap
+  |--------------------------------------------------------------------------
+  |
+  |
+  |
+  */
+
+if (!is_admin() && !is_network_admin()) {
+    $frontBootstrap = $leadpagesApp['frontBootstrap'];
+    //include('App/Helpers/ErrorHandlerAjax.php');
+}
+
+
+

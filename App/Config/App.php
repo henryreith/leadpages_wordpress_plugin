@@ -38,4 +38,5 @@ $leadpagesConfig['api']['leadboxes']           = 'https://my.leadpages.net/leadb
 $leadpagesConfig['update_url']   = "http://leadbrite.appspot.com";
 $leadpagesConfig['admin_assets'] = $leadpagesConfig['pluginUrl'] . 'assets';
 $leadpagesConfig['admin_images'] = $leadpagesConfig['admin_assets'] . '/images';
+$leadpagesConfig['admin_css']    = $leadpagesConfig['admin_assets'] . '/css/';
 

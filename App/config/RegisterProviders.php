@@ -1,10 +1,17 @@
 <?php
 
 use GuzzleHttp\Client;
+use Leadpages\Pages\LeadpagesPages;
 use LeadpagesWP\Lib\ApiResponseHandler;
 use LeadpagesWP\Bootstrap\AdminBootstrap;
+use LeadpagesWP\Bootstrap\FrontBootstrap;
+use LeadpagesWP\models\LeadPagesPostTypeModel;
 use TheLoop\ServiceContainer\ServiceContainer;
+use LeadpagesWP\Front\Controllers\NotFoundController;
+use LeadpagesWP\Front\Controllers\LeadpageController;
 use LeadpagesWP\ServiceProviders\WordPressLeadpagesAuth;
+use LeadpagesWP\Admin\CustomPostTypes\LeadpagesPostType;
+use LeadpagesWP\Front\Controllers\WelcomeGateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,13 +21,13 @@ use LeadpagesWP\ServiceProviders\WordPressLeadpagesAuth;
 |
 */
 
-$container = new ServiceContainer();
-$app       = $container->getContainer();
+$leadpagesContainer = new ServiceContainer();
+$leadpagesApp       = $leadpagesContainer->getContainer();
 
 /**
  * register config into container
  */
-$app['config'] = $leadpagesConfig;
+$leadpagesApp['config'] = $leadpagesConfig;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,16 +40,20 @@ $app['config'] = $leadpagesConfig;
 
 /**
  * HttpClient
- * @param $app
+ * @param $leadpagesApp
  *
  * @return \TheLoop\Providers\WordPressHttpClient
  */
-$app['httpClient'] = function ($app) {
+$leadpagesApp['httpClient'] = function ($leadpagesApp) {
     return new Client();
 };
 
-$app['adminBootstrap'] = function($app){
-    return new AdminBootstrap($app['leadpagesLogin']);
+$leadpagesApp['adminBootstrap'] = function($leadpagesApp){
+    return new AdminBootstrap($leadpagesApp['leadpagesLogin'], $leadpagesApp['lpPostTypeModel']);
+};
+
+$leadpagesApp['frontBootstrap'] = function($leadpagesApp){
+    return new FrontBootstrap($leadpagesApp['leadpagesLogin'], $leadpagesApp['leadpageController'], $leadpagesApp['pagesApi']);
 };
 
 
@@ -58,22 +69,47 @@ $app['adminBootstrap'] = function($app){
 
 /**
  * response object for handling leadpages api calls
- * @param $app
+ * @param $leadpagesApp
  *
- * @return \Leadpages\Lib\ApiResponseHandler
+ * @return \LeadpagesWP\Lib\ApiResponseHandler
  */
-$app['apiResponseHandler'] = function($app){
+$leadpagesApp['apiResponseHandler'] = function($leadpagesApp){
     return new ApiResponseHandler();
 };
 
 /**
  * Leadpages login api object
- * @param $app
+ * @param $leadpagesApp
  *
- * @return \Leadpages\ServiceProviders\LeadpagesLogin
+ * @return \LeadpagesWP\ServiceProviders\LeadpagesLogin
  */
-$app['leadpagesLogin'] = function($app){
-  return new WordPressLeadpagesAuth($app['httpClient']);
+$leadpagesApp['leadpagesLogin'] = function($leadpagesApp){
+  return new WordPressLeadpagesAuth($leadpagesApp['httpClient']);
 };
 
+$leadpagesApp['pagesApi'] = function($leadpagesApp){
+    return new LeadpagesPages($leadpagesApp['httpClient'], $leadpagesApp['leadpagesLogin']);
+};
+
+$leadpagesApp['lpPostType'] = function($leadpagesApp){
+    return new LeadpagesPostType();
+};
+
+
+$leadpagesApp['lpPostTypeModel'] = function($leadpagesApp){
+  return new LeadPagesPostTypeModel($leadpagesApp['pagesApi'], $leadpagesApp['lpPostType']);
+};
+
+
+
+$leadpagesApp['leadpageController'] = function($leadpagesApp){
+    return new LeadpageController($leadpagesApp['notfound'], $leadpagesApp['WelcomeGateController'], $leadpagesApp['lpPostTypeModel'], $leadpagesApp['pagesApi']);
+};
+$leadpagesApp['notfound'] = function($leadpagesApp){
+    return new NotFoundController($leadpagesApp['lpPostTypeModel'], $leadpagesApp['pagesApi']);
+};
+
+$leadpagesApp['WelcomeGateController'] = function($leadpagesApp){
+    return new WelcomeGateController();
+};
 
