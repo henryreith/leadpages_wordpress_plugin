@@ -4,6 +4,8 @@
 namespace LeadpagesWP\Admin\CustomPostTypes;
 
 use TheLoop\Contracts\CustomPostType;
+use LeadpagesWP\Helpers\LeadpageType;
+use LeadpagesWP\models\LeadPagesPostTypeModel;
 
 class LeadpagesPostType extends CustomPostType
 {
@@ -63,5 +65,103 @@ class LeadpagesPostType extends CustomPostType
     {
         $this->defineLabels();
         add_action('init', array($this, 'registerPostType'));
+        $this->addColumns();
+    }
+
+    public function defineColumns($columns)
+    {
+        $cols                        = array();
+        $cols['cb']                  = $columns['cb'];
+        $cols[$this->postTypeName.'_name'] = __('Name', 'leadpages');
+        $cols[$this->postTypeName.'_type'] = __('Type', 'leadpages');
+        $cols[$this->postTypeName.'_path'] = __('Url', 'leadpages');
+        $cols['date']                      = __('Date', 'leadpages');
+        return $cols;
+    }
+
+    public function populateColumns($column)
+    {
+        $id = get_the_ID();
+        $this->populateNameColumn($column, $id);
+        $this->populatePathColumn($column, $id);
+        $this->populateTypeColumn($column, $id);
+
+    }
+
+    private function populateNameColumn($column, $id){
+
+        if ( $this->postTypeName.'_name' == $column ) {
+            $url    = get_edit_post_link( $id );
+            $post_name = get_post_meta( $id, 'leadpages_name', true );
+            $name = $post_name;
+            if($name == ''){
+                $name = get_the_title($id);
+            }
+            echo '<strong><a href="' . $url . '">' . $name . '</a></strong>';
+        }
+    }
+
+    private function populatePathColumn($column, $id){
+        $path = LeadPagesPostTypeModel::getMetaPagePath($id);
+        if ( $this->postTypeName.'_path' == $column ) {
+
+            if ( LeadpageType::is_front_page($id) ) {
+                $url = site_url() . '/';
+                echo '<a href="' . $url . '" target="_blank">' . $url . '</a>';
+            } elseif ( LeadpageType::is_nf_page($id) ) {
+                $characters   = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                $randomString = '';
+                $length       = 10;
+                for ( $i = 0; $i < $length; $i ++ ) {
+                    $randomString .= $characters[ rand( 0, strlen( $characters ) - 1 ) ];
+                }
+                $url = site_url() . '/random-test-url-' . $randomString;
+                echo '<a href="' . $url . '" target="_blank">' . $url . '</a>';
+            } else {
+                if ( $path == '' ) {
+                    echo '<strong style="color:#ff3300">Missing path!</strong> <i>Page is not active</i>';
+                } else {
+                    $url = site_url() . '/' . $path;
+                    echo '<a href="' . $url . '" target="_blank">' . $url . '</a>';
+                }
+            }
+        }
+    }
+
+    private function populateTypeColumn($column, $id){
+
+        if ( $this->postTypeName.'_type' == $column ) {
+            $type    = LeadPagesPostTypeModel::getMetaPageType( $id );
+            if(empty($type)){
+                $type = 'lp';
+            }
+            switch($type){
+                case 'lp':
+                    echo 'Normal';
+                    break;
+                case 'fp':
+                    $activePage = LeadpageType::get_front_lead_page($id);
+                    echo 'Homepage';
+                    echo ($activePage ==  $id ? '<span style="font-style: italic; color:red;">'.__(' Active', 'leadpages').'</span>' : '');
+                    break;
+                case 'wg':
+                    $activePage = LeadpageType::get_wg_lead_page($id);
+                    echo 'Welcome Gate';
+                    echo ($activePage ==  $id ? '<span style="font-style: italic; color:red;">'.__(' Active', 'leadpages').'</span>' : '');
+                    break;
+                case 'nf':
+                    $activePage = LeadpageType::get_404_lead_page($id);
+                    echo '404 Page';
+                    echo ($activePage ==  $id ? '<span style="font-style: italic; color:red;">'.__(' Active', 'leadpages').'</span>' : '');
+                    break;
+            }
+        }
+    }
+
+    public function addColumns()
+    {
+        add_filter( 'manage_edit-'.$this->postTypeName.'_columns', array( &$this, 'defineColumns' ) );
+        add_action( 'manage_pages_custom_column', array( $this, 'populateColumns' ) );
+
     }
 }

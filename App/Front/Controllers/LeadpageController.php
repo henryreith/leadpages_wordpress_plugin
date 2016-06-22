@@ -117,6 +117,7 @@ class LeadpageController
         }else {
             $html = $this->pagesApi->downloadPageHtml($post['leadpages_page_id']);
         }
+
         if(ob_get_length() > 0){
             ob_clean();
         }
