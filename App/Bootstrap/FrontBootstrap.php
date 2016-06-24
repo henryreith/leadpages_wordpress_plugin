@@ -3,6 +3,7 @@
 namespace LeadpagesWP\Bootstrap;
 
 use Leadpages\Pages\LeadpagesPages;
+use LeadpagesWP\Helpers\PasswordProtected;
 use LeadpagesWP\models\LeadPagesPostTypeModel;
 use LeadpagesWP\Admin\Factories\CustomPostType;
 use LeadpagesWP\Front\Controllers\LeadpageController;
@@ -33,7 +34,8 @@ class FrontBootstrap
         $this->leadpageController = $leadpageController;
         add_filter('post_type_link', array( &$this, 'leadpages_permalink' ), 99, 2);
 
-        $this->leadpageController->displayWelcomeGate();
+
+        add_action('the_posts', array($this->leadpageController, 'displayWelcomeGate'));
         add_action('template_redirect', array($this->leadpageController, 'displayNFPage'));
         add_action('the_posts', array($this->leadpageController, 'isFrontPage'));
         add_action('the_posts', array($this, 'displayLeadpage'));

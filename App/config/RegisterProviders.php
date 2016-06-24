@@ -2,6 +2,7 @@
 
 use GuzzleHttp\Client;
 use Leadpages\Pages\LeadpagesPages;
+use LeadpagesWP\Helpers\PasswordProtected;
 use LeadpagesWP\Lib\ApiResponseHandler;
 use LeadpagesWP\Bootstrap\AdminBootstrap;
 use LeadpagesWP\Bootstrap\FrontBootstrap;
@@ -101,9 +102,14 @@ $leadpagesApp['lpPostTypeModel'] = function($leadpagesApp){
 };
 
 
+$leadpagesApp['passwordProtected'] = function ($leadpagesApp) {
+    global $wpdb;
+    return new PasswordProtected($wpdb);
+};
+
 
 $leadpagesApp['leadpageController'] = function($leadpagesApp){
-    return new LeadpageController($leadpagesApp['notfound'], $leadpagesApp['WelcomeGateController'], $leadpagesApp['lpPostTypeModel'], $leadpagesApp['pagesApi']);
+    return new LeadpageController($leadpagesApp['notfound'], $leadpagesApp['WelcomeGateController'], $leadpagesApp['lpPostTypeModel'], $leadpagesApp['pagesApi'], $leadpagesApp['passwordProtected']);
 };
 $leadpagesApp['notfound'] = function($leadpagesApp){
     return new NotFoundController($leadpagesApp['lpPostTypeModel'], $leadpagesApp['pagesApi']);
