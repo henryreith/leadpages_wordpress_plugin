@@ -43,8 +43,21 @@ class NotFoundController
     public function displaynfPage()
     {
         if($this->nfPageExists() && is_404()){
-            $pageID = $this->postTypeModel->getLeadpagePageId($this->nfPageId);
-            $html = $this->pagesApi->downloadPageHtml($pageID);
+            $pageId = $this->postTypeModel->getLeadpagePageId($this->nfPageId);
+
+            //check for cache
+            $getCache = get_post_meta($this->nfPageId, 'cache_page', true);
+            if($getCache == true){
+                $html = $this->postTypeModel->getCacheForPage($pageId);
+                if(empty($html)){
+                    $html = $this->pagesApi->downloadPageHtml($pageId);
+                    $this->leadpagesModel->setCacheForPage($pageId);
+                }
+            }else {
+                //no cache download html
+                $html = $this->pagesApi->downloadPageHtml($pageId);
+            }
+
             if(ob_get_length() > 0){
                 ob_clean();
             }

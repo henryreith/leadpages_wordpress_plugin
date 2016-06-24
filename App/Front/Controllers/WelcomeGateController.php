@@ -48,9 +48,7 @@ class WelcomeGateController
 
     public function displayWelcomeGate()
     {
-
-        $cookieIsSet = $this->checkWelcomeGateCookie();
-        if($cookieIsSet){
+        if($this->checkWelcomeGateCookie()){
             return;
         }
         if($this->welcomeGateExists() && !$this->checkWelcomeGateCookie()){

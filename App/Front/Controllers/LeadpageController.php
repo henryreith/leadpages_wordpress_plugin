@@ -4,6 +4,7 @@ namespace LeadpagesWP\Front\Controllers;
 
 use Leadpages\Pages\LeadpagesPages;
 use LeadpagesWP\Helpers\LeadpageType;
+use LeadpagesWP\Helpers\PasswordProtected;
 use LeadpagesWP\models\LeadPagesPostTypeModel;
 use LeadpagesWP\Front\Controllers\WelcomeGateController;
 use LeadpagesWP\Front\Controllers\NotFoundController;
@@ -28,14 +29,19 @@ class LeadpageController
      * @var \Leadpages\Pages\LeadpagesPages
      */
     private $pagesApi;
+    /**
+     * @var \LeadpagesWP\Helpers\PasswordProtected
+     */
+    private $passwordChecker;
 
-    public function __construct(NotFoundController $notfound, WelcomeGateController $welcomeGate ,LeadPagesPostTypeModel $leadpagesModel, LeadpagesPages $pagesApi)
+    public function __construct(NotFoundController $notfound, WelcomeGateController $welcomeGate ,LeadPagesPostTypeModel $leadpagesModel, LeadpagesPages $pagesApi, PasswordProtected $passwordChecker)
     {
 
         $this->leadpagesModel = $leadpagesModel;
         $this->notfound = $notfound;
         $this->welcomeGate = $welcomeGate;
         $this->pagesApi = $pagesApi;
+        $this->passwordChecker = $passwordChecker;
     }
 
     /**
@@ -54,7 +60,19 @@ class LeadpageController
             if ($post > 0) {
                 $pageId = $this->leadpagesModel->getLeadpagePageId($post);
 
-                $html = $this->pagesApi->downloadPageHtml($pageId);
+                //check for cache
+                $getCache = get_post_meta($pageId, 'cache_page', true);
+                if($getCache == true){
+                    $html = $this->postTypeModel->getCacheForPage($pageId);
+                    if(empty($html)){
+                        $html = $this->pagesApi->downloadPageHtml($pageId);
+                        $this->leadpagesModel->setCacheForPage($pageId);
+                    }
+                }else {
+                    //no cache download html
+                    $html = $this->pagesApi->downloadPageHtml($pageId);
+                }
+
                 echo $html;
                 die();
             }
@@ -87,8 +105,6 @@ class LeadpageController
      */
     public function normalPage()
     {
-        global $wpdb;
-
         //get page uri
         $requestedPage = $this->parse_request();
         if ( false == $requestedPage ) {
@@ -101,6 +117,7 @@ class LeadpageController
         //check leadpages_page_id(new pages from new plugin) and xhor id from old plugin
         if($post == false || !isset($post['leadpages_page_id']) || !isset($post['leadpages_my_selected_page'])) return false;
 
+        //ensure we have the leadpages page id
         $pageId = '';
         if(isset($post['leadpages_page_id'])){
             $pageId = $post['leadpages_page_id'];
@@ -108,12 +125,32 @@ class LeadpageController
             $pageId = $this->leadpagesModel->getPageByXORId($post['leadpages_my_selected_page']);
         }
 
-        if(empty($pageId)) return false;
+        //return false if no page id is found
+//        if(empty($pageId)) return false;
+//
+//        if (!empty($posts) || $this->passwordChecker->getPostPassword($post['post_id'])) {
+//            $passwordEntered = $this->passwordChecker->checkWPPasswordHash($post['post_id'], COOKIEHASH);
+//            if ($passwordEntered) {
+//                $result = $this->leadpageController->normalPage();
+//                if ($result == false) {
+//                    return $posts;
+//                }
+//            } else {
+//
+//                return;
+//            }
+//        }
 
         //check cache
         $getCache = get_post_meta($post['post_id'], 'cache_page', true);
         if($getCache == true){
             $html = $this->leadpagesModel->getCacheForPage($pageId);
+            //failsafe incase the cache is not set for some reason
+            //get html and set cache
+            if(empty($html)){
+                $html = $this->pagesApi->downloadPageHtml($post['leadpages_page_id']);
+                $this->leadpagesModel->setCacheForPage($post['leadpages_page_id']);
+            }
         }else {
             $html = $this->pagesApi->downloadPageHtml($post['leadpages_page_id']);
         }

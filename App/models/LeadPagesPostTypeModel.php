@@ -260,7 +260,7 @@ class LeadPagesPostTypeModel
     public function setCacheForPage($pageId)
     {
         $html = $this->PagesApi->downloadPageHtml($pageId);
-        set_transient('leadpages_page_html_cache_' . $pageId, $html, 600);
+        set_transient('leadpages_page_html_cache_' . $pageId, $html, 60*60*24);//one day/24 hours
     }
 
     public function getCacheForPage($pageId)
