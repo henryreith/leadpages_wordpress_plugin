@@ -323,7 +323,7 @@ class LeadPagesPostTypeModel
 
         if(empty($xorId)) return false;
 
-        $pages = $this->PagesApi->getUserPages();
+        $pages = $this->PagesApi->getAllUserPages();
         foreach ($pages['_items'] as $page) {
             if ($page['_meta']['xor_hex_id'] == $xorId) {
                 return $page['_meta']['id'];
