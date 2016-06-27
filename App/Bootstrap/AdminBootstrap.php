@@ -77,7 +77,6 @@ class AdminBootstrap
 
     public function loadJS(){
         global $leadpagesConfig;
-        global $post;
         if($leadpagesConfig['currentScreen'] == 'leadpages_post') {
             wp_enqueue_script('LeadpagesPostType', $leadpagesConfig['admin_assets'] . '/js/LeadpagesPostType.js',
               array('jquery'));
@@ -90,8 +89,9 @@ class AdminBootstrap
 
     public function loadStyles(){
         global $leadpagesConfig;
-        wp_enqueue_style( 'lp-lego', 'https://static.leadpages.net/lego/1.0.30/lego.min.css');
-        wp_enqueue_style( 'lp-styles', $leadpagesConfig['admin_css'].'styles.css');
-
+        if($leadpagesConfig['currentScreen'] == 'leadpages_post') {
+            wp_enqueue_style('lp-lego', 'https://static.leadpages.net/lego/1.0.30/lego.min.css');
+            wp_enqueue_style('lp-styles', $leadpagesConfig['admin_css'] . 'styles.css');
+        }
     }
 }
