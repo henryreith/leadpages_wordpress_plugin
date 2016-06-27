@@ -17,6 +17,12 @@
 
                 },
                 success: function (response) {
+                    var pageType = $("#leadpageType").val();
+                    if(pageType != 'nf' || pageType != 'fp'){
+                        $("#leadpage-slug").hide();
+                    }else{
+                        $(".leadpagesSlug").show();
+                    }
                     $(".ui-loading").hide();
                     $(".leadpagesSlug").show();
                     $(".leadpageType").show();
@@ -28,24 +34,22 @@
 
         getLeadPages();
 
+        var $body = $('body');
 
-        //not sure we need to do this
-    //    var $body = $('body');
-    //
-    //    function hideSlugFor404andHome(){
-    //        var pageType = $("#leadpageType").val();
-    //        if(pageType == 'nf' || pageType == 'fp'){
-    //            $("#leadpage-slug").hide();
-    //        }else{
-    //            $("#leadpage-slug").show();
-    //        }
-    //    }
-    //
-    //    $body.on('change', '#leadpageType', function(){
-    //        hideSlugFor404andHome();
-    //    });
-    //
-    //
+        function hideSlugFor404andHome(){
+            var pageType = $("#leadpageType").val();
+            if(pageType == 'nf' || pageType == 'fp'){
+                $("#leadpage-slug").hide();
+            }else{
+                $("#leadpage-slug").show();
+            }
+        }
+
+        $body.on('change', '#leadpageType', function(){
+            hideSlugFor404andHome();
+        });
+
+
 
     });
 }(jQuery));
