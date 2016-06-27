@@ -72,7 +72,6 @@ class LeadpageController
                     //no cache download html
                     $html = $this->pagesApi->downloadPageHtml($pageId);
                 }
-
                 echo $html;
                 die();
             }
@@ -113,18 +112,17 @@ class LeadpageController
         //get post from database including meta data
         $post = LeadPagesPostTypeModel::get_all_posts($requestedPage[0]);
 
-        //return posts if this isn't a leadpage
-        //check leadpages_page_id(new pages from new plugin) and xhor id from old plugin
-        if($post == false || !isset($post['leadpages_page_id']) || !isset($post['leadpages_my_selected_page'])) return false;
+        if($post == false) return false;
 
         //ensure we have the leadpages page id
         $pageId = '';
         if(isset($post['leadpages_page_id'])){
             $pageId = $post['leadpages_page_id'];
         }elseif(isset($post['leadpages_my_selected_page'])){
-            $pageId = $this->leadpagesModel->getPageByXORId($post['leadpages_my_selected_page']);
+            $pageId = $this->leadpagesModel->getPageByXORId($post['post_id'], $post['leadpages_my_selected_page']);
+        }else{
+            return false;
         }
-
         //return false if no page id is found
 //        if(empty($pageId)) return false;
 //
@@ -148,11 +146,11 @@ class LeadpageController
             //failsafe incase the cache is not set for some reason
             //get html and set cache
             if(empty($html)){
-                $html = $this->pagesApi->downloadPageHtml($post['leadpages_page_id']);
-                $this->leadpagesModel->setCacheForPage($post['leadpages_page_id']);
+                $html = $this->pagesApi->downloadPageHtml($pageId);
+                $this->leadpagesModel->setCacheForPage($pageId);
             }
         }else {
-            $html = $this->pagesApi->downloadPageHtml($post['leadpages_page_id']);
+            $html = $this->pagesApi->downloadPageHtml($pageId);
         }
 
         if(ob_get_length() > 0){
