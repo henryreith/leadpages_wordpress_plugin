@@ -14,9 +14,8 @@ class PasswordProtected
         $this->db = $db;
     }
 
-    public function getPostPassword($post){
-
-        $postId = $post->ID;
+    public function getPostPassword($postId){
+        $post = get_post($postId);
         $this->postPassword = $post->post_password;
         if(strlen($this->postPassword) > 0 || !is_null($this->postPassword)){
             return $this->postPassword;
@@ -33,8 +32,9 @@ class PasswordProtected
         }
 
         $password = $this->getPostPassword($post);
-        //$hash = 	$wp_hasher->HashPassword($password);
-        //echo $hash; die();
+
+        $hash =	$wp_hasher->HashPassword($password);
+
         if ( isset( $_COOKIE['wp-postpass_' . $COOKIEHASH] ) ){
             return true;
         }else{
