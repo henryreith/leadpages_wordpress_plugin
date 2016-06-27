@@ -51,7 +51,7 @@ class NotFoundController
                 $html = $this->postTypeModel->getCacheForPage($pageId);
                 if(empty($html)){
                     $html = $this->pagesApi->downloadPageHtml($pageId);
-                    $this->leadpagesModel->setCacheForPage($pageId);
+                    $this->postTypeModel->setCacheForPage($pageId);
                 }
             }else {
                 //no cache download html
