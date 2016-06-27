@@ -317,9 +317,12 @@ class LeadPagesPostTypeModel
         die();
     }
 
-    public function getPageByXORId($pageId)
+    public function getPageByXORId($pageId, $xorId = '')
     {
-        $xorId = get_post_meta($pageId, 'leadpages_my_selected_page', true);
+
+        if(empty($xorId)){
+            $xorId = get_post_meta($pageId, 'leadpages_my_selected_page', true);
+        }
 
         if(empty($xorId)) return false;
 
