@@ -50,12 +50,14 @@ class NotFoundController
             if($getCache == true){
                 $html = $this->postTypeModel->getCacheForPage($pageId);
                 if(empty($html)){
-                    $html = $this->pagesApi->downloadPageHtml($pageId);
+                    $apiResponse = $this->pagesApi->downloadPageHtml($pageId);
+                    $html = $apiResponse['response'];
                     $this->postTypeModel->setCacheForPage($pageId);
                 }
             }else {
                 //no cache download html
-                $html = $this->pagesApi->downloadPageHtml($pageId);
+                $apiResponse = $this->pagesApi->downloadPageHtml($pageId);
+                $html = $apiResponse['response'];
             }
 
             if(ob_get_length() > 0){

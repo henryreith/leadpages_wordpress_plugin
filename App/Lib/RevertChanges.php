@@ -60,7 +60,7 @@ function fixAllTheThings()
     update_option('LeadpagesDBFixApplied', true);
 }
 
-if(!isset($plugin_version) || version_compare( $plugin_version, '2.0.4', '<' )){
+if(!isset($plugin_version) || version_compare( $plugin_version, '2.0.2', '<' )){
     $fixAlreadyApplied = get_option('LeadpagesDbFixApplied');
     fixAllTheThings();
 }

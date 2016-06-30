@@ -10,6 +10,8 @@
             exitLeadBoxes();
             setPostTypes();
             $('#leadboxesLoading').hide();
+            $('#timedLoading').hide();
+            $('#exitLoading').hide();
             $("#leadboxesForm").show();
         }
 
@@ -40,11 +42,13 @@
         });
 
         $body.on('click', '#timedLeadboxRefresh', function(){
-            $('#timedLoading').show();
+            $('#timedLoading').css('display', 'inline');
             $.ajax({
                 type : "GET",
                 url : leadboxes_object.ajax_url,
-                data : {action: "getLeadboxesAjax"},
+                data : {
+                    action: "allLeadboxesAjax"
+                },
                 success: function(response) {
                     $('#timedLoading').hide();
                     var leadboxes = $.parseJSON(response);
@@ -55,11 +59,13 @@
         });
 
         $body.on('click', '#exitLeadboxRefresh', function(){
-            $('#exitLoading').show();
+            $('#exitLoading').css('display', 'inline');
             $.ajax({
                 type : "GET",
                 url : leadboxes_object.ajax_url,
-                data : {action: "getLeadboxesAjax"},
+                data : {
+                    action: "allLeadboxesAjax"
+                },
                 success: function(response) {
                     $('#exitLoading').hide();
                     var leadboxes = $.parseJSON(response);

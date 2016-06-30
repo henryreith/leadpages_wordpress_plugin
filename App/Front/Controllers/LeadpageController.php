@@ -50,7 +50,7 @@ class LeadpageController
      *
      * @param $post_id
      */
-    public function isFrontPage()
+    public function isFrontPage($posts)
     {
         if (is_home() || is_front_page()) {
             //see if a front page exists
@@ -65,25 +65,28 @@ class LeadpageController
                 if($getCache == true){
                     $html = $this->postTypeModel->getCacheForPage($pageId);
                     if(empty($html)){
-                        $html = $this->pagesApi->downloadPageHtml($pageId);
+                        $apiResponse = $this->pagesApi->downloadPageHtml($pageId);
+                        $html = $apiResponse['response'];
                         $this->leadpagesModel->setCacheForPage($pageId);
                     }
                 }else {
                     //no cache download html
-                    $html = $this->pagesApi->downloadPageHtml($pageId);
+                    $apiResponse = $this->pagesApi->downloadPageHtml($pageId);
+                    $html = $apiResponse['response'];
                 }
                 echo $html;
                 die();
             }
         }
+        return $posts;
     }
 
     /**
      *Display WelcomeGate Page
      */
-    public function displayWelcomeGate()
+    public function displayWelcomeGate($posts)
     {
-        $this->welcomeGate->displayWelcomeGate();
+        return $this->welcomeGate->displayWelcomeGate($posts);
     }
 
     /**
@@ -146,11 +149,14 @@ class LeadpageController
             //failsafe incase the cache is not set for some reason
             //get html and set cache
             if(empty($html)){
-                $html = $this->pagesApi->downloadPageHtml($pageId);
+                $apiResponse = $this->pagesApi->downloadPageHtml($pageId);
+                $html = $apiResponse['response'];
                 $this->leadpagesModel->setCacheForPage($pageId);
             }
         }else {
-            $html = $this->pagesApi->downloadPageHtml($pageId);
+            $apiResponse = $this->pagesApi->downloadPageHtml($pageId);
+            $html = $apiResponse['response'];
+            print_r($html);die();
         }
 
         if(ob_get_length() > 0){

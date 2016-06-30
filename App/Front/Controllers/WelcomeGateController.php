@@ -46,10 +46,10 @@ class WelcomeGateController
         die();
     }
 
-    public function displayWelcomeGate()
+    public function displayWelcomeGate($posts)
     {
         if($this->checkWelcomeGateCookie()){
-            return;
+            return $posts;
         }
         if($this->welcomeGateExists() && !$this->checkWelcomeGateCookie()){
 
@@ -57,6 +57,8 @@ class WelcomeGateController
             $this->setWelcomeGateCookie();
             $this->welcomeGateHttpRedirect();
         }
+
+        return $posts;
 
     }
 

@@ -3,12 +3,11 @@
 namespace LeadpagesWP\Bootstrap;
 
 use Leadpages\Pages\LeadpagesPages;
-use LeadpagesWP\Helpers\PasswordProtected;
-use LeadpagesWP\models\LeadPagesPostTypeModel;
+use LeadpagesWP\Admin\CustomPostTypes\LeadpagesPostType;
 use LeadpagesWP\Admin\Factories\CustomPostType;
+use LeadpagesWP\Front\Controllers\LeadboxController;
 use LeadpagesWP\Front\Controllers\LeadpageController;
 use LeadpagesWP\ServiceProviders\WordPressLeadpagesAuth;
-use LeadpagesWP\Admin\CustomPostTypes\LeadpagesPostType;
 
 class FrontBootstrap
 {
@@ -25,20 +24,38 @@ class FrontBootstrap
      * @var \Leadpages\Pages\LeadpagesPages
      */
     private $pagesApi;
+    /**
+     * @var \LeadpagesWP\Front\Controllers\LeadboxController
+     */
+    private $leadboxController;
 
-    public function __construct(WordPressLeadpagesAuth $login, LeadpageController $leadpageController, LeadpagesPages $pagesApi)
-    {
+    /**
+     * FrontBootstrap constructor.
+     *
+     * @param \LeadpagesWP\ServiceProviders\WordPressLeadpagesAuth $login
+     * @param \LeadpagesWP\Front\Controllers\LeadpageController $leadpageController
+     * @param \Leadpages\Pages\LeadpagesPages $pagesApi
+     * @param \LeadpagesWP\Front\Controllers\LeadboxController $leadboxController
+     */
+    public function __construct(
+      WordPressLeadpagesAuth $login,
+      LeadpageController $leadpageController,
+      LeadpagesPages $pagesApi,
+      LeadboxController $leadboxController
+    ) {
         $this->login = $login;
-        $this->setupLeadpages();
         $this->pagesApi = $pagesApi;
         $this->leadpageController = $leadpageController;
-        add_filter('post_type_link', array( &$this, 'leadpages_permalink' ), 99, 2);
+        $this->leadboxController = $leadboxController;
 
+        $this->setupLeadpages();
 
+        add_filter('post_type_link', array(&$this, 'leadpages_permalink'), 99, 2);
         add_action('the_posts', array($this->leadpageController, 'displayWelcomeGate'));
         add_action('template_redirect', array($this->leadpageController, 'displayNFPage'));
         add_action('the_posts', array($this->leadpageController, 'isFrontPage'));
         add_action('the_posts', array($this, 'displayLeadpage'));
+        add_filter('the_post', array($this->leadboxController, 'initLeadboxes'));
     }
 
     public function setupLeadpages()
@@ -54,7 +71,9 @@ class FrontBootstrap
     public function displayLeadpage($posts)
     {
         if (!empty($posts)) {
-            if($posts[0]->post_type != 'leadpages_post') return $posts;
+            if ($posts[0]->post_type != 'leadpages_post') {
+                return $posts;
+            }
         }
 
         $result = $this->leadpageController->normalPage();
@@ -63,10 +82,12 @@ class FrontBootstrap
         }
     }
 
-    public function leadpages_permalink( $url, $post ) {
-        if ( 'leadpages_post' == get_post_type( $post ) ) {
-            $path = esc_html( get_post_meta( $post->ID, 'leadpages_slug', true ) );
-            if ( $path != '' ) {
+
+    public function leadpages_permalink($url, $post)
+    {
+        if ('leadpages_post' == get_post_type($post)) {
+            $path = esc_html(get_post_meta($post->ID, 'leadpages_slug', true));
+            if ($path != '') {
                 return site_url() . '/' . $path;
             } else {
                 return '';

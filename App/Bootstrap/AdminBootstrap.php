@@ -2,13 +2,17 @@
 
 namespace LeadpagesWP\Bootstrap;
 
+use LeadpagesWP\models\LeadboxesModel;
 use LeadpagesWP\Admin\Factories\MetaBoxes;
 use LeadpagesWP\Admin\Factories\SettingsPage;
 use LeadpagesWP\Admin\MetaBoxes\LeadpageSlug;
 use LeadpagesWP\Admin\MetaBoxes\LeadpageType;
+use LeadpagesWP\ServiceProviders\LeadboxesApi;
 use LeadpagesWP\models\LeadPagesPostTypeModel;
+use LeadpagesWP\admin\SettingsPages\Leadboxes;
 use LeadpagesWP\Admin\Factories\CustomPostType;
 use LeadpagesWP\Admin\MetaBoxes\LeadpageSelect;
+use LeadpagesWP\Admin\MetaBoxes\LeadboxMetaBox;
 use LeadpagesWP\Admin\SettingsPages\LeadpagesLoginPage;
 use LeadpagesWP\ServiceProviders\WordPressLeadpagesAuth;
 use LeadpagesWP\Admin\CustomPostTypes\LeadpagesPostType;
@@ -25,14 +29,20 @@ class AdminBootstrap
      * @var \LeadpagesWP\models\LeadPagesPostTypeModel
      */
     private $postTypeModel;
+    /**
+     * @var \LeadpagesWP\ServiceProviders\LeadboxesApi
+     */
+    private $leadboxesApi;
 
-    public function __construct(WordPressLeadpagesAuth $login, LeadPagesPostTypeModel $postTypeModel)
+    public function __construct(WordPressLeadpagesAuth $login, LeadPagesPostTypeModel $postTypeModel, LeadboxesApi $leadboxesApi, LeadboxesModel $leadboxesModel)
     {
         $this->login = $login;
         $this->postTypeModel = $postTypeModel;
+        $this->leadboxesApi = $leadboxesApi;
 
         $this->setupLogin();
         $this->setupLeadpages();
+        $this->setupLeadboxes();
     }
 
     public function setupLogin()
@@ -72,11 +82,19 @@ class AdminBootstrap
         //dont execute if not logged in
         if(!$this->isLoggedIn) return;
 
+        global $leadpagesConfig;
+
+        SettingsPage::create(Leadboxes::getName());
+        Metaboxes::create(LeadboxMetaBox::getName());
+        LeadboxesModel::init();
+        LeadboxesModel::saveLeadboxMeta();
+
     }
 
 
     public function loadJS(){
         global $leadpagesConfig;
+
         if($leadpagesConfig['currentScreen'] == 'leadpages_post') {
             wp_enqueue_script('LeadpagesPostType', $leadpagesConfig['admin_assets'] . '/js/LeadpagesPostType.js',
               array('jquery'));
@@ -89,7 +107,7 @@ class AdminBootstrap
 
     public function loadStyles(){
         global $leadpagesConfig;
-        if($leadpagesConfig['currentScreen'] == 'leadpages_post') {
+        if($leadpagesConfig['currentScreen'] == 'leadpages_post' || $leadpagesConfig['currentScreenAll']->base == 'toplevel_page_Leadboxes') {
             wp_enqueue_style('lp-lego', 'https://static.leadpages.net/lego/1.0.30/lego.min.css');
             wp_enqueue_style('lp-styles', $leadpagesConfig['admin_css'] . 'styles.css');
         }

@@ -58,6 +58,7 @@ class LeadPagesPostTypeModel
         if (isset($_POST['cache_this']) && $_POST['cache_this'] == "true") {
             update_post_meta($post_id, 'cache_page', 'true');
             $this->setCacheForPage($this->LeadPageId);
+
         } elseif (isset($_POST['cache_this']) && $_POST['cache_this'] == "false") {
             update_post_meta($post_id, 'cache_page', 'false');
         } else {
@@ -259,7 +260,8 @@ class LeadPagesPostTypeModel
 
     public function setCacheForPage($pageId)
     {
-        $html = $this->PagesApi->downloadPageHtml($pageId);
+        $apiResponse = $this->PagesApi->downloadPageHtml($pageId);
+        $html = $apiResponse['response'];
         set_transient('leadpages_page_html_cache_' . $pageId, $html, 60*60*24);//one day/24 hours
     }
 

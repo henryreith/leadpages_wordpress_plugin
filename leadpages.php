@@ -53,6 +53,8 @@ function getScreen()
 
     $screen = get_current_screen();
     $leadpagesConfig['currentScreen'] = $screen->post_type;
+    $leadpagesConfig['currentScreenAll'] = $screen;
+
 }
 
 

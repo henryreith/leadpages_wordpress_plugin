@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Leadpages\models;
+namespace LeadpagesWP\models;
 
 
 use LeadpagesWP\Helpers\Security;
@@ -82,8 +82,7 @@ class LeadboxesModel
      */
     public static function savePageSpecificTimedLeadbox($post_id)
     {
-        $timedLeadbox = $_POST['pageTimedLeadbox'];
-
+        $timedLeadbox = sanitize_text_field($_POST['pageTimedLeadbox']);
 
         if ($timedLeadbox != 'select') {
             update_post_meta($post_id, 'pageTimedLeadbox', $timedLeadbox);
@@ -99,7 +98,7 @@ class LeadboxesModel
      */
     public static function savePageSpecificExitLeadbox($post_id)
     {
-        $exitLeadbox  = $_POST['pageExitLeadbox'];
+        $exitLeadbox  = sanitize_text_field($_POST['pageExitLeadbox']);
 
         if ($exitLeadbox != 'select') {
             update_post_meta($post_id, 'pageExitLeadbox', $exitLeadbox);
