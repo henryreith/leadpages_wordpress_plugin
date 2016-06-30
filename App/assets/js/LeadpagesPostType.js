@@ -5,7 +5,7 @@
         function getLeadPages(){
 
             //var loading ='<div class="ui-loading"> <div class="ui-loading__dots ui-loading__dots--1"></div> <div class="ui-loading__dots ui-loading__dots--2"></div> <div class="ui-loading__dots ui-loading__dots--3"></div> </div>';
-
+            var start = new Date().getTime();
             $.ajax({
                 type: 'POST',
                 url: ajax_object.ajax_url,
@@ -17,8 +17,10 @@
 
                 },
                 success: function (response) {
+                    var end = new Date().getTime();
+                    console.log('milliseconds passed', end - start);
                     var pageType = $("#leadpageType").val();
-                    if(pageType != 'nf' || pageType != 'fp'){
+                    if(pageType == 'nf' || pageType == 'fp'){
                         $("#leadpage-slug").hide();
                     }else{
                         $(".leadpagesSlug").show();

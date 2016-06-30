@@ -4,3 +4,4 @@ node_modules/**/*
 testData.php
 
 tests/_output/*
+tests/_output/*

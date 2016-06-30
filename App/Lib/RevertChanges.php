@@ -16,17 +16,17 @@ function fixAllTheThings()
     //remove all the slashes
     foreach ($posts as $post) {
         $title = $post->post_title;
-        //dont update the title if it is only /
-        if($title != '/') {
-            $title = ltrim($title, '/');
-            $title = rtrim($title, '/');
-            update_post_meta($post->ID, 'leadpages_slug', $title);
-        }
-        $post_update_name = array(
-          'post_name'    => $title,
-        );
 
-        $wpdb->update("{$wpdb->prefix}posts", $post_update_name, ['ID' => $post->ID] );
+        $title = ltrim($title, '/');
+        $title = rtrim($title, '/');
+        update_post_meta($post->ID, 'leadpages_slug', $title);
+
+        $post_update_name = array(
+          'post_name' => $title,
+        );
+        if ($title != '/') {
+            $wpdb->update("{$wpdb->prefix}posts", $post_update_name, ['ID' => $post->ID]);
+        }
     }
 
     /**

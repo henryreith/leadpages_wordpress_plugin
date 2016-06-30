@@ -58,8 +58,8 @@ class LeadpageSelect extends LeadpagesPostType implements MetaBox
             <br />
             <br />
 
-            <input type="radio" name="cache_this" value="true"  <?php echo ($useCache == 'true') ? 'checked="checked"': ''; ?>> Yes, cache for improved performance. <br />
-            <input type="radio" name="cache_this" value="false"  <?php echo ($useCache != 'true') ? 'checked="checked"': ''; ?>> No, re-fetch on each visit; slower, but required for split testing.
+            <input type="radio" id="cache_this_true" name="cache_this" value="true"  <?php echo ($useCache == 'true') ? 'checked="checked"': ''; ?>> Yes, cache for improved performance. <br />
+            <input type="radio" id="cache_this_false" name="cache_this" value="false"  <?php echo ($useCache != 'true') ? 'checked="checked"': ''; ?>> No, re-fetch on each visit; slower, but required for split testing.
         </div>
         <?php
     }

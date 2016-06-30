@@ -12,10 +12,21 @@ settings:
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
+coverage:
+    enabled: true
+    whitelist:
+            include:
+                - App/*
 modules:
     config:
         Db:
-            dsn: ''
-            user: ''
-            password: ''
-            dump: tests/_data/dump.sql
+            dsn: 'mysql:host=127.0.0.1;dbname=wordpress2'
+            user: 'root'
+            password: 'root'
+            dump: tests/_data/wordpress2.sql
+            populate: true
+            cleanup: true
+        WebDriver:
+            url: 'http://localhost/wordpress'
+            browser: 'chrome'
+            window_size: 1024x768

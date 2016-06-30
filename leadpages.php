@@ -21,7 +21,7 @@ $plugin_version = '2.0.2';
     |
     */
 
-
+require_once('c3.php');
 require_once('vendor/autoload.php');
 require_once('App/Config/App.php');
 require_once($leadpagesConfig['basePath'] . 'Framework/ServiceContainer/ServiceContainer.php');

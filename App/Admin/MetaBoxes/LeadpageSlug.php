@@ -31,7 +31,7 @@ class LeadpageSlug extends LeadpagesPostType implements MetaBox
             <div class="ui-loading__dots ui-loading__dots--3"></div>
         </div>
         <div class="leadpagesSlug">
-            <input type="text" name="leadpages_slug" value="<?php echo $slug; ?>">
+            <input type="text" id="leadpages_slug_input" name="leadpages_slug" value="<?php echo $slug; ?>">
         </div>
         <?php
     }
