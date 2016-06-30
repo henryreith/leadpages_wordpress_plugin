@@ -9,7 +9,7 @@ use LeadpagesWP\Admin\MetaBoxes\LeadpageSlug;
 use LeadpagesWP\Admin\MetaBoxes\LeadpageType;
 use LeadpagesWP\ServiceProviders\LeadboxesApi;
 use LeadpagesWP\models\LeadPagesPostTypeModel;
-use LeadpagesWP\admin\SettingsPages\Leadboxes;
+use LeadpagesWP\Admin\SettingsPages\Leadboxes;
 use LeadpagesWP\Admin\Factories\CustomPostType;
 use LeadpagesWP\Admin\MetaBoxes\LeadpageSelect;
 use LeadpagesWP\Admin\MetaBoxes\LeadboxMetaBox;

@@ -179,6 +179,10 @@ class LeadpageController
         // strip parameters
         $real   = explode( '?', $part );
         $tokens = explode( '/', $real[0] );
+        foreach($tokens as $index => $token){
+            //decode url enteities such as %20 for space
+            $tokens[$index] = urldecode($token);
+        }
         return $tokens;
     }
 
