@@ -5,26 +5,53 @@ namespace LeadpagesWP\Front\Controllers;
 use LeadpagesWP\models\LeadboxesModel;
 use LeadpagesWP\ServiceProviders\LeadboxesApi;
 
+/**
+ * Class LeadboxController
+ * @package LeadpagesWP\Front\Controllers
+ */
 class LeadboxController
 {
 
+    /**
+     * @var
+     */
     protected $postType;
     /**
      * @var
      */
     private $leadboxApi;
 
+    /**
+     * @var
+     */
     private $hasSpecificTimed;
+    /**
+     * @var
+     */
     private $hasSpecificExit;
+    /**
+     * @var
+     */
     private $pageSpecificTimedLeadboxId;
+    /**
+     * @var
+     */
     private $pageSpecificExitdLeadboxId;
 
 
+    /**
+     * LeadboxController constructor.
+     *
+     * @param \LeadpagesWP\ServiceProviders\LeadboxesApi $leadboxApi
+     */
     public function __construct(LeadboxesApi $leadboxApi)
     {
         $this->leadboxApi = $leadboxApi;
     }
 
+    /**
+     *
+     */
     public function initLeadboxes(){
         global $post;
 
@@ -38,11 +65,17 @@ class LeadboxController
         $this->addEmbedToContent();
     }
 
+    /**
+     * @param $post
+     */
     protected function setPageType($post)
     {
         $this->postType = $post->post_type;
     }
 
+    /**
+     * @return array
+     */
     protected function getGlobalLeadBoxes(){
 
         $currentTimedLeadbox = LeadboxesModel::getCurrentTimedLeadbox();
@@ -53,8 +86,10 @@ class LeadboxController
         );
     }
 
+    /**
+     * @param $leadboxes
+     */
     public function getTimedLeadboxCode($leadboxes){
-        $leadboxes = $this->getGlobalLeadBoxes();
         if($leadboxes['timed'][1] == $this->postType || $leadboxes['timed'][1] == 'all'){
             $apiResponse = $this->leadboxApi->getSingleLeadboxEmbedCode($leadboxes['timed'][0], 'timed');
             $timed_embed_code = json_decode($apiResponse['response'], true);
@@ -65,6 +100,9 @@ class LeadboxController
         return $timed_embed_code['embed_code'];
     }
 
+    /**
+     * @param $leadboxes
+     */
     public function getExitLeadboxCode($leadboxes){
 
 
@@ -79,18 +117,31 @@ class LeadboxController
 
     }
 
+    /**
+     * @param $content
+     *
+     * @return string
+     */
     public function addTimedLeadboxesGlobal($content){
         $leadboxes = $this->getGlobalLeadBoxes();
         $content = $content . $this->getTimedLeadboxCode($leadboxes);
         return $content;
     }
 
+    /**
+     * @param $content
+     *
+     * @return string
+     */
     public function addExitLeadboxesGlobal($content){
         $leadboxes = $this->getGlobalLeadBoxes();
         $content   = $content . $this->getExitLeadboxCode($leadboxes);
         return $content;
     }
 
+    /**
+     *
+     */
     public function addEmbedToContent(){
         if($this->hasSpecificTimed){
             add_filter('the_content', array($this, 'displayPageSpecificTimedLeadbox'));
@@ -109,6 +160,9 @@ class LeadboxController
         }
     }
 
+    /**
+     * @param $method
+     */
     protected function woocommerce_specific_hook($method){
         if($this->postType == 'product'){
             add_action('woocommerce_after_main_content', array($this, $method));
@@ -119,6 +173,9 @@ class LeadboxController
      * Page Specific Leadboxes
      */
 
+    /**
+     * @param $post
+     */
     protected function getPageSpecificTimedLeadbox($post){
         if(!is_front_page()) {
             $this->pageSpecificTimedLeadboxId = get_post_meta($post->ID, 'pageTimedLeadbox', true);
@@ -128,6 +185,11 @@ class LeadboxController
         }
     }
 
+    /**
+     * @param $content
+     *
+     * @return string
+     */
     public function displayPageSpecificTimedLeadbox($content){
         //only display a leadbox if the id selected is not none.
         //if none is selected nothing will show.
@@ -143,6 +205,9 @@ class LeadboxController
 
     }
 
+    /**
+     * @param $post
+     */
     protected function getExitSpecifiExitLeadbox($post){
         if(!is_front_page()) {
             $this->pageSpecificExitdLeadboxId = get_post_meta($post->ID, 'pageExitLeadbox', true);
@@ -152,6 +217,11 @@ class LeadboxController
         }
     }
 
+    /**
+     * @param $content
+     *
+     * @return string
+     */
     public function displayPageSpecificExitLeadbox($content){
         //only display a leadbox if the id selected is not none.
         //if none is selected nothing will show.

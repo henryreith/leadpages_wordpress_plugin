@@ -20,13 +20,14 @@
                     var end = new Date().getTime();
                     console.log('milliseconds passed', end - start);
                     var pageType = $("#leadpageType").val();
+                    var leadpagesSlug = $("#leadpage-slug");
                     if(pageType == 'nf' || pageType == 'fp'){
-                        $("#leadpage-slug").hide();
+                        leadpagesSlug.hide();
                     }else{
-                        $(".leadpagesSlug").show();
+                        leadpagesSlug.show();
                     }
                     $(".ui-loading").hide();
-                    $(".leadpagesSlug").show();
+                    leadpagesSlug.show();
                     $(".leadpageType").show();
                     $(".leadpagesSelect").show();
                     $("#leadpages_my_selected_page").append(response);

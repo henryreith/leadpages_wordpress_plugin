@@ -6,8 +6,6 @@ use Leadpages\Pages\LeadpagesPages;
 use LeadpagesWP\Helpers\LeadpageType;
 use LeadpagesWP\Helpers\PasswordProtected;
 use LeadpagesWP\models\LeadPagesPostTypeModel;
-use LeadpagesWP\Front\Controllers\WelcomeGateController;
-use LeadpagesWP\Front\Controllers\NotFoundController;
 
 class LeadpageController
 {
@@ -48,7 +46,9 @@ class LeadpageController
      * check to see if current page is front page and if so see if a front
      * leadpage exists to display it
      *
-     * @param $post_id
+     * @param $posts
+     *
+     * @return
      */
     public function isFrontPage($posts)
     {
@@ -102,7 +102,7 @@ class LeadpageController
     }
 
     /**
-     * Return a normal Leadpage type if the post type is leadpages_post
+     * Echos a normal Leadpage type html if the post type is leadpages_post
      * @param $post
      */
     public function normalPage()
@@ -118,7 +118,6 @@ class LeadpageController
         if($post == false) return false;
 
         //ensure we have the leadpages page id
-        $pageId = '';
         if(isset($post['leadpages_page_id'])){
             $pageId = $post['leadpages_page_id'];
         }elseif(isset($post['leadpages_my_selected_page'])){

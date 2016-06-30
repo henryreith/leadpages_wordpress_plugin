@@ -140,17 +140,17 @@ class LeadpagesPostType extends CustomPostType
                     echo 'Normal';
                     break;
                 case 'fp':
-                    $activePage = LeadpageType::get_front_lead_page($id);
+                    $activePage = LeadpageType::get_front_lead_page();
                     echo 'Homepage';
                     echo ($activePage ==  $id ? '<span style="font-style: italic; color:red;">'.__(' Active', 'leadpages').'</span>' : '');
                     break;
                 case 'wg':
-                    $activePage = LeadpageType::get_wg_lead_page($id);
+                    $activePage = LeadpageType::get_wg_lead_page();
                     echo 'Welcome Gate';
                     echo ($activePage ==  $id ? '<span style="font-style: italic; color:red;">'.__(' Active', 'leadpages').'</span>' : '');
                     break;
                 case 'nf':
-                    $activePage = LeadpageType::get_404_lead_page($id);
+                    $activePage = LeadpageType::get_404_lead_page();
                     echo '404 Page';
                     echo ($activePage ==  $id ? '<span style="font-style: italic; color:red;">'.__(' Active', 'leadpages').'</span>' : '');
                     break;

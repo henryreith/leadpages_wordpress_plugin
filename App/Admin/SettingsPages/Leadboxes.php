@@ -4,7 +4,6 @@
 namespace LeadpagesWP\admin\SettingsPages;
 
 use TheLoop\Contracts\SettingsPage;
-use LeadpagesWP\models\LeadboxesModel;
 use LeadpagesWP\Helpers\LeadboxDisplay;
 use TheLoop\ServiceContainer\ServiceContainerTrait;
 

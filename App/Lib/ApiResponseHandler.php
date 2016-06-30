@@ -24,17 +24,17 @@ class ApiResponseHandler
         return $this->handleError($code, $body);
     }
 
-    public function handleError($code, $body)
-    {
-        return $code;
-        //the below should happen but not appears to work for now return code
-        /*
-        $body = $body['_status']['errors'][0]['message'];
-        add_action('admin_notices', function () use ($body, $code) {
-            echo '<div class="notice notice-error is-dismissible"><p>', esc_html($body), ' Error Code: '. esc_html($code) .'</p></div>';
-        });
-        */
-    }
+//    public function handleError($code, $body)
+//    {
+//        return $code;
+//        //the below should happen but not appears to work for now return code
+//        /*
+//        $body = $body['_status']['errors'][0]['message'];
+//        add_action('admin_notices', function () use ($body, $code) {
+//            echo '<div class="notice notice-error is-dismissible"><p>', esc_html($body), ' Error Code: '. esc_html($code) .'</p></div>';
+//        });
+//        */
+//    }
 
     public function adminErrorNotice($code, $body)
     {
@@ -61,8 +61,8 @@ class ApiResponseHandler
                 }
             });
 
-            return $code;
         }
+        return $code;
     }
 
     public function getBody($response)
@@ -78,8 +78,8 @@ class ApiResponseHandler
                     }
                 }
             });
-            return $body;
         }
+        return $body;
     }
 
 

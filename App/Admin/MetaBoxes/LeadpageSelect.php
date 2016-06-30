@@ -6,7 +6,6 @@ namespace LeadpagesWP\Admin\MetaBoxes;
 use TheLoop\Contracts\MetaBox;
 use LeadpagesWP\models\LeadPagesPostTypeModel;
 use LeadpagesWP\Admin\CustomPostTypes\LeadpagesPostType;
-use Leadpages\Pages\LeadpagesPages;
 
 
 class LeadpageSelect extends LeadpagesPostType implements MetaBox

@@ -2,7 +2,7 @@
 
 /**
  * We changed some functionality in 2.0 and 2.01 from the 1.x versions of the plugin.
- * This function will change all of it back and hopefull mitigate any issues
+ * This function will change all of it back and hopeful mitigate any issues
  */
 function fixAllTheThings()
 {
