@@ -83,7 +83,7 @@ class FrontEndTestCest
         $I->waitForElement('#leadpages_slug_input', 10);
         //need to wait 5 seconds so we can manipulate the field
         $I->wait(5);
-        //$I->fillField('#leadpages_slug_input', 'e2etest');
+        $I->fillField('#leadpages_slug_input', 'homepage');
         $I->selectOption('form select[name=leadpages-post-type]', 'Home Page');
         $I->selectOption('form select[name=leadpages_my_selected_page]', 'E2E Test Page Do Not Remove');
         $I->selectOption('form input[name=cache_this]', 'true');
@@ -108,7 +108,7 @@ class FrontEndTestCest
         $I->waitForElement('#leadpages_slug_input', 10);
         //need to wait 5 seconds so we can manipulate the field
         $I->wait(5);
-        // $I->fillField('#leadpages_slug_input', 'e2etest');
+        $I->fillField('#leadpages_slug_input', '404 Page');
         $I->selectOption('form select[name=leadpages-post-type]', '404 Page');
         $I->selectOption('form select[name=leadpages_my_selected_page]', 'E2E Test Page Do Not Remove');
         $I->selectOption('form input[name=cache_this]', 'true');

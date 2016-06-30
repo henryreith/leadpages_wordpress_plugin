@@ -4,7 +4,6 @@
 
         function getLeadPages(){
 
-            //var loading ='<div class="ui-loading"> <div class="ui-loading__dots ui-loading__dots--1"></div> <div class="ui-loading__dots ui-loading__dots--2"></div> <div class="ui-loading__dots ui-loading__dots--3"></div> </div>';
             var start = new Date().getTime();
             $.ajax({
                 type: 'POST',
@@ -19,15 +18,16 @@
                 success: function (response) {
                     var end = new Date().getTime();
                     console.log('milliseconds passed', end - start);
-                    var pageType = $("#leadpageType").val();
-                    var leadpagesSlug = $("#leadpage-slug");
-                    if(pageType == 'nf' || pageType == 'fp'){
-                        leadpagesSlug.hide();
-                    }else{
-                        leadpagesSlug.show();
-                    }
+                    //var pageType = $("#leadpageType").val();
+                    //if(pageType == 'nf' || pageType == 'fp'){
+                    //
+                    //    $("#leadpage-slug").hide();
+                    //}else{
+                    //    $("#leadpage-slug").show();
+                    //}
+
+                    $(".leadpagesSlug").show();
                     $(".ui-loading").hide();
-                    leadpagesSlug.show();
                     $(".leadpageType").show();
                     $(".leadpagesSelect").show();
                     $("#leadpages_my_selected_page").append(response);
@@ -48,11 +48,9 @@
             }
         }
 
-        $body.on('change', '#leadpageType', function(){
-            hideSlugFor404andHome();
-        });
-
-
+        //$body.on('change', '#leadpageType', function(){
+        //    hideSlugFor404andHome();
+        //});
 
     });
 }(jQuery));
