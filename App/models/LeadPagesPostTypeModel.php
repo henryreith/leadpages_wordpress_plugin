@@ -362,9 +362,15 @@ class LeadPagesPostTypeModel
             from {$wpdb->prefix}postmeta as pm
             INNER JOIN {$wpdb->prefix}posts as p
             on p.ID = pm.post_id
-            where p.post_name = '%s'
-            ", [$requestedPage]
+            where p.ID = (
+                SELECT
+                pm.post_id
+                from
+                {$wpdb->prefix}postmeta pm
+                where pm.meta_value = '%s'
+                )", [$requestedPage]
         );
+       
 
         $result = $wpdb->get_results($query, ARRAY_A);
 
