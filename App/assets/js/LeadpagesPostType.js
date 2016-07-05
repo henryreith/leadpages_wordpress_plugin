@@ -18,13 +18,13 @@
                 success: function (response) {
                     var end = new Date().getTime();
                     console.log('milliseconds passed', end - start);
-                    //var pageType = $("#leadpageType").val();
-                    //if(pageType == 'nf' || pageType == 'fp'){
-                    //
-                    //    $("#leadpage-slug").hide();
-                    //}else{
-                    //    $("#leadpage-slug").show();
-                    //}
+                    var pageType = $("#leadpageType").val();
+                    if(pageType == 'nf' || pageType == 'fp'){
+
+                        $("#leadpage-slug").hide();
+                    }else{
+                        $("#leadpage-slug").show();
+                    }
 
                     $(".leadpagesSlug").show();
                     $(".ui-loading").hide();
@@ -55,9 +55,9 @@
             $("#leadpages_name").val(selected_page_name);
         });
 
-        //$body.on('change', '#leadpageType', function(){
-        //    hideSlugFor404andHome();
-        //});
+        $body.on('change', '#leadpageType', function(){
+            hideSlugFor404andHome();
+        });
 
     });
 }(jQuery));
