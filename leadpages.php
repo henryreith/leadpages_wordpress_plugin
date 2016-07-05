@@ -44,16 +44,12 @@ require_once($leadpagesConfig['basePath'].'App/Lib/Update.php');
 $update = new Update();
 $update->register_auto_update();
 
-
 /*
   |--------------------------------------------------------------------------
   | Admin Bootstrap
   |--------------------------------------------------------------------------
   |
-  |
-  |
   */
-
 
 
 if (is_admin() || is_network_admin()) {
