@@ -38,7 +38,7 @@ class Update
         wp_clear_scheduled_hook('lp_check_event');
     }
 
-    function _plugin_get( $i ) {
+    public function _plugin_get( $i ) {
         if ( ! function_exists( 'get_plugins' ) ) {
             require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
         }
@@ -170,6 +170,7 @@ class Update
         $licence_key = 'upUbSkfvYbd74rYnAl5hWczFlGbnYLCp';
         $url         = $leadpagesConfig['update_url'].'/service/leadpages/' . $service . '/';
         $current_ver = self::_plugin_get('Version');
+        $phpVersion  = PHP_VERSION;
         $response    = wp_remote_post(
           $url,
           array(
@@ -181,7 +182,8 @@ class Update
             'headers'     => array(),
             'body'        => array(
               'version'     => $current_ver,
-              'licence_key' => $licence_key
+              'licence_key' => $licence_key,
+              'php_version' => $phpVersion
             ),
             'cookies'     => array()
           )
