@@ -47,7 +47,7 @@ class LeadpageSelect extends LeadpagesPostType implements MetaBox
         ?>
         <div class="leadpagesSelect">
             <input type="hidden" name="leadpages_my_selected_page">
-
+            <input type="hidden" name="leadpages_name" id="leadpages_name">
             <select name="leadpages_my_selected_page" id="leadpages_my_selected_page">
                 <option value="none">Select...</option>
             </select>

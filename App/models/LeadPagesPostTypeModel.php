@@ -68,7 +68,7 @@ class LeadPagesPostTypeModel
         update_post_meta($post_id, 'leadpages_slug', sanitize_text_field($_POST['leadpages_slug']));
 
         //save post name in meta for backwards compatibility
-        //update_post_meta($post_id, 'leadpages_name', $post->post_name);
+        update_post_meta($post_id, 'leadpages_name', sanitize_text_field($_POST['leadpages_name']));
 
         update_post_meta($post_id, 'leadpages_page_id', $this->LeadPageId);
         update_post_meta($post_id, 'leadpages_my_selected_page', $this->LeadpageXORId);
