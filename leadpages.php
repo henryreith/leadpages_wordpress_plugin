@@ -9,6 +9,8 @@ Version: 2.0.2
 Author URI: http://leadpages.net
 */
 
+use LeadpagesWP\Lib\Update;
+
 $plugin_version = '2.0.2';
 
   /*
@@ -27,8 +29,20 @@ require_once('App/Config/App.php');
 require_once($leadpagesConfig['basePath'] . 'Framework/ServiceContainer/ServiceContainer.php');
 require_once($leadpagesConfig['basePath'].'App/Config/RegisterProviders.php');
 
-//fix broken stuff in 2.0 and 2.0.x
+/*
+  |--------------------------------------------------------------------------
+  | Fix Database items from plugin version 2.0 and 2.0.1
+  |--------------------------------------------------------------------------
+  */
 require_once($leadpagesConfig['basePath'].'App/Lib/RevertChanges.php');
+/*
+  |--------------------------------------------------------------------------
+  | Register Auto Update
+  |--------------------------------------------------------------------------
+  */
+require_once($leadpagesConfig['basePath'].'App/Lib/Update.php');
+$update = new Update();
+$update->register_auto_update();
 
 
 /*
@@ -54,7 +68,6 @@ function getScreen()
     $screen = get_current_screen();
     $leadpagesConfig['currentScreen'] = $screen->post_type;
     $leadpagesConfig['currentScreenAll'] = $screen;
-
 }
 
 
