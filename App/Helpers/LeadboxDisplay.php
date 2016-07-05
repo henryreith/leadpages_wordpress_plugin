@@ -147,6 +147,7 @@ trait LeadboxDisplay
      *generate radio buttons for timed buttons
      */
     public function postTypesForTimedLeadboxes(){
+        global $leadpagesApp;
         $this->getPostTypesForLeadboxes();
         $disallowedPostTypes = $this->disallowedPostTypes();
         $options = '<br />';
@@ -156,8 +157,10 @@ trait LeadboxDisplay
             if(in_array($postType, $disallowedPostTypes)){
                 continue;
             }
+            $postTypeLabel = ucfirst($postType);
+            $postTypeLabel = $leadpagesApp['inflector']->pluralize($postTypeLabel);
             $options .="<br />";
-            $options .= '<input type="radio" id="timed_radio_'.$postType.'" name="leadboxes_timed_display_radio" value="'.$postType.'" '.$this->currentTimedLeadboxDisplayPostType($postType).'> <label for="exit_'.$postType.'">Display on '.ucfirst($postType).'</label>';
+            $options .= '<input type="radio" id="timed_radio_' . $postType . '" name="leadboxes_timed_display_radio" value="' . $postType . '" ' . $this->currentTimedLeadboxDisplayPostType($postType) . '> <label for="exit_' . $postType . '">Display on ' . $postTypeLabel . '</label>';
         }
 
         return $options;
@@ -167,6 +170,8 @@ trait LeadboxDisplay
      *generate radio buttons for timed buttons
      */
     public function postTypesForExitLeadboxes(){
+        global $leadpagesApp;
+
         $this->getPostTypesForLeadboxes();
         $disallowedPostTypes = $this->disallowedPostTypes();
         $options = '<br />';
@@ -176,8 +181,10 @@ trait LeadboxDisplay
             if(in_array($postType, $disallowedPostTypes)){
                 continue;
             }
+            $postTypeLabel = ucfirst($postType);
+            $postTypeLabel = $leadpagesApp['inflector']->pluralize($postTypeLabel);
             $options .="<br />";
-            $options .= '<input type="radio" id="timed_radio_'.$postType.'" name="leadboxes_exit_display_radio" value="'.$postType.'" '.$this->currentExitLeadboxDisplayPostType($postType).'> <label for="exit_'.$postType.'">Display on '.ucfirst($postType).'</label>';
+            $options .= '<input type="radio" id="timed_radio_'.$postType.'" name="leadboxes_exit_display_radio" value="'.$postType.'" '.$this->currentExitLeadboxDisplayPostType($postType).'> <label for="exit_'.$postType.'">Display on '.$postTypeLabel.'</label>';
         }
 
         return $options;

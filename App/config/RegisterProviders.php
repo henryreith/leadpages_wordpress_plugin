@@ -1,21 +1,22 @@
 <?php
 
 use GuzzleHttp\Client;
+use ICanBoogie\Inflector;
 use Leadpages\Pages\LeadpagesPages;
-use LeadpagesWP\Admin\CustomPostTypes\LeadpagesPostType;
+use LeadpagesWP\models\LeadboxesModel;
+use LeadpagesWP\Lib\ApiResponseHandler;
 use LeadpagesWP\Bootstrap\AdminBootstrap;
 use LeadpagesWP\Bootstrap\FrontBootstrap;
+use LeadpagesWP\Helpers\PasswordProtected;
+use LeadpagesWP\ServiceProviders\LeadboxesApi;
+use TheLoop\ServiceContainer\ServiceContainer;
+use LeadpagesWP\models\LeadPagesPostTypeModel;
 use LeadpagesWP\Front\Controllers\LeadboxController;
 use LeadpagesWP\Front\Controllers\LeadpageController;
 use LeadpagesWP\Front\Controllers\NotFoundController;
 use LeadpagesWP\Front\Controllers\WelcomeGateController;
-use LeadpagesWP\Helpers\PasswordProtected;
-use LeadpagesWP\Lib\ApiResponseHandler;
-use LeadpagesWP\models\LeadboxesModel;
-use LeadpagesWP\models\LeadPagesPostTypeModel;
-use LeadpagesWP\ServiceProviders\LeadboxesApi;
+use LeadpagesWP\Admin\CustomPostTypes\LeadpagesPostType;
 use LeadpagesWP\ServiceProviders\WordPressLeadpagesAuth;
-use TheLoop\ServiceContainer\ServiceContainer;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +64,45 @@ $leadpagesApp['frontBootstrap'] = function ($leadpagesApp) {
     return new FrontBootstrap($leadpagesApp['leadpagesLogin'], $leadpagesApp['leadpageController'],
       $leadpagesApp['pagesApi'], $leadpagesApp['leadboxController']);
 };
+
+
+$leadpagesApp['lpPostType'] = function ($leadpagesApp) {
+    return new LeadpagesPostType();
+};
+
+
+$leadpagesApp['lpPostTypeModel'] = function ($leadpagesApp) {
+    return new LeadPagesPostTypeModel($leadpagesApp['pagesApi'], $leadpagesApp['lpPostType']);
+};
+
+$leadpagesApp['leadboxesModel'] = function ($leadpagesApp) {
+    return new LeadboxesModel();
+};
+
+
+$leadpagesApp['passwordProtected'] = function ($leadpagesApp) {
+    global $wpdb;
+    return new PasswordProtected($wpdb);
+};
+
+
+$leadpagesApp['leadpageController'] = function ($leadpagesApp) {
+    return new LeadpageController($leadpagesApp['notfound'], $leadpagesApp['WelcomeGateController'],
+      $leadpagesApp['lpPostTypeModel'], $leadpagesApp['pagesApi'], $leadpagesApp['passwordProtected']);
+};
+$leadpagesApp['notfound']           = function ($leadpagesApp) {
+    return new NotFoundController($leadpagesApp['lpPostTypeModel'], $leadpagesApp['pagesApi']);
+};
+
+$leadpagesApp['WelcomeGateController'] = function ($leadpagesApp) {
+    return new WelcomeGateController();
+};
+
+$leadpagesApp['leadboxController'] = function ($leadpagesApp) {
+    return new LeadboxController($leadpagesApp['leadboxesApi']);
+};
+
+$leadpagesApp['inflector'] = Inflector::get('en');
 
 
 /*
@@ -118,39 +158,5 @@ $leadpagesApp['leadboxesApi'] = function ($leadpagesApp) {
     return new LeadboxesApi($leadpagesApp['httpClient'], $leadpagesApp['leadpagesLogin']);
 };
 
-$leadpagesApp['lpPostType'] = function ($leadpagesApp) {
-    return new LeadpagesPostType();
-};
 
-
-$leadpagesApp['lpPostTypeModel'] = function ($leadpagesApp) {
-    return new LeadPagesPostTypeModel($leadpagesApp['pagesApi'], $leadpagesApp['lpPostType']);
-};
-
-$leadpagesApp['leadboxesModel'] = function ($leadpagesApp) {
-    return new LeadboxesModel();
-};
-
-
-$leadpagesApp['passwordProtected'] = function ($leadpagesApp) {
-    global $wpdb;
-    return new PasswordProtected($wpdb);
-};
-
-
-$leadpagesApp['leadpageController'] = function ($leadpagesApp) {
-    return new LeadpageController($leadpagesApp['notfound'], $leadpagesApp['WelcomeGateController'],
-      $leadpagesApp['lpPostTypeModel'], $leadpagesApp['pagesApi'], $leadpagesApp['passwordProtected']);
-};
-$leadpagesApp['notfound']           = function ($leadpagesApp) {
-    return new NotFoundController($leadpagesApp['lpPostTypeModel'], $leadpagesApp['pagesApi']);
-};
-
-$leadpagesApp['WelcomeGateController'] = function ($leadpagesApp) {
-    return new WelcomeGateController();
-};
-
-$leadpagesApp['leadboxController'] = function ($leadpagesApp) {
-    return new LeadboxController($leadpagesApp['leadboxesApi']);
-};
 
