@@ -150,6 +150,8 @@ class Update
     public function _update_information($false, $action, $args)
     {
         // Check if this plugins API is about this plugin
+        if(!isset($args->slug)) return false;
+
         if ($args->slug != 'leadpages') {
             return $false;
         }
