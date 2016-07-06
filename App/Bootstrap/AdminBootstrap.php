@@ -2,6 +2,7 @@
 
 namespace LeadpagesWP\Bootstrap;
 
+use LeadpagesWP\Lib\AdminNotices;
 use LeadpagesWP\models\LeadboxesModel;
 use LeadpagesWP\Admin\Factories\MetaBoxes;
 use LeadpagesWP\Admin\Factories\SettingsPage;
@@ -51,6 +52,8 @@ class AdminBootstrap
         {
             //create login form page if user is not logged in
             SettingsPage::create(LeadpagesLoginPage::getName());
+            add_action( 'admin_notices', array(AdminNotices::getName(), 'NotLoggedInToLeadpages') );
+
             //register hook to listen for admin post of login form
             $this->login->loginHook();
         }else {
