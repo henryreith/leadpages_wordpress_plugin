@@ -38,13 +38,14 @@ class Update
         wp_clear_scheduled_hook('lp_check_event');
     }
 
-    public function _plugin_get( $i ) {
-        if ( ! function_exists( 'get_plugins' ) ) {
-            require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+    public function _plugin_get($i)
+    {
+        if (!function_exists('get_plugins')) {
+            require_once(ABSPATH . 'wp-admin/includes/plugin.php');
         }
-        $plugin_folder = get_plugins( '/leadpages' );
+        $plugin_folder = get_plugins('/leadpages');
 
-        return $plugin_folder['leadpages.php'][ $i ];
+        return $plugin_folder['leadpages.php'][$i];
     }
 
     /**
@@ -65,7 +66,7 @@ class Update
 
     public function silent_update_check()
     {
-        $result   = self::_check_for_update(true); // full response if possible is returned
+        $result = self::_check_for_update(true); // full response if possible is returned
 
         $response = $result[0];
         if (false === $response) {
@@ -150,7 +151,9 @@ class Update
     public function _update_information($false, $action, $args)
     {
         // Check if this plugins API is about this plugin
-        if(!isset($args->slug)) return false;
+        if (!isset($args->slug)) {
+            return false;
+        }
 
         if ($args->slug != 'leadpages') {
             return $false;
@@ -170,7 +173,7 @@ class Update
     {
         global $leadpagesConfig;
         $licence_key = 'upUbSkfvYbd74rYnAl5hWczFlGbnYLCp';
-        $url         = $leadpagesConfig['update_url'].'/service/leadpages/' . $service . '/';
+        $url         = $leadpagesConfig['update_url'] . '/service/leadpages/' . $service . '/';
         $current_ver = self::_plugin_get('Version');
         $phpVersion  = PHP_VERSION;
         $response    = wp_remote_post(
@@ -221,24 +224,65 @@ class Update
 
     private static $message = false;
 
-    function show_message( $not_error, $message ) {
+    function show_message($not_error, $message)
+    {
         self::$message = $message;
-        if ( $not_error ) {
-            add_action( 'admin_notices', array( &$this, 'showMessage' ) );
+        if ($not_error) {
+            add_action('admin_notices', array(&$this, 'showMessage'));
         } else {
-            add_action( 'admin_notices', array( &$this, 'showErrorMessage' ) );
+            add_action('admin_notices', array(&$this, 'showErrorMessage'));
         }
     }
 
-    function showMessage() {
+    function showMessage()
+    {
         echo '<div id="message" class="updated">';
         echo '<p><strong>' . self::$message . '</strong></p></div>';
     }
 
-    function showErrorMessage() {
+    function showErrorMessage()
+    {
         echo '<div id="message" class="error">';
         echo '<p><strong>' . self::$message . '</strong></p></div>';
     }
 
+
+
+    public function scheduleCacheUpdates()
+    {
+        add_action('lp_cache_updates', array($this, 'UpdateNonSplittTestedPagesCache'));
+
+        if (!wp_next_scheduled('lp_cache_updates')) {
+            wp_schedule_event(current_time('timestamp'), 'twicedaily', 'lp_cache_updates');
+        }
+    }
+
+    /**
+     * If a page is from the old plugin and has a leadpages_split_test post meta option and its false
+     * Update the cache post meta data to true
+     */
+    public function UpdateNonSplittTestedPagesCache()
+    {
+        global $wpdb;
+        //get all Leadpages Post Types
+        $posts = $wpdb->get_results("Select ID from {$wpdb->prefix}posts where post_type = 'leadpages_post'");
+
+        $query   = <<<BOQ
+        SELECT
+	        pm.post_id,
+	        pm.meta_key,
+	        pm.meta_value
+        FROM
+	        wp_postmeta as pm
+        WHERE
+	        pm.meta_key = 'leadpages_split_test'
+BOQ;
+        $results = $wpdb->get_results($query);
+        foreach ($results as $row) {
+            if (!$row->meta_value) {
+                update_post_meta($row->post_id, 'cache_page', 'true');
+            }
+        }
+    }
 
 }

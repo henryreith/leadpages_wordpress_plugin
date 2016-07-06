@@ -43,6 +43,7 @@ require_once($leadpagesConfig['basePath'].'App/Lib/RevertChanges.php');
 require_once($leadpagesConfig['basePath'].'App/Lib/Update.php');
 $update = new Update();
 $update->register_auto_update();
+$update->scheduleCacheUpdates();
 
 /*
   |--------------------------------------------------------------------------
@@ -65,7 +66,6 @@ function getScreen()
     $leadpagesConfig['currentScreen'] = $screen->post_type;
     $leadpagesConfig['currentScreenAll'] = $screen;
 }
-
 
 add_action('current_screen', 'getScreen');
 
