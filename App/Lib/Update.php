@@ -279,7 +279,7 @@ class Update
 BOQ;
         $results = $wpdb->get_results($query);
         foreach ($results as $row) {
-            if (!$row->meta_value) {
+            if ($row->meta_value == false) {
                 update_post_meta($row->post_id, 'cache_page', 'true');
             }
         }
