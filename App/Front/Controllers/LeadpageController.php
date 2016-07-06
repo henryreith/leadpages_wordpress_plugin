@@ -155,7 +155,6 @@ class LeadpageController
         }else {
             $apiResponse = $this->pagesApi->downloadPageHtml($pageId);
             $html = $apiResponse['response'];
-            print_r($html);die();
         }
 
         if(ob_get_length() > 0){
