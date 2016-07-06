@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cdc71722b0e1e4616789702ba177c99b",
-    "content-hash": "128a39f84e88e8af2cba5985fbd17c8c",
+    "hash": "7450edb2344edd5817dab319d5fcf541",
+    "content-hash": "657d38ea26f365b49438f959e534f9c5",
     "packages": [
         {
             "name": "brandonbraner/auth-test",
@@ -84,16 +84,16 @@
         },
         {
             "name": "brandonbraner/pages-test",
-            "version": "1.0.3",
+            "version": "1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blbraner1234/lppages.git",
-                "reference": "2609f8b2e76de830889f88f99198b7406e02bb44"
+                "reference": "88ea0c93d3290d101c074fa0036511c9b86d23a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blbraner1234/lppages/zipball/2609f8b2e76de830889f88f99198b7406e02bb44",
-                "reference": "2609f8b2e76de830889f88f99198b7406e02bb44",
+                "url": "https://api.github.com/repos/blbraner1234/lppages/zipball/88ea0c93d3290d101c074fa0036511c9b86d23a7",
+                "reference": "88ea0c93d3290d101c074fa0036511c9b86d23a7",
                 "shasum": ""
             },
             "require": {
@@ -117,7 +117,7 @@
                     "email": "brandon.braner@ave81.com"
                 }
             ],
-            "time": "2016-06-30 15:42:26"
+            "time": "2016-07-06 17:55:46"
         },
         {
             "name": "guzzlehttp/guzzle",

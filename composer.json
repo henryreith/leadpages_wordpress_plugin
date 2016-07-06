@@ -4,7 +4,7 @@
     "require": {
         "pimple/pimple": "^3.0",
         "brandonbraner/auth-test": "^1.0",
-        "brandonbraner/pages-test": "1.0.3",
+        "brandonbraner/pages-test": "^1.0",
         "brandonbraner/leadboxes": "^1.0",
         "icanboogie/inflector": "^1.4"
     },
