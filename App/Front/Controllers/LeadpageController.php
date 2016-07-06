@@ -61,9 +61,10 @@ class LeadpageController
                 $pageId = $this->leadpagesModel->getLeadpagePageId($post);
 
                 //check for cache
-                $getCache = get_post_meta($pageId, 'cache_page', true);
+
+                $getCache = get_post_meta($post, 'cache_page', true);
                 if($getCache == true){
-                    $html = $this->postTypeModel->getCacheForPage($pageId);
+                    $html = $this->leadpagesModel->getCacheForPage($pageId);
                     if(empty($html)){
                         $apiResponse = $this->pagesApi->downloadPageHtml($pageId);
                         $html = $apiResponse['response'];
