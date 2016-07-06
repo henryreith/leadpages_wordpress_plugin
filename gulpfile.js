@@ -30,6 +30,10 @@ gulp.task('runcomposer', function(){
     return composer("update --no-dev");
 });
 
+gulp.task('run_composer_release', function(){
+    return composer("update --no-dev --working-dir /Users/brandonbraner/projects/releases/leadpages-wordpress-v2/beta2/leadpages");
+});
+
 gulp.task('movetoreleases', function(){
 
     return gulp.src(['**/*'], {"base" : "."})
@@ -49,6 +53,15 @@ gulp.task('deploy', function(){
         'compressandmove',
         'removeallfiles',
         'runcomposer',
+        'movetoreleases',
+        'removenode',
+        'runcomposer2'
+    );
+});
+
+
+gulp.task('deploy2', function(){
+    runSequence(
         'movetoreleases',
         'removenode',
         'runcomposer2'

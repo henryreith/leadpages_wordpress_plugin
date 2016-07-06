@@ -9,8 +9,7 @@
         "icanboogie/inflector": "^1.4"
     },
     "require-dev": {
-        "codeception/codeception": "^2.2",
-        "codeception/c3": "^2.0"
+        "codeception/codeception": "^2.2"
     },
     "autoload": {
         "psr-4": {
