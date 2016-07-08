@@ -9,6 +9,9 @@ class AdminNotices
         return get_called_class();
     }
 
+    /**
+     * Notice for if a user is not logged in
+     */
     public static function NotLoggedInToLeadpages(){
         $loginUrl = admin_url()."?page=Leadpages";
         $message = <<<BOM
@@ -24,6 +27,9 @@ BOM;
         <?php
     }
 
+    /**
+     * Notice to let user know they need to turn on permalinks
+     */
     public static function TurnOnPermalinks()
     {
         ?>

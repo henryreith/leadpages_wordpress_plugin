@@ -40,3 +40,6 @@ $leadpagesConfig['admin_assets'] = $leadpagesConfig['pluginUrl'] . 'assets';
 $leadpagesConfig['admin_images'] = $leadpagesConfig['admin_assets'] . '/images';
 $leadpagesConfig['admin_css']    = $leadpagesConfig['admin_assets'] . '/css/';
 
+//Required version of php for plugin
+$leadpagesConfig['php_version'] = 5.4;
+
