@@ -64,6 +64,6 @@ gulp.task('deploy2', function(){
     runSequence(
         'movetoreleases',
         'removenode',
-        'runcomposer2'
+        'run_composer_release'
     );
 });

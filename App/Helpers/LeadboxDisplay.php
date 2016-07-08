@@ -25,6 +25,9 @@ trait LeadboxDisplay
     }
 
     protected function currentTimedLeadboxDisplayPostType($PostType){
+        if($this->currentTimedLeadbox[1] == 'posts'){
+            $this->currentTimedLeadbox[1] = 'post';
+        }
         if($this->currentTimedLeadbox[1] == $PostType){
             return 'checked="checked"';
         }
