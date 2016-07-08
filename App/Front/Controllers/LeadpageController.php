@@ -63,7 +63,7 @@ class LeadpageController
                 //check for cache
 
                 $getCache = get_post_meta($post, 'cache_page', true);
-                if($getCache == true){
+                if($getCache == 'true'){
                     $html = $this->leadpagesModel->getCacheForPage($pageId);
                     if(empty($html)){
                         $apiResponse = $this->pagesApi->downloadPageHtml($pageId);
@@ -126,25 +126,11 @@ class LeadpageController
         }else{
             return false;
         }
-        //return false if no page id is found
-//        if(empty($pageId)) return false;
-//
-//        if (!empty($posts) || $this->passwordChecker->getPostPassword($post['post_id'])) {
-//            $passwordEntered = $this->passwordChecker->checkWPPasswordHash($post['post_id'], COOKIEHASH);
-//            if ($passwordEntered) {
-//                $result = $this->leadpageController->normalPage();
-//                if ($result == false) {
-//                    return $posts;
-//                }
-//            } else {
-//
-//                return;
-//            }
-//        }
 
         //check cache
         $getCache = get_post_meta($post['post_id'], 'cache_page', true);
-        if($getCache == true){
+
+        if($getCache == 'true'){
             $html = $this->leadpagesModel->getCacheForPage($pageId);
             //failsafe incase the cache is not set for some reason
             //get html and set cache
