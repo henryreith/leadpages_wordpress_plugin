@@ -202,7 +202,7 @@ trait LeadboxDisplay
     public function timedDropDownPageSpecific($leadboxArray, $post)
     {
         $select = "<select name='pageTimedLeadbox' id='leadboxesTime'>";
-        $select .= "<option name='select' value='select'". $this->currentTimedLeadboxPageSpecific('select', $post->ID) ." >Select</option>";
+        $select .= "<option name='select' value='select'". $this->currentTimedLeadboxPageSpecific('select', $post->ID) ." >Use Global Leadbox</option>";
         $select .= "<option name='none' value='none'". $this->currentTimedLeadboxPageSpecific('none', $post->ID) ." >None</option>";
         foreach($leadboxArray['_items'] as $leadbox){
 
@@ -231,7 +231,7 @@ trait LeadboxDisplay
     public function exitDropDownPageSpecific($leadboxArray, $post)
     {
         $select = "<select name='pageExitLeadbox' id='leadboxesExit'>";
-        $select .= "<option name='select' value='select'". $this->currentTimedLeadboxPageSpecific('select', $post->ID) ." >Select</option>";
+        $select .= "<option name='select' value='select'". $this->currentTimedLeadboxPageSpecific('select', $post->ID) ." >Use Global Leadbox</option>";
         $select .= "<option name='none' value='none' ". $this->currentExitLeadboxPageSpecific('none', $post->ID) .">None</option>";
         foreach($leadboxArray['_items'] as $leadbox){
 
