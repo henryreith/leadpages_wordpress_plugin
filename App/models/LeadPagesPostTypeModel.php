@@ -75,14 +75,6 @@ class LeadPagesPostTypeModel
 
         update_post_meta($post_id, 'leadpages_post_type', $postType);
 
-        //return here as if there was an error saving the page because the type
-        //already exists (ErrorHandlerAjax.php on page save)
-
-//        $error = $this->postType->checkError($postType, $post_id);
-//
-//        if ($error == 'error') {
-//            return $post_id;
-//        }
         /**
          * only update these items if the post is actually being published
          */
@@ -172,14 +164,14 @@ class LeadPagesPostTypeModel
         }
     }
 
-    public function getLeadPageHtml()
-    {
-        if (isset($_POST['leadpages_my_selected_page'])) {
-            $this->LeadPageId = sanitize_text_field($_POST['leadpages_my_selected_page']);
-            $html             = $this->PagesApi->downloadPageHtml($this->LeadPageId);
-            return $html;
-        }
-    }
+//    public function getLeadPageHtml()
+//    {
+//        if (isset($_POST['leadpages_my_selected_page'])) {
+//            $this->LeadPageId = sanitize_text_field($_POST['leadpages_my_selected_page']);
+//            $html             = $this->PagesApi->downloadPageHtml($this->LeadPageId);
+//            return $html;
+//        }
+//    }
 
     public function save()
     {
@@ -284,41 +276,6 @@ class LeadPagesPostTypeModel
         return $LeadpageId;
     }
 
-    public function getHtml($pageId)
-    {
-        //try to get leadpages_page_id if it is set(version 2 plugin pages)
-        $LeadpageId = get_post_meta($pageId, 'leadpages_page_id', true);
-
-        //if $LeadpageId does not exist try to get it from the xor id...once again maybe something that should be done
-        //TODO in the api like getPageByXor call
-        if (empty($LeadpageId)) {
-            $LeadpageId = $this->getPageByXORId($pageId);
-        }
-        if($LeadpageId == false){
-            return false;
-        }
-        $getCache = get_post_meta($pageId, 'cache_page', true);
-        if ($getCache == 'true') {
-            //check if cache exist
-            $currentCache = $this->getCacheForPage($LeadpageId);
-            if ($currentCache) {
-                echo $currentCache;
-                die();
-            } else {
-                //if no cache get the html then set the cache for next time
-                //then return html
-                $html = $this->PagesApi->downloadPageHtml($LeadpageId);
-                $this->setCacheForPage($LeadpageId, $html);
-                echo $html;
-                die();
-            }
-        }
-        //if we don't fall into cache just echo $html
-        $html = $this->PagesApi->downloadPageHtml($LeadpageId);
-        echo $html;
-        die();
-    }
-
     public function getPageByXORId($pageId, $xorId = '')
     {
 
@@ -367,13 +324,14 @@ class LeadPagesPostTypeModel
                 pm.post_id
                 from
                 {$wpdb->prefix}postmeta pm
-                where pm.meta_value = '%s'
+                where
+                pm.meta_key = 'leadpages_slug'
+                and
+                pm.meta_value = '%s'
                 )", [$requestedPage]
         );
-       
 
         $result = $wpdb->get_results($query, ARRAY_A);
-
         if(empty($result)) return false;
 
         $lpPostArray = [];
@@ -381,6 +339,7 @@ class LeadPagesPostTypeModel
             $lpPostArray[$post['meta_key']] = $post['meta_value'];
             $lpPostArray['post_id'] = $post['ID'];
         }
+
         return $lpPostArray;
     }
 }
