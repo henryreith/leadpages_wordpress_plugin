@@ -44,6 +44,8 @@ class AdminBootstrap
         $this->setupLogin();
         $this->setupLeadpages();
         $this->setupLeadboxes();
+
+        $this->setupAdminNotices();
     }
 
     public function setupLogin()
@@ -52,8 +54,6 @@ class AdminBootstrap
         {
             //create login form page if user is not logged in
             SettingsPage::create(LeadpagesLoginPage::getName());
-            add_action( 'admin_notices', array(AdminNotices::getName(), 'NotLoggedInToLeadpages') );
-
             //register hook to listen for admin post of login form
             $this->login->loginHook();
         }else {
@@ -114,5 +114,21 @@ class AdminBootstrap
             wp_enqueue_style('lp-lego', 'https://static.leadpages.net/lego/1.0.30/lego.min.css');
             wp_enqueue_style('lp-styles', $leadpagesConfig['admin_css'] . 'styles.css');
         }
+    }
+
+    protected function setupAdminNotices()
+    {
+        global $leadpagesConfig;
+
+        if ( get_option( 'permalink_structure' ) == '' ) {
+            add_action('admin_notices', array(AdminNotices::getName(), 'TurnOnPermalinks'));
+        }
+
+        if(!$this->login->isLoggedIn()) {
+            if (!isset($_GET['page']) || isset($_GET['page']) && $_GET['page'] != "Leadpages") {
+                add_action('admin_notices', array(AdminNotices::getName(), 'NotLoggedInToLeadpages'));
+            }
+        }
+
     }
 }
