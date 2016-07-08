@@ -47,7 +47,7 @@ class NotFoundController
 
             //check for cache
             $getCache = get_post_meta($this->nfPageId, 'cache_page', true);
-            if($getCache == true){
+            if($getCache == "true"){
                 $html = $this->postTypeModel->getCacheForPage($pageId);
                 if(empty($html)){
                     $apiResponse = $this->pagesApi->downloadPageHtml($pageId);
