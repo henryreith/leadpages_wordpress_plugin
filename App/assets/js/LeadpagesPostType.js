@@ -59,5 +59,8 @@
             hideSlugFor404andHome();
         });
 
+        //hide preview button for Leadpages
+        $("#preview-action").hide();
+
     });
 }(jQuery));
