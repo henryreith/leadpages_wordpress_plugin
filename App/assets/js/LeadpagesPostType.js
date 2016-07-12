@@ -57,10 +57,65 @@
 
         $body.on('change', '#leadpageType', function(){
             hideSlugFor404andHome();
+            if($leadpageType == 'fp' || $leadpageType == 'nf'){
+                $(".leadpage_slug_error").remove();
+            }
         });
 
         //hide preview button for Leadpages
         $("#preview-action").hide();
+
+        $body.on('click', '#publish', function (e) {
+
+            $("#publishing-action .spinner").removeClass('is-active');
+            $("#publish").removeClass('disabled');
+            var error = false;
+            $(".leadpages_error").remove();
+            $('#leadpages_my_selected_page').css('border-color', '#ddd');
+            $('#leadpageType').css('border-color', '#ddd');
+            $leadpageType = $("#leadpageType").val();
+            $selectedPage = $("#leadpages_my_selected_page").val();
+            $leadpageSlug = $('#leadpages_slug_input').val();
+
+            if($leadpageType == 'none'){
+                e.preventDefault();
+                $( ".wrap h1" ).after( "<div class='error notice leadpages_error'><p>Please select a page type</p></div>" );
+                $('#leadpageType').css('border-color', 'red');
+                error = true;
+            }
+
+            if($selectedPage == 'none'){
+                e.preventDefault();
+                $( ".wrap h1" ).after( "<div class='error notice leadpages_error'><p>Please select a Leadpage</p></div>" );
+                $('#leadpages_my_selected_page').css('border-color', 'red');
+                error = true;
+            }
+            if($leadpageType != 'fp' || $leadpageType != 'nf'){
+                if($leadpageSlug.length == 0){
+                    e.preventDefault();
+                    $( ".wrap h1" ).after( "<div class='error notice leadpages_error leadpage_slug_error'><p>Slug appears to be empty. Please add a slug.</p></div>" );
+                    $('#leadpages_slug_input').css('border-color', 'red');
+                    error = true;
+                }
+            }
+
+            if($leadpageType == 'fp' || $leadpageType == 'nf'){
+                $(".leadpage_slug_error").remove();
+            }
+
+            if(error == true){
+                return;
+            }
+            if($leadpageType == 'wg'){
+                /* checkWelcomeGatePageExists(e)
+                 .done(function(response){
+                 console.log(response);
+                 if(response == 'error'){
+                 e.preventDefault();
+                 }
+                 });*/
+            }
+        });
 
     });
 }(jQuery));
