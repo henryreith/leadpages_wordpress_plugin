@@ -74,6 +74,7 @@ class AdminBootstrap
         Metaboxes::create(LeadpageSelect::getName());
         add_action('admin_enqueue_scripts', array($this, 'loadJS'));
         add_action('admin_enqueue_scripts', array($this, 'loadStyles'));
+
         //setup hook for saving Leadpages Post Type
         $this->postTypeModel->save();
 

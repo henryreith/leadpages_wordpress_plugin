@@ -58,13 +58,17 @@ class LeadpagesPostType extends CustomPostType
         remove_post_type_support($this->postTypeName, 'editor');
         remove_post_type_support($this->postTypeName, 'title');
 
+        if(is_admin()){
+            add_filter('post_updated_messages', array($this, 'post_updated_messages'));
+
+        }
 
     }
 
     public function buildPostType()
     {
         $this->defineLabels();
-        add_action('init', array($this, 'registerPostType'));
+        add_action('init', array($this, 'registerPostType'), 5);
         $this->addColumns();
     }
 
@@ -164,4 +168,87 @@ class LeadpagesPostType extends CustomPostType
         add_action( 'manage_pages_custom_column', array( $this, 'populateColumns' ) );
 
     }
+
+
+    /*
+	*  post_updated_messages
+	*
+	*  @description: messages for saving a field group
+	*  @since 1.0.0
+	*  @created: 23/06/12
+	*/
+
+    function post_updated_messages( $messages )
+    {
+        global $post, $post_ID;
+        if($post->post_type != 'leadpages_post'){
+            return $messages;
+        }
+        $leadpageSlug = get_post_meta($post->ID, 'leadpages_slug', true);
+
+        $url = get_site_url().'/'.$leadpageSlug;
+        $messages['leadpages_post'] = array(
+          0 => '', // Unused. Messages start at index 1.
+          1 => sprintf(__('Leadpage updated. %s', 'Leadpages'), "<a href=\"{$url}\" target='_blank'>View Leadpage</a>"),
+          2 => __('Leadpage updated.', 'Leadpages'),
+          3 => __('Leadpage deleted.', 'Leadpages'),
+          4 => __('Leadpage updated.', 'Leadpages'),
+            /* translators: %s: date and time of the revision */
+          5 => isset($_GET['revision']) ? sprintf( __('Field group restored to revision from %s', 'Leadpages'), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+          6 => sprintf(__('Leadpage Published. %s', 'Leadpages'), "<a href=\"{$url}\" target='_blank'>View Leadpage</a>"),
+          7 => __('Leadpage saved.', 'Leadpages'),
+          8 => __('Leadpage submitted.', 'Leadpages'),
+          9 => __('Leadpage scheduled for.', 'Leadpages'),
+          10 => __('Leadpage draft updated.', 'Leadpages'),
+        );
+
+        return $messages;
+    }
+
+
+//add_filter( 'post_updated_messages', 'codex_book_updated_messages' );
+
+//    public static function modifySuccessMessage($messages)
+//    {
+//        global $post, $post_ID;
+//
+//        //echo '<pre>'; print_r($post);die();
+//        $messages['leadpages_post'] = array(
+//          0  => '', // Unused. Messages start at index 1.
+//          1  => __( 'Leadpage updated.', 'Leadpages' ),
+//          2  => __( 'Custom field updated.', 'Leadpages' ),
+//          3  => __( 'Custom field deleted.', 'Leadpages' ),
+//          4  => __( 'Leadpage updated.', 'Leadpages' ),
+//            /* translators: %s: date and time of the revision */
+//          5  => isset( $_GET['revision'] ) ? sprintf( __( 'Leadpage restored to revision from %s', 'Leadpages' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+//          6  => __( 'Leadpage published.', 'Leadpages' ),
+//          7  => __( 'Leadpage saved.', 'Leadpages' ),
+//          8  => __( 'Leadpage submitted.', 'Leadpages' ),
+//          9  => sprintf(
+//            __( 'Leadpage scheduled for: <strong>%1$s</strong>.', 'Leadpages' ),
+//            // translators: Publish box date format, see http://php.net/date
+//            date_i18n( __( 'M j, Y @ G:i', 'Leadpages' ), strtotime( $post->post_date ) )
+//          ),
+//          10 => __( 'Leadpage draft updated.', 'Leadpage' )
+//        );
+//
+//        if ( $post_type_object->publicly_queryable ) {
+//            $leadpageSlug = get_post_meta($post->ID);
+//            $url = site_url().$leadpageSlug;
+//
+//            $view_link = sprintf( ' <a href="%s">%s</a>', esc_url( $url ), __( 'View Leadpage', 'Leadpages' ) );
+//            $messages[ $post_type ][1] .= $view_link;
+//            $messages[ $post_type ][6] .= $view_link;
+//            $messages[ $post_type ][9] .= $view_link;
+//
+//            $preview_permalink = add_query_arg( 'preview', 'true', $url );
+//            $preview_link = sprintf( ' <a target="_blank" href="%s">%s</a>', esc_url( $preview_permalink ), __( 'Preview Leadpage', 'Leadpages' ) );
+//            $messages[ $post_type ][8]  .= $preview_link;
+//            $messages[ $post_type ][10] .= $preview_link;
+//        }
+//
+//        return $messages;
+//
+//
+//    }
 }
