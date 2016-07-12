@@ -55,8 +55,8 @@ class FrontBootstrap
         add_filter('the_posts', array($this->leadpageController, 'displayWelcomeGate'));
         add_action('template_redirect', array($this->leadpageController, 'displayNFPage'));
         add_action('wp', array($this->leadpageController, 'isFrontPage'));
+        add_filter('the_content', array($this->leadboxController, 'initLeadboxes'));
 
-        add_filter('the_post', array($this->leadboxController, 'initLeadboxes'));
     }
 
     public function setupLeadpages()

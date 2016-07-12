@@ -52,7 +52,7 @@ class LeadboxController
     /**
      *
      */
-    public function initLeadboxes(){
+    public function initLeadboxes($content){
         global $post;
 
 
@@ -62,7 +62,7 @@ class LeadboxController
         $this->setPageType($post);
         $this->getPageSpecificTimedLeadbox($post);
         $this->getExitSpecifiExitLeadbox($post);
-        $this->addEmbedToContent();
+        return $this->addEmbedToContent($content);
     }
 
     /**
@@ -122,10 +122,9 @@ class LeadboxController
      *
      * @return string
      */
-    public function addTimedLeadboxesGlobal($content){
+    public function addTimedLeadboxesGlobal(){
         $leadboxes = $this->getGlobalLeadBoxes();
-        $content = $content . $this->getTimedLeadboxCode($leadboxes);
-        return $content;
+        return $this->getTimedLeadboxCode($leadboxes);
     }
 
     /**
@@ -133,31 +132,36 @@ class LeadboxController
      *
      * @return string
      */
-    public function addExitLeadboxesGlobal($content){
+    public function addExitLeadboxesGlobal(){
         $leadboxes = $this->getGlobalLeadBoxes();
-        $content   = $content . $this->getExitLeadboxCode($leadboxes);
-        return $content;
+        return $this->getExitLeadboxCode($leadboxes);
+
     }
 
     /**
-     *
+     * @param $content
      */
-    public function addEmbedToContent(){
+    public function addEmbedToContent($content){
         if($this->hasSpecificTimed){
-            add_filter('the_content', array($this, 'displayPageSpecificTimedLeadbox'));
-            $this->woocommerce_specific_hook('displayPageSpecificTimedLeadbox');
+            $content = $content . $this->displayPageSpecificTimedLeadbox();
+            $content = $content . $this->woocommerce_specific_hook('displayPageSpecificTimedLeadbox');
+            //add_filter('the_content', array($this, 'displayPageSpecificTimedLeadbox'));
         }else {
-            add_filter('the_content', array($this, 'addTimedLeadboxesGlobal'));
-            $this->woocommerce_specific_hook('addTimedLeadboxesGlobal');
+            $content = $content . $this->addTimedLeadboxesGlobal();
+            $content = $content . $this->woocommerce_specific_hook('addTimedLeadboxesGlobal');
+           // add_filter('the_content', array($this, 'addTimedLeadboxesGlobal'));
         }
 
         if($this->hasSpecificExit) {
-            add_filter('the_content', array($this, 'displayPageSpecificExitLeadbox'));
-            $this->woocommerce_specific_hook('displayPageSpecificExitLeadbox');
+            $content = $content . $this->displayPageSpecificExitLeadbox();
+            $content = $content . $this->woocommerce_specific_hook('displayPageSpecificExitLeadbox');
+            //add_filter('the_content', array($this, 'displayPageSpecificExitLeadbox'));
         }else{
-            add_filter('the_content', array($this, 'addExitLeadboxesGlobal'));
-            $this->woocommerce_specific_hook('addExitLeadboxesGlobal');
+            $content = $content . $this->addExitLeadboxesGlobal();
+            $content = $content .$this->woocommerce_specific_hook('addExitLeadboxesGlobal');
+            //add_filter('the_content', array($this, 'addExitLeadboxesGlobal'));
         }
+        return $content;
     }
 
     /**
@@ -190,7 +194,7 @@ class LeadboxController
      *
      * @return string
      */
-    public function displayPageSpecificTimedLeadbox($content){
+    public function displayPageSpecificTimedLeadbox(){
         //only display a leadbox if the id selected is not none.
         //if none is selected nothing will show.
         if($this->pageSpecificTimedLeadboxId != 'none') {
@@ -198,9 +202,7 @@ class LeadboxController
             $timed_embed_code = json_decode($apiResponse['response'], true);
         }
         if(isset($timed_embed_code['embed_code'])) {
-            return $content . $timed_embed_code['embed_code'];
-        }else{
-            return $content;
+            return $timed_embed_code['embed_code'];
         }
 
     }
@@ -222,7 +224,7 @@ class LeadboxController
      *
      * @return string
      */
-    public function displayPageSpecificExitLeadbox($content){
+    public function displayPageSpecificExitLeadbox(){
         //only display a leadbox if the id selected is not none.
         //if none is selected nothing will show.
         if($this->pageSpecificExitdLeadboxId != 'none') {
@@ -230,9 +232,7 @@ class LeadboxController
             $exit_embed_code = json_decode($apiResponse['response'], true);
         }
         if(isset($exit_embed_code['embed_code'])) {
-            return $content . $exit_embed_code['embed_code'];
-        }else{
-            return $content;
+            return $exit_embed_code['embed_code'];
         }
     }
 
