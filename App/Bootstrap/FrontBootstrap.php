@@ -42,11 +42,12 @@ class FrontBootstrap
       LeadpageController $leadpageController,
       LeadpagesPages $pagesApi,
       LeadboxController $leadboxController
-    ) {
-        $this->login = $login;
-        $this->pagesApi = $pagesApi;
+    )
+    {
+        $this->login              = $login;
+        $this->pagesApi           = $pagesApi;
         $this->leadpageController = $leadpageController;
-        $this->leadboxController = $leadboxController;
+        $this->leadboxController  = $leadboxController;
 
         $this->setupLeadpages();
 
@@ -55,7 +56,10 @@ class FrontBootstrap
         add_filter('the_posts', array($this->leadpageController, 'displayWelcomeGate'));
         add_action('template_redirect', array($this->leadpageController, 'displayNFPage'));
         add_action('wp', array($this->leadpageController, 'isFrontPage'));
-        add_filter('the_content', array($this->leadboxController, 'initLeadboxes'));
+        add_action('the_content', array($this->leadboxController, 'initLeadboxes'));
+        //had to add a special method for 404 pages
+        add_action('get_footer', array($this->leadboxController, 'initLeadboxes404'));
+
 
     }
 

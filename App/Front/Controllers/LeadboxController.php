@@ -52,9 +52,8 @@ class LeadboxController
     /**
      *
      */
-    public function initLeadboxes($content){
+    public function initLeadboxes(){
         global $post;
-
 
         if(empty($post)){
             return;
@@ -62,7 +61,12 @@ class LeadboxController
         $this->setPageType($post);
         $this->getPageSpecificTimedLeadbox($post);
         $this->getExitSpecifiExitLeadbox($post);
-        return $this->addEmbedToContent($content);
+        $this->addEmbedToContent();
+    }
+
+
+    public function initLeadboxes404(){
+        $this->addEmbedToContent();
     }
 
     /**
@@ -141,27 +145,28 @@ class LeadboxController
     /**
      * @param $content
      */
-    public function addEmbedToContent($content){
+    public function addEmbedToContent(){
+        $message = '';
         if($this->hasSpecificTimed){
-            $content = $content . $this->displayPageSpecificTimedLeadbox();
-            $content = $content . $this->woocommerce_specific_hook('displayPageSpecificTimedLeadbox');
+            $message = $message . $this->displayPageSpecificTimedLeadbox();
+            $message = $message . $this->woocommerce_specific_hook('displayPageSpecificTimedLeadbox');
             //add_filter('the_content', array($this, 'displayPageSpecificTimedLeadbox'));
         }else {
-            $content = $content . $this->addTimedLeadboxesGlobal();
-            $content = $content . $this->woocommerce_specific_hook('addTimedLeadboxesGlobal');
+            $message = $message . $this->addTimedLeadboxesGlobal();
+            $message = $message . $this->woocommerce_specific_hook('addTimedLeadboxesGlobal');
            // add_filter('the_content', array($this, 'addTimedLeadboxesGlobal'));
         }
 
         if($this->hasSpecificExit) {
-            $content = $content . $this->displayPageSpecificExitLeadbox();
-            $content = $content . $this->woocommerce_specific_hook('displayPageSpecificExitLeadbox');
+            $message = $message . $this->displayPageSpecificExitLeadbox();
+            $message = $message . $this->woocommerce_specific_hook('displayPageSpecificExitLeadbox');
             //add_filter('the_content', array($this, 'displayPageSpecificExitLeadbox'));
         }else{
-            $content = $content . $this->addExitLeadboxesGlobal();
-            $content = $content .$this->woocommerce_specific_hook('addExitLeadboxesGlobal');
+            $message = $message . $this->addExitLeadboxesGlobal();
+            $message = $message . $this->woocommerce_specific_hook('addExitLeadboxesGlobal');
             //add_filter('the_content', array($this, 'addExitLeadboxesGlobal'));
         }
-        return $content;
+        echo $message;
     }
 
     /**

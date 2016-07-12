@@ -106,15 +106,6 @@
             if(error == true){
                 return;
             }
-            if($leadpageType == 'wg'){
-                /* checkWelcomeGatePageExists(e)
-                 .done(function(response){
-                 console.log(response);
-                 if(response == 'error'){
-                 e.preventDefault();
-                 }
-                 });*/
-            }
         });
 
     });
