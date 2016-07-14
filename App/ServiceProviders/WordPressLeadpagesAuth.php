@@ -55,6 +55,7 @@ class WordPressLeadpagesAuth extends LeadpagesLogin
         $response = $this->login();
         if ($response == 'success') {
             $this->storeToken();
+            $this->setLoggedInCookie();
             wp_redirect(admin_url('edit.php?post_type=leadpages_post'));
             exit;
         } else {
@@ -103,6 +104,7 @@ class WordPressLeadpagesAuth extends LeadpagesLogin
      */
     public function isLoggedIn()
     {
+
         //if cookie is set and is true don't bother with http call
         if($this->getLoggedInCookie()) return true;
 
@@ -112,6 +114,8 @@ class WordPressLeadpagesAuth extends LeadpagesLogin
             return false;
         }
         //set cookie if they are logged in
+        $this->setLoggedInCookie();
+
         return true;
     }
 

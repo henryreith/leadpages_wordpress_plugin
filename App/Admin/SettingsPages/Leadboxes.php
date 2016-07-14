@@ -20,7 +20,9 @@ class Leadboxes implements SettingsPage
     public function definePage() {
         global $leadpagesConfig;
 
-        add_action( 'admin_enqueue_scripts', array($this, 'leadboxScripts') );
+        if(isset($_GET['page']) && $_GET['page'] == 'Leadboxes') {
+            add_action('admin_enqueue_scripts', array($this, 'leadboxScripts'));
+        }
 
         add_menu_page('leadboxes', 'Leadboxes', 'manage_options', 'Leadboxes', array($this, 'displayCallback'), $leadpagesConfig['admin_images'].'/leadboxes_sm.png' );
     }
