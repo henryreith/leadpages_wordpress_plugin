@@ -56,9 +56,7 @@ class FrontBootstrap
         add_filter('the_posts', array($this->leadpageController, 'displayWelcomeGate'));
         add_action('template_redirect', array($this->leadpageController, 'displayNFPage'));
         add_action('wp', array($this->leadpageController, 'isFrontPage'));
-        add_action('the_content', array($this->leadboxController, 'initLeadboxes'));
-        //had to add a special method for 404 pages
-        add_action('get_footer', array($this->leadboxController, 'initLeadboxes404'));
+        add_action('wp', array($this, 'displayLeadboxes'));
 
 
     }
@@ -84,6 +82,15 @@ class FrontBootstrap
         $result = $this->leadpageController->normalPage();
         if ($result == false) {
             return $posts;
+        }
+    }
+
+    public function displayLeadboxes()
+    {
+        if(!is_404()){
+            add_action('get_footer', array($this->leadboxController, 'initLeadboxes'));
+        }else{
+            add_action('get_footer', array($this->leadboxController, 'initLeadboxes404'));
         }
     }
 

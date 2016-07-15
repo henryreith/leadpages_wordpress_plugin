@@ -47,6 +47,7 @@ class LeadboxController
     public function __construct(LeadboxesApi $leadboxApi)
     {
         $this->leadboxApi = $leadboxApi;
+        $this->globalLeadboxes = $this->getGlobalLeadBoxes();
     }
 
     /**
@@ -58,6 +59,7 @@ class LeadboxController
         if(empty($post)){
             return;
         }
+
         $this->setPageType($post);
         $this->getPageSpecificTimedLeadbox($post);
         $this->getExitSpecifiExitLeadbox($post);
@@ -81,9 +83,9 @@ class LeadboxController
      * @return array
      */
     protected function getGlobalLeadBoxes(){
-
-        $currentTimedLeadbox = LeadboxesModel::getCurrentTimedLeadbox();
-        $currentExitLeadbox  = LeadboxesModel::getCurrentExitLeadbox();
+        $leadboxes = LeadboxesModel::getLpSettings();
+        $currentTimedLeadbox = LeadboxesModel::getCurrentTimedLeadbox($leadboxes);
+        $currentExitLeadbox  = LeadboxesModel::getCurrentExitLeadbox($leadboxes);
         return array(
           'timed' => $currentTimedLeadbox,
           'exit'  => $currentExitLeadbox
@@ -105,6 +107,21 @@ class LeadboxController
     }
 
     /**
+     * return js code directly from database if it is there, if not make a call for it
+     * hopefully improve page load speeds
+     * @param $leadboxes
+     */
+    public function getGlobalTimedLeadboxJs($leadboxes)
+    {
+        $globalTimedLeadboxJs = $this->globalLeadboxes['timed'][2];
+        if(empty($globalTimedLeadboxJs)){
+            //include for backward compatibility
+            return $this->getTimedLeadboxCode($leadboxes);
+        }
+        return $globalTimedLeadboxJs;
+    }
+
+    /**
      * @param $leadboxes
      */
     public function getExitLeadboxCode($leadboxes){
@@ -118,7 +135,22 @@ class LeadboxController
             return;
         }
         return $exit_embed_code['embed_code'];
+    }
 
+
+    /**
+     * return js code directly from database if it is there, if not make a call for it
+     * hopefully improve page load speeds
+     * @param $leadboxes
+     */
+    public function getGlobalExitLeadboxJs($leadboxes)
+    {
+        $globalExitLeadboxJs = $this->globalLeadboxes['exit'][2];
+        if(empty($globalExitLeadboxJs)){
+            //include for backward compatibility
+            return $this->getExitLeadboxCode($leadboxes);
+        }
+        return $globalExitLeadboxJs;
     }
 
     /**
@@ -127,8 +159,7 @@ class LeadboxController
      * @return string
      */
     public function addTimedLeadboxesGlobal(){
-        $leadboxes = $this->getGlobalLeadBoxes();
-        return $this->getTimedLeadboxCode($leadboxes);
+        return $this->getGlobalTimedLeadboxJs($this->globalLeadboxes);
     }
 
     /**
@@ -137,8 +168,7 @@ class LeadboxController
      * @return string
      */
     public function addExitLeadboxesGlobal(){
-        $leadboxes = $this->getGlobalLeadBoxes();
-        return $this->getExitLeadboxCode($leadboxes);
+        return $this->getGlobalExitLeadboxJs($this->globalLeadboxes);
 
     }
 
@@ -146,27 +176,29 @@ class LeadboxController
      * @param $content
      */
     public function addEmbedToContent(){
-        $message = '';
+        $messageTimed = '';
+        $messageExit  = '';
         if($this->hasSpecificTimed){
-            $message = $message . $this->displayPageSpecificTimedLeadbox();
-            $message = $message . $this->woocommerce_specific_hook('displayPageSpecificTimedLeadbox');
+            $messageTimed = $messageTimed . $this->displayPageSpecificTimedLeadbox();
+            $messageTimed = $messageTimed . $this->woocommerce_specific_hook('displayPageSpecificTimedLeadbox');
             //add_filter('the_content', array($this, 'displayPageSpecificTimedLeadbox'));
         }else {
-            $message = $message . $this->addTimedLeadboxesGlobal();
-            $message = $message . $this->woocommerce_specific_hook('addTimedLeadboxesGlobal');
+            $messageTimed = $messageTimed . $this->addTimedLeadboxesGlobal();
+            $messageTimed = $messageTimed . $this->woocommerce_specific_hook('addTimedLeadboxesGlobal');
            // add_filter('the_content', array($this, 'addTimedLeadboxesGlobal'));
         }
 
         if($this->hasSpecificExit) {
-            $message = $message . $this->displayPageSpecificExitLeadbox();
-            $message = $message . $this->woocommerce_specific_hook('displayPageSpecificExitLeadbox');
+            $messageExit = $messageExit . $this->displayPageSpecificExitLeadbox();
+            $messageExit = $messageExit . $this->woocommerce_specific_hook('displayPageSpecificExitLeadbox');
             //add_filter('the_content', array($this, 'displayPageSpecificExitLeadbox'));
         }else{
-            $message = $message . $this->addExitLeadboxesGlobal();
-            $message = $message . $this->woocommerce_specific_hook('addExitLeadboxesGlobal');
+            $messageExit = $messageExit . $this->addExitLeadboxesGlobal();
+            $messageExit = $messageExit . $this->woocommerce_specific_hook('addExitLeadboxesGlobal');
             //add_filter('the_content', array($this, 'addExitLeadboxesGlobal'));
         }
-        echo $message;
+        echo $messageTimed;
+        echo $messageExit;
     }
 
     /**

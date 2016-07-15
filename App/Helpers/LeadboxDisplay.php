@@ -13,8 +13,9 @@ trait LeadboxDisplay
 
 
     public function setCurrentLeadboxes(){
-        $this->currentTimedLeadbox = LeadboxesModel::getCurrentTimedLeadbox();
-        $this->currentExitLeadbox = LeadboxesModel::getCurrentExitLeadbox();
+        $leadboxes = LeadboxesModel::getLpSettings();
+        $this->currentTimedLeadbox = LeadboxesModel::getCurrentTimedLeadbox($leadboxes);
+        $this->currentExitLeadbox = LeadboxesModel::getCurrentExitLeadbox($leadboxes);
     }
 
     protected function currentTimedLeadbox($leadboxId){

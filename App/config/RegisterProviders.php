@@ -99,7 +99,7 @@ $leadpagesApp['WelcomeGateController'] = function ($leadpagesApp) {
 };
 
 $leadpagesApp['leadboxController'] = function ($leadpagesApp) {
-    return new LeadboxController($leadpagesApp['leadboxesApi']);
+    return new LeadboxController($leadpagesApp['leadboxesApi'], $leadpagesApp['leadboxesModel']);
 };
 
 $leadpagesApp['inflector'] = Inflector::get('en');

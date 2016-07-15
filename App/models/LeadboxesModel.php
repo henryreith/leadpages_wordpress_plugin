@@ -9,6 +9,8 @@ use LeadpagesWP\Helpers\Security;
 class LeadboxesModel
 {
 
+    public $currentLeadboxes = '';
+
     public static function init()
     {
         add_action('admin_post_save_leadbox_options', array(get_called_class(), 'saveGlobalLeadboxes'));
@@ -19,12 +21,24 @@ class LeadboxesModel
     {
 
         Security::checkAdminRefererStatic('save_leadbox_options');
+        global $leadpagesApp;
+
+        $response = $leadpagesApp['leadboxesApi']->getSingleLeadboxEmbedCode($_POST['lp_select_field_0'], 'timed');
+        $jsTimed = json_decode($response['response']);
+        //$jsTimed = json_encode($jsTimed->embed_code);
+
+
+        $response = $leadpagesApp['leadboxesApi']->getSingleLeadboxEmbedCode($_POST['lp_select_field_2'], 'exit');
+        $jsExit = json_decode($response['response']);
+        //$jsExit = json_encode($jsExit->embed_code);
 
         $globalLeadboxes = array(
           'lp_select_field_0'             => sanitize_text_field($_POST['lp_select_field_0']),
           'leadboxes_timed_display_radio' => sanitize_text_field((!empty($_POST['leadboxes_timed_display_radio']) ? $_POST['leadboxes_timed_display_radio'] : '')),
+          'leadboxes_timed_js'            => $jsTimed,
           'lp_select_field_2'             => sanitize_text_field($_POST['lp_select_field_2']),
-          'leadboxes_exit_display_radio'  => sanitize_text_field((!empty($_POST['leadboxes_exit_display_radio']) ? $_POST['leadboxes_exit_display_radio'] : ''))
+          'leadboxes_exit_display_radio'  => sanitize_text_field((!empty($_POST['leadboxes_exit_display_radio']) ? $_POST['leadboxes_exit_display_radio'] : '')),
+          'leadboxes_exit_js'            => $jsExit,
         );
 
         static::updateLeadboxOption($globalLeadboxes);
@@ -44,28 +58,25 @@ class LeadboxesModel
         }
     }
 
-    public static function getCurrentTimedLeadbox()
+    public static function getCurrentTimedLeadbox($leadboxes)
     {
-        $leadboxes = static::getLpSettings();
         if (!empty($leadboxes['lp_select_field_0'])) {
-            $currentTimedLeadbox = array($leadboxes['lp_select_field_0'], $leadboxes['leadboxes_timed_display_radio']);
+            $currentTimedLeadbox = array($leadboxes['lp_select_field_0'], $leadboxes['leadboxes_timed_display_radio'], $leadboxes['leadboxes_timed_js']->embed_code);
         } else {
             $currentTimedLeadbox = array('none', 'none');
         }
         return $currentTimedLeadbox;
     }
 
-    public static function getCurrentExitLeadbox()
+    public static function getCurrentExitLeadbox($leadboxes)
     {
-        $leadboxes = static::getLpSettings();
         if (!empty($leadboxes['lp_select_field_2'])) {
-            $currentExitLeadbox = array($leadboxes['lp_select_field_2'], $leadboxes['leadboxes_exit_display_radio']);
+            $currentExitLeadbox = array($leadboxes['lp_select_field_2'], $leadboxes['leadboxes_exit_display_radio'], $leadboxes['leadboxes_exit_js']->embed_code);
         } else {
             $currentExitLeadbox = array('none', 'none');
         }
         return $currentExitLeadbox;
     }
-
 
     public static function savePageSpecificLeadboxes($post_id, $post)
     {
@@ -116,5 +127,4 @@ class LeadboxesModel
             }
         }
     }
-
 }
