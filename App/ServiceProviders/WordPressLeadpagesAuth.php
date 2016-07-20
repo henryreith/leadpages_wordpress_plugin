@@ -106,7 +106,7 @@ class WordPressLeadpagesAuth extends LeadpagesLogin
     {
 
         //if cookie is set and is true don't bother with http call
-        if($this->getLoggedInCookie()) return true;
+        //if($this->getLoggedInCookie()) return true;
 
         $isTokenEmpty = $this->checkIfTokenIsEmpty();
         //verify that token in database was not empty, and ensure that token gets a response from Leadpages
@@ -114,7 +114,7 @@ class WordPressLeadpagesAuth extends LeadpagesLogin
             return false;
         }
         //set cookie if they are logged in
-        $this->setLoggedInCookie();
+        //$this->setLoggedInCookie();
 
         return true;
     }
