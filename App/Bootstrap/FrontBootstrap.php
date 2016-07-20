@@ -49,8 +49,11 @@ class FrontBootstrap
         $this->leadpageController = $leadpageController;
         $this->leadboxController  = $leadboxController;
 
-        $this->setupLeadpages();
 
+        if(!$this->login->isLoggedIn()){
+            return;
+        }
+        $this->setupLeadpages();
         add_filter('post_type_link', array(&$this, 'leadpages_permalink'), 99, 2);
         add_filter('the_posts', array($this, 'displayLeadpage'), 1);
         add_filter('the_posts', array($this->leadpageController, 'displayWelcomeGate'));
@@ -63,10 +66,6 @@ class FrontBootstrap
 
     public function setupLeadpages()
     {
-        //dont execute if not logged in
-        if (!$this->login->isLoggedIn()) {
-            return;
-        }
         CustomPostType::create(LeadpagesPostType::getName());
 
     }
