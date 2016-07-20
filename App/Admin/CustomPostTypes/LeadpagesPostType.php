@@ -70,6 +70,10 @@ class LeadpagesPostType extends CustomPostType
         $this->defineLabels();
         add_action('init', array($this, 'registerPostType'), 5);
         $this->addColumns();
+        add_action('admin_head-post.php', array($this, 'hide_publishing_actions'));
+        add_action('admin_head-post-new.php', array($this, 'hide_publishing_actions'));
+        add_filter( 'wp_insert_post_data', array($this,'force_published'));
+
     }
 
     public function defineColumns($columns)
@@ -205,50 +209,29 @@ class LeadpagesPostType extends CustomPostType
         return $messages;
     }
 
+    public function hide_publishing_actions(){
+        global $post;
+        if($post->post_type == 'leadpages_post'){
+            echo '
+                <style type="text/css">
+                    #misc-publishing-actions,
+                    #minor-publishing-actions{
+                        display:none;
+                    }
+                </style>
+            ';
+        }
+    }
 
-//add_filter( 'post_updated_messages', 'codex_book_updated_messages' );
-
-//    public static function modifySuccessMessage($messages)
-//    {
-//        global $post, $post_ID;
-//
-//        //echo '<pre>'; print_r($post);die();
-//        $messages['leadpages_post'] = array(
-//          0  => '', // Unused. Messages start at index 1.
-//          1  => __( 'Leadpage updated.', 'Leadpages' ),
-//          2  => __( 'Custom field updated.', 'Leadpages' ),
-//          3  => __( 'Custom field deleted.', 'Leadpages' ),
-//          4  => __( 'Leadpage updated.', 'Leadpages' ),
-//            /* translators: %s: date and time of the revision */
-//          5  => isset( $_GET['revision'] ) ? sprintf( __( 'Leadpage restored to revision from %s', 'Leadpages' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-//          6  => __( 'Leadpage published.', 'Leadpages' ),
-//          7  => __( 'Leadpage saved.', 'Leadpages' ),
-//          8  => __( 'Leadpage submitted.', 'Leadpages' ),
-//          9  => sprintf(
-//            __( 'Leadpage scheduled for: <strong>%1$s</strong>.', 'Leadpages' ),
-//            // translators: Publish box date format, see http://php.net/date
-//            date_i18n( __( 'M j, Y @ G:i', 'Leadpages' ), strtotime( $post->post_date ) )
-//          ),
-//          10 => __( 'Leadpage draft updated.', 'Leadpage' )
-//        );
-//
-//        if ( $post_type_object->publicly_queryable ) {
-//            $leadpageSlug = get_post_meta($post->ID);
-//            $url = site_url().$leadpageSlug;
-//
-//            $view_link = sprintf( ' <a href="%s">%s</a>', esc_url( $url ), __( 'View Leadpage', 'Leadpages' ) );
-//            $messages[ $post_type ][1] .= $view_link;
-//            $messages[ $post_type ][6] .= $view_link;
-//            $messages[ $post_type ][9] .= $view_link;
-//
-//            $preview_permalink = add_query_arg( 'preview', 'true', $url );
-//            $preview_link = sprintf( ' <a target="_blank" href="%s">%s</a>', esc_url( $preview_permalink ), __( 'Preview Leadpage', 'Leadpages' ) );
-//            $messages[ $post_type ][8]  .= $preview_link;
-//            $messages[ $post_type ][10] .= $preview_link;
-//        }
-//
-//        return $messages;
-//
-//
-//    }
+    /**
+     * Sets the post status to published
+     */
+    function force_published( $post ) {
+        if( 'trash' !== $post[ 'post_status' ] ) { /* We still want to use the trash */
+            if( in_array( $post[ 'post_type' ], array( 'page', 'leadpages_post' ) ) ) {
+                $post['post_status'] = 'publish';
+            }
+            return $post;
+        }
+    }
 }

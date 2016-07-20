@@ -6,7 +6,6 @@ namespace LeadpagesWP\Helpers;
 
 class PasswordProtected
 {
-    public $postPassword = array();
     public $submittedPassword;
 
     public function __construct($db)
@@ -16,9 +15,8 @@ class PasswordProtected
 
     public function getPostPassword($postId){
         $post = get_post($postId);
-        $this->postPassword = $post->post_password;
-        if(strlen($this->postPassword) > 0 || !is_null($this->postPassword)){
-            return $this->postPassword;
+        if(strlen($post->post_password) > 0 || !is_null($post->post_password)){
+            return $post->post_password;
         }else{
             return false;
         }

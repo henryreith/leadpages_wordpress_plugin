@@ -9,6 +9,7 @@ use LeadpagesWP\models\LeadPagesPostTypeModel;
 
 class LeadpageController
 {
+    public $postPassword;
 
 
     /**
