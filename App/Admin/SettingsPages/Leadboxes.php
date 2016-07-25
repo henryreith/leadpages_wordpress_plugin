@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LeadpagesWP\admin\SettingsPages;
+namespace LeadpagesWP\Admin\SettingsPages;
 
 use TheLoop\Contracts\SettingsPage;
 use LeadpagesWP\Helpers\LeadboxDisplay;
