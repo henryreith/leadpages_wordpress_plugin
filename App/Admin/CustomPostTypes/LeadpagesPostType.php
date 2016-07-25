@@ -70,9 +70,10 @@ class LeadpagesPostType extends CustomPostType
         $this->defineLabels();
         add_action('init', array($this, 'registerPostType'), 5);
         $this->addColumns();
+        //removing publish options
         add_action('admin_head-post.php', array($this, 'hide_publishing_actions'));
         add_action('admin_head-post-new.php', array($this, 'hide_publishing_actions'));
-        add_filter( 'wp_insert_post_data', array($this,'force_published'));
+        //add_filter( 'wp_insert_post_data', array($this,'force_published'));
 
     }
 
