@@ -56,8 +56,9 @@
         });
 
         $body.on('change', '#leadpageType', function(){
+            var pageType = $("#leadpageType").val();
             hideSlugFor404andHome();
-            if($leadpageType == 'fp' || $leadpageType == 'nf'){
+            if(pageType == 'fp' || $leadpageType == 'nf'){
                 $(".leadpage_slug_error").remove();
             }
         });
@@ -90,7 +91,8 @@
                 $('#leadpages_my_selected_page').css('border-color', 'red');
                 error = true;
             }
-            if($leadpageType != 'fp' || $leadpageType != 'nf'){
+            if($leadpageType != 'fp' && $leadpageType != 'nf'){
+                console.log($leadpageType);
                 if($leadpageSlug.length == 0){
                     e.preventDefault();
                     $( ".wrap h1" ).after( "<div class='error notice leadpages_error leadpage_slug_error'><p>Slug appears to be empty. Please add a slug.</p></div>" );
