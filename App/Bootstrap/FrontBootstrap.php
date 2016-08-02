@@ -64,14 +64,22 @@ class FrontBootstrap
 
     }
 
+    /**
+     * Create leadpages custom post type from factory
+     */
     public function setupLeadpages()
     {
         CustomPostType::create(LeadpagesPostType::getName());
 
     }
 
+    /**
+     * display a leadpage if its not a homepage or a 404 page
+     * @param $posts
+     */
     public function displayLeadpage($posts)
     {
+        if(is_front_page() || is_home() || is_404()) return;
         if (!empty($posts)) {
             if ($posts[0]->post_type != 'leadpages_post') {
                 return $posts;
@@ -84,6 +92,9 @@ class FrontBootstrap
         }
     }
 
+    /**
+     * display leadboxes on normal and 404 pages
+     */
     public function displayLeadboxes()
     {
         if(!is_404()){
@@ -94,6 +105,14 @@ class FrontBootstrap
     }
 
 
+    /**
+     * create url structure for leadpages post type so it does not include leadpages_post in the url
+     *
+     * @param $url
+     * @param $post
+     *
+     * @return string
+     */
     public function leadpages_permalink($url, $post)
     {
         if ('leadpages_post' == get_post_type($post)) {
