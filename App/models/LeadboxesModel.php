@@ -60,7 +60,8 @@ class LeadboxesModel
 
     public static function getCurrentTimedLeadbox($leadboxes)
     {
-        if (!empty($leadboxes['lp_select_field_0'])) {
+
+        if ($leadboxes['lp_select_field_0'] != 'none') {
             $currentTimedLeadbox = array($leadboxes['lp_select_field_0'], $leadboxes['leadboxes_timed_display_radio'], $leadboxes['leadboxes_timed_js']->embed_code);
         } else {
             $currentTimedLeadbox = array('none', 'none');
@@ -70,7 +71,7 @@ class LeadboxesModel
 
     public static function getCurrentExitLeadbox($leadboxes)
     {
-        if (!empty($leadboxes['lp_select_field_2'])) {
+        if ($leadboxes['lp_select_field_2'] != 'none') {
             $currentExitLeadbox = array($leadboxes['lp_select_field_2'], $leadboxes['leadboxes_exit_display_radio'], $leadboxes['leadboxes_exit_js']->embed_code);
         } else {
             $currentExitLeadbox = array('none', 'none');
