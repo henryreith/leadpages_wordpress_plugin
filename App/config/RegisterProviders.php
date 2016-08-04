@@ -3,6 +3,7 @@
 use GuzzleHttp\Client;
 use ICanBoogie\Inflector;
 use Leadpages\Pages\LeadpagesPages;
+use LeadpagesWP\Front\ShortCodes\LeadboxShortCodes;
 use LeadpagesWP\models\LeadboxesModel;
 use LeadpagesWP\Lib\ApiResponseHandler;
 use LeadpagesWP\Bootstrap\AdminBootstrap;
@@ -63,7 +64,7 @@ $leadpagesApp['adminBootstrap'] = function ($leadpagesApp) {
 
 $leadpagesApp['frontBootstrap'] = function ($leadpagesApp) {
     return new FrontBootstrap($leadpagesApp['leadpagesLogin'], $leadpagesApp['leadpageController'],
-      $leadpagesApp['pagesApi'], $leadpagesApp['leadboxController']);
+      $leadpagesApp['pagesApi'], $leadpagesApp['leadboxController'], $leadpagesApp['leadboxShortCode']);
 };
 
 
@@ -108,6 +109,10 @@ $leadpagesApp['leadboxTinyMce'] = function($leadpagesApp) {
 };
 
 $leadpagesApp['inflector'] = Inflector::get('en');
+
+$leadpagesApp['leadboxShortCode'] = function($leadpagesApp){
+  return new LeadboxShortCodes();
+};
 
 
 /*

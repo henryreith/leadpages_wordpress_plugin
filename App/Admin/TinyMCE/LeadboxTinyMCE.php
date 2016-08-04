@@ -2,6 +2,8 @@
 
 namespace LeadpagesWP\Admin\TinyMCE;
 
+use LeadpagesWP\ServiceProviders\LeadboxesApi;
+
 
 class LeadboxTinyMCE
 {
@@ -10,9 +12,9 @@ class LeadboxTinyMCE
     {
         //tinymce setup
         add_action('init', array($this, 'leadboxes_buttons'));
-//        foreach (array('post.php', 'post-new.php') as $hook) {
-//            add_action("admin_head-$hook", array($this, 'leadboxtiny_mce_vars'));
-//        }
+        foreach (array('post.php', 'post-new.php') as $hook) {
+            add_action("admin_head-$hook", array($this, 'tinymceVars'));
+        }
     }
 
     /**
@@ -44,7 +46,33 @@ class LeadboxTinyMCE
 
     public function tinymceVars()
     {
-        
+
+        global $leadpagesApp;
+
+        $leadboxApi = $leadpagesApp['leadboxesApi'];
+        $leadboxes = $leadboxApi->getAllLeadboxes();
+        $allLeadBoxes = json_decode($leadboxes['response'], true);
+        $allLeadBoxes = $allLeadBoxes['_items'];
+        $leadboxesJavascript = [];
+        $i = 0;
+        foreach($allLeadBoxes as $leadBox) {
+            //echo '<pre>'; print_r($leadBox);
+            if (isset($leadBox['publish_settings']['embed']) && strpos($leadBox['publish_settings']['embed'],
+                'href') > 0
+            ) {
+
+                $leadboxesJavascript[$i]['name']   = $leadBox['name'];
+                $leadboxesJavascript[$i]['xor_id'] = $leadBox['xor_hex_id'];
+                $i++;
+            }
+        }
+        ?>
+        <!-- TinyMCE Shortcode Plugin -->
+		<script type='text/javascript'>
+			window.leadboxes = <?php echo json_encode($leadboxesJavascript); ?>
+		</script>
+		<!-- TinyMCE Shortcode Plugin -->
+        <?php
     }
 
 }
