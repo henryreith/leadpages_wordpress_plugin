@@ -80,12 +80,7 @@ class FrontBootstrap
     public function displayLeadpage($posts)
     {
         if(is_front_page() || is_home() || is_404()) return;
-        if (!empty($posts)) {
-            if ($posts[0]->post_type != 'leadpages_post') {
-                return $posts;
-            }
-        }
-
+        
         $result = $this->leadpageController->normalPage();
         if ($result == false) {
             return $posts;
