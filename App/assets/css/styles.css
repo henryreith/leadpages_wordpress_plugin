@@ -52,5 +52,9 @@
     display: none;
 }
 
+.mce-i-leadbox_shortcode_icon{
+    background: url(../images/menu-icon.png) no-repeat !important; background-size: 100% !important;
+}
+
 
 

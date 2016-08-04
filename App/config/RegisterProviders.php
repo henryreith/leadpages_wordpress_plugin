@@ -3,11 +3,13 @@
 use GuzzleHttp\Client;
 use ICanBoogie\Inflector;
 use Leadpages\Pages\LeadpagesPages;
+use LeadpagesWP\Front\ShortCodes\LeadboxShortCodes;
 use LeadpagesWP\models\LeadboxesModel;
 use LeadpagesWP\Lib\ApiResponseHandler;
 use LeadpagesWP\Bootstrap\AdminBootstrap;
 use LeadpagesWP\Bootstrap\FrontBootstrap;
 use LeadpagesWP\Helpers\PasswordProtected;
+use LeadpagesWP\Admin\TinyMCE\LeadboxTinyMCE;
 use LeadpagesWP\ServiceProviders\LeadboxesApi;
 use TheLoop\ServiceContainer\ServiceContainer;
 use LeadpagesWP\models\LeadPagesPostTypeModel;
@@ -57,12 +59,12 @@ $leadpagesApp['httpClient'] = function ($leadpagesApp) {
 
 $leadpagesApp['adminBootstrap'] = function ($leadpagesApp) {
     return new AdminBootstrap($leadpagesApp['leadpagesLogin'], $leadpagesApp['lpPostTypeModel'],
-      $leadpagesApp['leadboxesApi'], $leadpagesApp['leadboxesModel']);
+      $leadpagesApp['leadboxesApi'], $leadpagesApp['leadboxesModel'], $leadpagesApp['leadboxTinyMce']);
 };
 
 $leadpagesApp['frontBootstrap'] = function ($leadpagesApp) {
     return new FrontBootstrap($leadpagesApp['leadpagesLogin'], $leadpagesApp['leadpageController'],
-      $leadpagesApp['pagesApi'], $leadpagesApp['leadboxController']);
+      $leadpagesApp['pagesApi'], $leadpagesApp['leadboxController'], $leadpagesApp['leadboxShortCode']);
 };
 
 
@@ -102,7 +104,15 @@ $leadpagesApp['leadboxController'] = function ($leadpagesApp) {
     return new LeadboxController($leadpagesApp['leadboxesApi'], $leadpagesApp['leadboxesModel']);
 };
 
+$leadpagesApp['leadboxTinyMce'] = function($leadpagesApp) {
+  return new LeadboxTinyMCE();
+};
+
 $leadpagesApp['inflector'] = Inflector::get('en');
+
+$leadpagesApp['leadboxShortCode'] = function($leadpagesApp){
+  return new LeadboxShortCodes();
+};
 
 
 /*
