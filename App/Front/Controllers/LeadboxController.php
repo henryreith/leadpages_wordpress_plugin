@@ -113,7 +113,9 @@ class LeadboxController
      */
     public function getGlobalTimedLeadboxJs($leadboxes)
     {
-        $globalTimedLeadboxJs = $this->globalLeadboxes['timed'][2];
+        if(isset($this->globalLeadboxes['timed'][2])) {
+            $globalTimedLeadboxJs = $this->globalLeadboxes['timed'][2];
+        }
         if(empty($globalTimedLeadboxJs)){
             //include for backward compatibility
             return $this->getTimedLeadboxCode($leadboxes);
@@ -145,7 +147,9 @@ class LeadboxController
      */
     public function getGlobalExitLeadboxJs($leadboxes)
     {
-        $globalExitLeadboxJs = $this->globalLeadboxes['exit'][2];
+        if(isset($this->globalLeadboxes['exit'][2])) {
+            $globalExitLeadboxJs = $this->globalLeadboxes['exit'][2];
+        }
         if(empty($globalExitLeadboxJs)){
             //include for backward compatibility
             return $this->getExitLeadboxCode($leadboxes);
