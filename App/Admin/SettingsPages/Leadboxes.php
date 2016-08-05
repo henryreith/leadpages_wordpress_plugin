@@ -3,8 +3,8 @@
 
 namespace LeadpagesWP\Admin\SettingsPages;
 
-use TheLoop\Contracts\SettingsPage;
 use LeadpagesWP\Helpers\LeadboxDisplay;
+use TheLoop\Contracts\SettingsPage;
 use TheLoop\ServiceContainer\ServiceContainerTrait;
 
 class Leadboxes implements SettingsPage
@@ -65,7 +65,6 @@ class Leadboxes implements SettingsPage
                     </div>
                 </div>
 
-
                 <input type="hidden" name="action" value="save_leadbox_options" />
                 <?php wp_nonce_field( 'save_leadbox_options' ); ?>
                 <input type="submit" value="Save Global Leadboxes" class="leadboxButton">
@@ -86,7 +85,9 @@ class Leadboxes implements SettingsPage
         global $leadpagesApp;
 
         $apiResponse = $leadpagesApp['leadboxesApi']->getAllLeadboxes();
-        $leadboxes = json_decode($apiResponse['response'], true);
+        $allLeadboxes = json_decode($apiResponse['response'], true);
+        $leadboxes['_items'] = array_filter($allLeadboxes['_items'], array($this, 'filterLeadpageGeneratedLeadboxes'));
+
         wp_enqueue_script('Leadboxes', $leadpagesConfig['admin_assets'] . '/js/Leadboxes.js', array('jquery'));
         wp_localize_script('Leadboxes', 'leadboxes_object', array(
           'ajax_url'  => admin_url('admin-ajax.php'),
@@ -95,6 +96,20 @@ class Leadboxes implements SettingsPage
           'postTypesForExitLeadboxes' => $this->postTypesForExitLeadboxes(),
           'exitLeadboxes'  => $this->exitDropDown($leadboxes),
         ));
+    }
+
+    /**
+     * Loop over leadboxes using array filter and only return leadboxes
+     * that actually have embed code
+     * @param $leadboxes
+     * @param $body
+     */
+    public function filterLeadpageGeneratedLeadboxes($leadbox)
+    {
+        //if embed is not set it is not published so it must be removed
+        if (!empty($leadbox['publish_settings']['embed'])) {
+           return $leadbox;
+        }
     }
 
 

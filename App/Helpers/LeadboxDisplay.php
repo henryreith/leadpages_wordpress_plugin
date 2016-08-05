@@ -94,7 +94,6 @@ trait LeadboxDisplay
      */
     public function exitDropDown($leadboxArray)
     {
-        //echo '<pre>';print_r($leadboxArray);die();
         $select = "<select name='lp_select_field_2' id='leadboxesExit'>";
         $select .= "<option name='none' value='none' ". $this->currentExitLeadbox('none') .">None</option>";
         foreach($leadboxArray['_items'] as $leadbox){
