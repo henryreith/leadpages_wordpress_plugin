@@ -22,8 +22,8 @@ $leadpagesConfig['pluginUrl'] = plugin_dir_url((dirname(__FILE__)));
 |
 */
 
-$leadpagesConfig['api']['sessions']['new']     = 'https://api.leadpages.io/auth/v1/sessions/';
-$leadpagesConfig['api']['sessions']['current'] = 'https://api.leadpages.io/auth/v1/sessions/current';
+$leadpagesConfig['api']['sessions']['new']     = 'https://api.center.io/account/v1/sessions/';
+$leadpagesConfig['api']['sessions']['current'] = 'https://api.center.io/account/v1/sessions/current';
 $leadpagesConfig['api']['pages']               = 'https://my.leadpages.net/page/v1/pages';
 $leadpagesConfig['api']['leadboxes']           = 'https://my.leadpages.net/leadbox/v1/leadboxes';
 
