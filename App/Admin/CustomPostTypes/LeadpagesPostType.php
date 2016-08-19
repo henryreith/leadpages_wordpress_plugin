@@ -45,7 +45,7 @@ class LeadpagesPostType extends CustomPostType
           'publicly_queryable'   => true,
           'show_ui'              => true,
           'query_var'            => true,
-          'menu_icon'            => $leadpagesConfig['admin_images'].'/menu-icon.png',
+          'menu_icon'            => '',
           'capability_type'      => 'page',
           'menu_position'        => 10000,
           'can_export'           => false,
