@@ -9,15 +9,15 @@ gulp.task('setupTestEnv', shell.task([
     "bash bin/install-wp-tests.sh wordpress2 root root 127.0.0.1 latest"
 ]));
 
-
-var releaseFolder = '/Users/brandonbraner/projects/releases/leadpages-wordpress-v2/beta2/leadpages';
+var releaseBase = '/Users/brandonbraner/projects/releases/leadpages-wordpress-v2/beta2/'
+var releaseFolder = releaseBase+'leadpages';
 var zipsFolder = '/Users/brandonbraner/projects/releases/leadpages-wordpress-v2/archive/';
 
 gulp.task('removeallfiles',function(){
     return del([releaseFolder+'/**/*'], {force: true});
 });
 
-//compress whole folder and move it just incase
+//compress whole folder and move it for a full backup
 
 gulp.task('compressandmove', function(){
     var date = new Date();
@@ -40,12 +40,18 @@ gulp.task('movetoreleases', function(){
         .pipe(gulp.dest(releaseFolder));
 });
 
-gulp.task('removenode',function(){
-    return del([releaseFolder+'/node_modules'], {force: true});
+gulp.task('removeUnneedFiles',function(){
+    return del([releaseFolder+'/node_modules', releaseFolder+'/tests', releaseFolder+'/bin'], {force: true});
 });
 
 gulp.task('runcomposer2', function(){
     return composer("update");
+});
+
+gulp.task('compressrelease', function(){
+    return gulp.src(releaseFolder)
+        .pipe(zip('leadpagesv2.zip'))
+        .pipe(gulp.dest(releaseBase));
 });
 
 gulp.task('deploy', function(){
@@ -54,16 +60,8 @@ gulp.task('deploy', function(){
         'removeallfiles',
         'runcomposer',
         'movetoreleases',
-        'removenode',
+        'removeUnneedFiles',
         'runcomposer2'
     );
 });
 
-
-gulp.task('deploy2', function(){
-    runSequence(
-        'movetoreleases',
-        'removenode',
-        'run_composer_release'
-    );
-});
