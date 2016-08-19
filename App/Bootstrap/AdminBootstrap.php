@@ -61,7 +61,8 @@ class AdminBootstrap
         $this->setupLeadpages();
         $this->setupLeadboxes();
         $this->setupAdminNotices();
-        $this->leadboxTinyMCE->init();
+        add_action('admin_enqueue_scripts', array($this, 'loadStyles'));
+
 
     }
 
@@ -91,7 +92,6 @@ class AdminBootstrap
         MetaBoxes::create(LeadpageType::getName());
         Metaboxes::create(LeadpageSelect::getName());
         add_action('admin_enqueue_scripts', array($this, 'loadJS'));
-        add_action('admin_enqueue_scripts', array($this, 'loadStyles'));
 
         //setup hook for saving Leadpages Post Type
         $this->postTypeModel->save();
@@ -112,6 +112,8 @@ class AdminBootstrap
         Metaboxes::create(LeadboxMetaBox::getName());
         LeadboxesModel::init();
         LeadboxesModel::saveLeadboxMeta();
+        $this->leadboxTinyMCE->init();
+
 
     }
 
@@ -136,6 +138,8 @@ class AdminBootstrap
         if ($leadpagesConfig['currentScreen'] == 'leadpages_post' || $leadpagesConfig['currentScreenAll']->base == 'toplevel_page_Leadboxes') {
             wp_enqueue_style('lp-lego', 'https://static.leadpages.net/lego/1.0.30/lego.min.css');
         }
+        wp_enqueue_style( 'center_admin_css_icons', 'https://static.leadpages.net/icons/v25/lp-icons.css', false, '1.0.0' );
+
         wp_enqueue_style('lp-styles', $leadpagesConfig['admin_css'] . 'styles.css');
     }
 
