@@ -13,7 +13,7 @@ class LeadpagesLoginPage implements SettingsPage
 
     public function definePage() {
         global $leadpagesConfig;
-        add_menu_page('leadpages', 'Leadpages', 'manage_options', 'Leadpages', array($this, 'displayCallback'), $leadpagesConfig['admin_images'].'/menu-icon.png' );
+        add_menu_page('leadpages', 'Leadpages', 'manage_options', 'Leadpages', array($this, 'displayCallback'), 'none' );
     }
 
 
