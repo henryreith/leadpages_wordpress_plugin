@@ -56,5 +56,19 @@
     background: url(../images/menu-icon.png) no-repeat !important; background-size: 100% !important;
 }
 
+#menu-posts-leadpages_post .wp-menu-image::before, #toplevel_page_Leadpages .wp-menu-image::before{
+    display: inline-block;
+    vertical-align: middle;
+    font: normal 1.25rem/1.4 'LeadPages-Icons';
+    speak: none;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    padding-top: 3px;
+    content: "\e60b";
+}
+
 
 
