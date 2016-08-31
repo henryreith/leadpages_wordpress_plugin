@@ -3,6 +3,7 @@
 namespace LeadpagesWP\ServiceProviders;
 
 use Leadpages\Auth\LeadpagesLogin;
+use LeadpagesMetrics\LeadpagesSignInEvent;
 
 class WordPressLeadpagesAuth extends LeadpagesLogin
 {
@@ -45,7 +46,9 @@ class WordPressLeadpagesAuth extends LeadpagesLogin
     public function login()
     {
         if (isset($_POST['username']) && isset($_POST['password'])) {
-            $response = $this->getUser(sanitize_email($_POST['username']), sanitize_text_field($_POST['password']))->parseResponse();
+            $username = $_POST['username'];
+            $password = stripslashes($_POST['password']); //wordpress automaticlly escapes ' so if the password has one login fails
+            $response = $this->getUser($username, $password)->parseResponse();
             return $response;
         }
     }
@@ -56,6 +59,10 @@ class WordPressLeadpagesAuth extends LeadpagesLogin
         if ($response == 'success') {
             $this->storeToken();
             $this->setLoggedInCookie();
+            $eventArray = array(
+              'email_address' => $_POST['username']
+            );
+            (new LeadpagesSignInEvent())->storeEvent($eventArray);
             wp_redirect(admin_url('edit.php?post_type=leadpages_post'));
             exit;
         } else {

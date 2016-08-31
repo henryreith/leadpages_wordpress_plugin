@@ -3,7 +3,7 @@
 /*
 Plugin Name: Leadpages Connector
 Plugin URI: http://wordpress.org/plugins/hello-dolly/
-Description:
+Description: Connect your Leadpages account to your WordPress site to import Leadpages and Leadboxes
 Author: Leadpages
 Version: 2.1.0
 Author URI: http://leadpages.net
@@ -15,7 +15,17 @@ checkPHPVersion($plugin_version);
 
 
 use LeadpagesWP\Lib\Update;
+use LeadpagesMetrics\ActivationEvent;
+use LeadpagesMetrics\DeactivationEvent;
 
+
+register_activation_hook(__FILE__, function(){
+    (new ActivationEvent())->storeEvent();
+});
+
+register_deactivation_hook(__FILE__, function(){
+    (new DeactivationEvent())->storeEvent();
+});
 
 
   /*
@@ -91,6 +101,7 @@ if (!is_admin() && !is_network_admin()) {
     $frontBootstrap = $leadpagesApp['frontBootstrap'];
     //include('App/Helpers/ErrorHandlerAjax.php');
 }
+
 
 
 
