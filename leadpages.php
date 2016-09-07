@@ -8,24 +8,7 @@ Author: Leadpages
 Version: 2.1.1
 Author URI: http://leadpages.net
 */
-$plugin_version = '2.1.1';
-define('REQUIRED_PHP_VERSION', 5.4);
 
-checkPHPVersion($plugin_version);
-
-
-use LeadpagesWP\Lib\Update;
-use LeadpagesMetrics\ActivationEvent;
-use LeadpagesMetrics\DeactivationEvent;
-
-
-register_activation_hook(__FILE__, function(){
-    (new ActivationEvent())->storeEvent();
-});
-
-register_deactivation_hook(__FILE__, function(){
-    (new DeactivationEvent())->storeEvent();
-});
 
 
   /*
@@ -38,7 +21,9 @@ register_deactivation_hook(__FILE__, function(){
     |
     */
 
-
+use LeadpagesWP\Lib\Update;
+use LeadpagesMetrics\ActivationEvent;
+use LeadpagesMetrics\DeactivationEvent;
 
 require_once('c3.php');
 require_once('vendor/autoload.php');
@@ -46,6 +31,35 @@ require_once('App/Config/App.php');
 require_once($leadpagesConfig['basePath'] . 'Framework/ServiceContainer/ServiceContainer.php');
 require_once($leadpagesConfig['basePath'].'App/Config/RegisterProviders.php');
 
+
+$plugin_version = '2.1.1';
+define('REQUIRED_PHP_VERSION', 5.4);
+
+
+/*
+  |--------------------------------------------------------------------------
+  | Check PHP Version for plugin to make sure its compatible
+  |--------------------------------------------------------------------------
+  */
+
+    checkPHPVersion($plugin_version);
+
+
+
+/*
+  |--------------------------------------------------------------------------
+  | Store events when when plugin is activated and deactivated
+  |--------------------------------------------------------------------------
+  */
+register_activation_hook(__FILE__, function(){
+    $activationEvent = new ActivationEvent();
+    $activationEvent->storeEvent();
+});
+
+register_deactivation_hook(__FILE__, function(){
+   $deactivationEvent = new DeactivationEvent();
+   $deactivationEvent->storeEvent();
+});
 
 /*
   |--------------------------------------------------------------------------
@@ -118,7 +132,7 @@ function checkPHPVersion($plugin_version)
             }
         }
         update_option('active_plugins', $activePlugins);
-        $current_php_version = PHP_VERSION;
+
         wp_die('<p>The <strong>Leadpages&reg;</strong> plugin version '.$plugin_version.' requires php version <strong> '.REQUIRED_PHP_VERSION.' </strong> or greater.</p>
     <p>You are currently using <strong>'.PHP_VERSION.'</strong></p>
     <p>Please use plugin version 1.2', 'Plugin Activation Error',  array('back_link'=>TRUE ) );
