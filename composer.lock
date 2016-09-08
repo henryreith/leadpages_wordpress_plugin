@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "84e4571ce191820df65f48c94a985f4a",
-    "content-hash": "f43db9471b04c9316bd4e734109811bb",
+    "hash": "7493d3329ef6facb63a274460940aacc",
+    "content-hash": "a63701d6b0a3a0892dbc09d07f41bb91",
     "packages": [
         {
             "name": "brandonbraner/auth-test",
