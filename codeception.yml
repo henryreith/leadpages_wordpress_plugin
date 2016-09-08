@@ -30,5 +30,5 @@ modules:
             cleanup: true
         WebDriver:
             url: 'http://localhost:8000'
-            browser: 'chrome'
+            browser: 'phantomjs'
             window_size: 1024x768
