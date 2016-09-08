@@ -26,6 +26,7 @@ matrix:
 
 before_install:
   - composer self-update
+  - echo "CODECEPTION VERSION "${CODECEPTION_VERSION}
   #- composer require "codeception/codeception:${CODECEPTION_VERSION}"
 install:
   - composer update --dev
@@ -37,4 +38,4 @@ script:
   - phantomjs phantomjs/test_runner.js
 
 script:
-  - codecept run acceptance
+  - ./vendor/bin/codecept run acceptance
