@@ -1,9 +1,8 @@
 vendor/
 node_modules/**/*
 !vendor/pimple
-testData.php
 
-tests/_output/*
+
 tests/_output/*
 codecept
 bin
