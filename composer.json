@@ -10,7 +10,9 @@
         "ramsey/uuid": "^2.9"
     },
     "require-dev": {
-        "codeception/codeception": "^2.2"
+        "codeception/codeception": "^2.2",
+        "site5/phantoman": "^1.1",
+        "jakoch/phantomjs-installer": "2.1.1-p06"
     },
     "autoload": {
         "psr-4": {
@@ -24,5 +26,16 @@
             "name": "Brandon Braner",
             "email": "brandon.braner@ave81.com"
         }
-    ]
+    ],
+    "config": {
+        "bin-dir": "bin"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ],
+        "post-update-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ]
+    }
 }

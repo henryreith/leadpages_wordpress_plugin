@@ -12,6 +12,8 @@ settings:
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
+        - Codeception\Extension\Phantoman
+
 coverage:
     enabled: true
     whitelist:

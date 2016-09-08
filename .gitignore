@@ -5,3 +5,5 @@ testData.php
 
 tests/_output/*
 tests/_output/*
+codecept
+bin
