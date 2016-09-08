@@ -11,7 +11,7 @@
         "moontoast/math": "*"
     },
     "require-dev": {
-        "codeception/codeception": "^2.2",
+        "codeception/codeception": "2.1.11",
         "site5/phantoman": "^1.1",
         "jakoch/phantomjs-installer": "2.1.1-p06"
     },
