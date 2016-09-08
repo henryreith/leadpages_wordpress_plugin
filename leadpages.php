@@ -5,7 +5,7 @@ Plugin Name: Leadpages Connector
 Plugin URI: http://wordpress.org/plugins/hello-dolly/
 Description: Connect your Leadpages account to your WordPress site to import Leadpages and Leadboxes
 Author: Leadpages
-Version: 2.1.1
+Version: 2.1.2
 Author URI: http://leadpages.net
 */
 
@@ -32,7 +32,7 @@ require_once($leadpagesConfig['basePath'] . 'Framework/ServiceContainer/ServiceC
 require_once($leadpagesConfig['basePath'].'App/Config/RegisterProviders.php');
 
 
-$plugin_version = '2.1.1';
+$plugin_version = '2.1.2';
 define('REQUIRED_PHP_VERSION', 5.4);
 
 
