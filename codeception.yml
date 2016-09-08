@@ -22,13 +22,13 @@ coverage:
 modules:
     config:
         Db:
-            dsn: 'mysql:host=127.0.0.1;dbname=wordpress2'
+            dsn: 'mysql:host=127.0.0.1;dbname=wordpress_test'
             user: 'root'
-            password: 'root'
+            password: ''
             dump: tests/_data/wordpress2.sql
             populate: true
             cleanup: true
         WebDriver:
-            url: 'http://localhost/wordpress'
+            url: 'http://localhost:8000'
             browser: 'chrome'
             window_size: 1024x768
