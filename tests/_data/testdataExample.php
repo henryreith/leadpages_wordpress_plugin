@@ -1,6 +1,10 @@
 <?php
 
-return $testdata = array(
+putenv("username=example@example.com");
+putenv("password=passwordgoeshere");
+putenv("testToken=keygoeshere");
+
+return array(
 
   'leadpagesUsername' => getenv('username'),
   'leadpagesPassword' => getenv('password'),

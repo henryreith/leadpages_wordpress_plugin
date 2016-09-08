@@ -56,7 +56,7 @@ gulp.task('compressrelease', function(){
 
 gulp.task('deploy', function(){
     runSequence(
-        'compressandmove',
+        //'compressandmove',
         'removeallfiles',
         'runcomposer',
         'movetoreleases',
