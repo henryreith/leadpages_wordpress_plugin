@@ -12,5 +12,5 @@ modules:
         - Db:
    config:
            WebDriver:
-               url: 'http://localhost/wordpress'
-               browser: 'chrome'
+               url: 'http://localhost'
+               browser: 'phantomjs'
