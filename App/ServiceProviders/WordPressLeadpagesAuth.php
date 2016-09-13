@@ -117,7 +117,7 @@ class WordPressLeadpagesAuth extends LeadpagesLogin
 
         $isTokenEmpty = $this->checkIfTokenIsEmpty();
         //verify that token in database was not empty, and ensure that token gets a response from Leadpages
-        if ($isTokenEmpty['error'] || !$this->checkCurrentUserToken()) {
+        if ($isTokenEmpty['error']) {
             return false;
         }
         //set cookie if they are logged in
