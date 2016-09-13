@@ -4,121 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c5952153d2cc7186e9b53c647a7d9998",
-    "content-hash": "b231d9cafef95c72dc566773fab36f92",
+    "hash": "a9b5af716716eef770ebecda8a131332",
+    "content-hash": "af988a7b0357a4174c57d01d88c95415",
     "packages": [
-        {
-            "name": "brandonbraner/auth-test",
-            "version": "1.0.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/blbraner1234/lpauth.git",
-                "reference": "6cb494ab781251d569d73c58a77fc69c5fbed664"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/blbraner1234/lpauth/zipball/6cb494ab781251d569d73c58a77fc69c5fbed664",
-                "reference": "6cb494ab781251d569d73c58a77fc69c5fbed664",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "~5 < 6",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Leadpages\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Brandon Braner",
-                    "email": "brandon.braner@ave81.com"
-                }
-            ],
-            "description": "Authentication package for interfacing with Leadpages API's",
-            "time": "2016-08-22 22:12:38"
-        },
-        {
-            "name": "brandonbraner/leadboxes",
-            "version": "1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/blbraner1234/lpboxes.git",
-                "reference": "1603877825ec483f76434c186dad4bce520c1abf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/blbraner1234/lpboxes/zipball/1603877825ec483f76434c186dad4bce520c1abf",
-                "reference": "1603877825ec483f76434c186dad4bce520c1abf",
-                "shasum": ""
-            },
-            "require": {
-                "brandonbraner/auth-test": "^1.0",
-                "guzzlehttp/guzzle": "~5 < 6",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Leadpages\\Leadboxes\\": "src/Leadboxes/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Brandon Braner",
-                    "email": "brandon.braner@ave81.com"
-                }
-            ],
-            "description": "A package to allow you to easily integrate Leadpages Leadboxes into your PHP project",
-            "time": "2016-06-29 18:47:30"
-        },
-        {
-            "name": "brandonbraner/pages-test",
-            "version": "1.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/blbraner1234/lppages.git",
-                "reference": "88ea0c93d3290d101c074fa0036511c9b86d23a7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/blbraner1234/lppages/zipball/88ea0c93d3290d101c074fa0036511c9b86d23a7",
-                "reference": "88ea0c93d3290d101c074fa0036511c9b86d23a7",
-                "shasum": ""
-            },
-            "require": {
-                "brandonbraner/auth-test": "^1.0",
-                "guzzlehttp/guzzle": "~5 < 6",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Leadpages\\Pages\\": "src/Pages/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Brandon Braner",
-                    "email": "brandon.braner@ave81.com"
-                }
-            ],
-            "time": "2016-07-06 17:55:46"
-        },
         {
             "name": "guzzlehttp/guzzle",
             "version": "5.3.1",
@@ -323,6 +211,128 @@
                 "underscore"
             ],
             "time": "2016-07-02 11:14:17"
+        },
+        {
+            "name": "leadpages/leadboxes",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LeadPages/php_leadbox_component.git",
+                "reference": "26749391aee6c303d6a327bfdbd124e1b7f9a95c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LeadPages/php_leadbox_component/zipball/26749391aee6c303d6a327bfdbd124e1b7f9a95c",
+                "reference": "26749391aee6c303d6a327bfdbd124e1b7f9a95c",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~5 < 6",
+                "leadpages/leadpages-auth": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Leadpages\\Leadboxes\\": "src/Leadboxes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brandon Braner",
+                    "email": "brandon.braner@ave81.com"
+                }
+            ],
+            "description": "A package to allow you to easily integrate Leadpages Leadboxes into your PHP project",
+            "time": "2016-09-09 21:10:41"
+        },
+        {
+            "name": "leadpages/leadpages-auth",
+            "version": "1.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LeadPages/php_auth_package.git",
+                "reference": "03a5a5d19f8b81104b972e80d8b3cd9f44e2409c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LeadPages/php_auth_package/zipball/03a5a5d19f8b81104b972e80d8b3cd9f44e2409c",
+                "reference": "03a5a5d19f8b81104b972e80d8b3cd9f44e2409c",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~5 < 6",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Leadpages\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brandon Braner",
+                    "email": "brandon.braner@ave81.com"
+                }
+            ],
+            "description": "Authentication package for interfacing with Leadpages API's",
+            "time": "2016-09-12 23:13:13"
+        },
+        {
+            "name": "leadpages/pages",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LeadPages/php_pages_component.git",
+                "reference": "f523f6e5597d37450cd8c7dd41a47cfab7d34cd8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LeadPages/php_pages_component/zipball/f523f6e5597d37450cd8c7dd41a47cfab7d34cd8",
+                "reference": "f523f6e5597d37450cd8c7dd41a47cfab7d34cd8",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~5 < 6",
+                "leadpages/leadpages-auth": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Leadpages\\Pages\\": "src/Pages/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brandon Braner",
+                    "email": "brandon.braner@ave81.com"
+                }
+            ],
+            "description": "A package to allow you to easily integrate Leadpages pages into your PHP project",
+            "time": "2016-09-09 21:11:22"
         },
         {
             "name": "moontoast/math",
@@ -568,21 +578,80 @@
     ],
     "packages-dev": [
         {
-            "name": "codeception/codeception",
-            "version": "2.1.11",
+            "name": "behat/gherkin",
+            "version": "v4.4.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "d451dbe35e23da1cde5c367130d22f843981aafc"
+                "url": "https://github.com/Behat/Gherkin.git",
+                "reference": "d26757dc970e67b50ed0ee47b95273daeb84fea6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/d451dbe35e23da1cde5c367130d22f843981aafc",
-                "reference": "d451dbe35e23da1cde5c367130d22f843981aafc",
+                "url": "https://api.github.com/repos/Behat/Gherkin/zipball/d26757dc970e67b50ed0ee47b95273daeb84fea6",
+                "reference": "d26757dc970e67b50ed0ee47b95273daeb84fea6",
                 "shasum": ""
             },
             "require": {
-                "ext-curl": "*",
+                "php": ">=5.3.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.5|~5",
+                "symfony/phpunit-bridge": "~2.7|~3",
+                "symfony/yaml": "~2.3|~3"
+            },
+            "suggest": {
+                "symfony/yaml": "If you want to parse features, represented in YAML files"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Behat\\Gherkin": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Konstantin Kudryashov",
+                    "email": "ever.zet@gmail.com",
+                    "homepage": "http://everzet.com"
+                }
+            ],
+            "description": "Gherkin DSL parser for PHP 5.3",
+            "homepage": "http://behat.org/",
+            "keywords": [
+                "BDD",
+                "Behat",
+                "Cucumber",
+                "DSL",
+                "gherkin",
+                "parser"
+            ],
+            "time": "2016-09-03 07:28:57"
+        },
+        {
+            "name": "codeception/codeception",
+            "version": "2.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Codeception/Codeception.git",
+                "reference": "ea617b8b55e6e33cdd47edeafde5d3f6466049e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/ea617b8b55e6e33cdd47edeafde5d3f6466049e2",
+                "reference": "ea617b8b55e6e33cdd47edeafde5d3f6466049e2",
+                "shasum": ""
+            },
+            "require": {
+                "behat/gherkin": "~4.4.0",
                 "ext-json": "*",
                 "ext-mbstring": "*",
                 "facebook/webdriver": ">=1.0.1 <2.0",
@@ -590,30 +659,37 @@
                 "guzzlehttp/psr7": "~1.0",
                 "php": ">=5.4.0 <8.0",
                 "phpunit/php-code-coverage": ">=2.1.3",
-                "phpunit/phpunit": ">4.8.20 <5.4",
-                "symfony/browser-kit": ">=2.5 <3.2",
-                "symfony/console": ">=2.5 <3.2",
-                "symfony/css-selector": ">=2.5 <3.2",
-                "symfony/dom-crawler": ">=2.5 <3.2",
-                "symfony/event-dispatcher": ">=2.5 <3.2",
-                "symfony/finder": ">=2.5 <3.2",
-                "symfony/yaml": ">=2.5 <3.2"
+                "phpunit/phpunit": ">4.8.20 <5.5",
+                "sebastian/comparator": "~1.1",
+                "sebastian/diff": "^1.4",
+                "symfony/browser-kit": ">=2.7 <4.0",
+                "symfony/console": ">=2.7 <4.0",
+                "symfony/css-selector": ">=2.7 <4.0",
+                "symfony/dom-crawler": ">=2.7 <4.0",
+                "symfony/event-dispatcher": ">=2.7 <4.0",
+                "symfony/finder": ">=2.7 <4.0",
+                "symfony/yaml": ">=2.7 <4.0"
             },
             "require-dev": {
                 "codeception/specify": "~0.3",
                 "facebook/php-sdk-v4": "~5.0",
                 "flow/jsonpath": "~0.2",
+                "league/factory-muffin": "^3.0",
+                "league/factory-muffin-faker": "^1.0",
+                "mongodb/mongodb": "^1.0",
                 "monolog/monolog": "~1.8",
-                "pda/pheanstalk": "~2.0",
+                "pda/pheanstalk": "~3.0",
                 "php-amqplib/php-amqplib": "~2.4",
+                "predis/predis": "^1.0",
                 "squizlabs/php_codesniffer": "~2.0"
             },
             "suggest": {
-                "codeception/phpbuiltinserver": "Extension to start and stop PHP built-in web server for your tests",
                 "codeception/specify": "BDD-style code blocks",
                 "codeception/verify": "BDD-style assertions",
-                "monolog/monolog": "Log test steps",
-                "phpseclib/phpseclib": "Extension required to use the SFTP option in the FTP Module.",
+                "flow/jsonpath": "For using JSONPath in REST module",
+                "league/factory-muffin": "For DataFactory module",
+                "league/factory-muffin-faker": "For Faker support in DataFactory module",
+                "phpseclib/phpseclib": "for SFTP option in FTP Module",
                 "symfony/phpunit-bridge": "For phpunit-bridge support"
             },
             "bin": [
@@ -649,7 +725,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2016-06-28 23:57:41"
+            "time": "2016-08-14 12:28:58"
         },
         {
             "name": "doctrine/instantiator",
@@ -1103,16 +1179,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "3.3.3",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "44cd8e3930e431658d1a5de7d282d5cb37837fd5"
+                "reference": "5f3f7e736d6319d5f1fc402aff8b026da26709a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/44cd8e3930e431658d1a5de7d282d5cb37837fd5",
-                "reference": "44cd8e3930e431658d1a5de7d282d5cb37837fd5",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/5f3f7e736d6319d5f1fc402aff8b026da26709a3",
+                "reference": "5f3f7e736d6319d5f1fc402aff8b026da26709a3",
                 "shasum": ""
             },
             "require": {
@@ -1121,12 +1197,12 @@
                 "phpunit/php-text-template": "~1.2",
                 "phpunit/php-token-stream": "^1.4.2",
                 "sebastian/code-unit-reverse-lookup": "~1.0",
-                "sebastian/environment": "^1.3.2",
+                "sebastian/environment": "^1.3.2 || ^2.0",
                 "sebastian/version": "~1.0|~2.0"
             },
             "require-dev": {
                 "ext-xdebug": ">=2.1.4",
-                "phpunit/phpunit": "~5"
+                "phpunit/phpunit": "^5.4"
             },
             "suggest": {
                 "ext-dom": "*",
@@ -1136,7 +1212,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.3.x-dev"
+                    "dev-master": "4.0.x-dev"
                 }
             },
             "autoload": {
@@ -1162,7 +1238,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-05-27 16:24:29"
+            "time": "2016-07-26 14:39:29"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1347,16 +1423,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.3.5",
+            "version": "5.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "08c513bfcab57f3dd72f5214c1c3940439fae7fe"
+                "reference": "3132365e1430c091f208e120b8845d39c25f20e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/08c513bfcab57f3dd72f5214c1c3940439fae7fe",
-                "reference": "08c513bfcab57f3dd72f5214c1c3940439fae7fe",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3132365e1430c091f208e120b8845d39c25f20e6",
+                "reference": "3132365e1430c091f208e120b8845d39c25f20e6",
                 "shasum": ""
             },
             "require": {
@@ -1368,20 +1444,23 @@
                 "myclabs/deep-copy": "~1.3",
                 "php": "^5.6 || ^7.0",
                 "phpspec/prophecy": "^1.3.1",
-                "phpunit/php-code-coverage": ">=3.3.0,<4.0.0",
+                "phpunit/php-code-coverage": "^4.0.1",
                 "phpunit/php-file-iterator": "~1.4",
                 "phpunit/php-text-template": "~1.2",
                 "phpunit/php-timer": "^1.0.6",
-                "phpunit/phpunit-mock-objects": ">=3.1.0,<3.2.0",
+                "phpunit/phpunit-mock-objects": "^3.2",
                 "sebastian/comparator": "~1.1",
                 "sebastian/diff": "~1.2",
-                "sebastian/environment": "~1.3",
+                "sebastian/environment": "^1.3 || ^2.0",
                 "sebastian/exporter": "~1.2",
                 "sebastian/global-state": "~1.0",
                 "sebastian/object-enumerator": "~1.0",
                 "sebastian/resource-operations": "~1.0",
                 "sebastian/version": "~1.0|~2.0",
                 "symfony/yaml": "~2.1|~3.0"
+            },
+            "conflict": {
+                "phpdocumentor/reflection-docblock": "3.0.2"
             },
             "suggest": {
                 "phpunit/php-invoker": "~1.1"
@@ -1392,7 +1471,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.3.x-dev"
+                    "dev-master": "5.4.x-dev"
                 }
             },
             "autoload": {
@@ -1418,30 +1497,33 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-06-03 09:42:56"
+            "time": "2016-07-26 14:48:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "3.1.3",
+            "version": "3.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "151c96874bff6fe61a25039df60e776613a61489"
+                "reference": "546898a2c0c356ef2891b39dd7d07f5d82c8ed0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/151c96874bff6fe61a25039df60e776613a61489",
-                "reference": "151c96874bff6fe61a25039df60e776613a61489",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/546898a2c0c356ef2891b39dd7d07f5d82c8ed0a",
+                "reference": "546898a2c0c356ef2891b39dd7d07f5d82c8ed0a",
                 "shasum": ""
             },
             "require": {
                 "doctrine/instantiator": "^1.0.2",
-                "php": ">=5.6",
-                "phpunit/php-text-template": "~1.2",
-                "sebastian/exporter": "~1.2"
+                "php": "^5.6 || ^7.0",
+                "phpunit/php-text-template": "^1.2",
+                "sebastian/exporter": "^1.2"
+            },
+            "conflict": {
+                "phpunit/phpunit": "<5.4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~5"
+                "phpunit/phpunit": "^5.4"
             },
             "suggest": {
                 "ext-soap": "*"
@@ -1449,7 +1531,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1.x-dev"
+                    "dev-master": "3.2.x-dev"
                 }
             },
             "autoload": {
@@ -1474,7 +1556,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2016-04-20 14:39:26"
+            "time": "2016-09-06 16:07:45"
         },
         {
             "name": "psr/http-message",

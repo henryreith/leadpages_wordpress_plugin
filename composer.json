@@ -3,9 +3,9 @@
     "description": "Leadpages WordPress connector",
     "require": {
         "pimple/pimple": "^3.0",
-        "brandonbraner/auth-test": "^1.0",
-        "brandonbraner/pages-test": "^1.0",
-        "brandonbraner/leadboxes": "^1.0",
+        "leadpages/leadpages-auth": "*",
+        "leadpages/pages": "*",
+        "leadpages/leadboxes": "*",
         "icanboogie/inflector": "^1.4",
         "ramsey/uuid": "^2.9",
         "moontoast/math": "*"
