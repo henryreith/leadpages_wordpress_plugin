@@ -17,8 +17,7 @@ class LeadboxShortCodes
         ), $atts );
         $leadboxId = $atts['leadbox_id'];
 
-        $leadbox = $leadpagesApp['leadboxesApi']->getSingleLeadboxEmbedCode($leadboxId);
-
+        $leadbox = $leadpagesApp['leadboxesApi']->getSingleLeadboxEmbedCode($leadboxId, '');
 
         $leadbox = json_decode($leadbox['response']);
         $embedCode = $leadbox->embed_code;
