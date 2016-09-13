@@ -21,6 +21,7 @@ Author URI: http://leadpages.net
     |
     */
 
+use LeadpagesWP\Lib\LeadpagesCronJobs;
 use LeadpagesWP\Lib\Update;
 use LeadpagesMetrics\ActivationEvent;
 use LeadpagesMetrics\DeactivationEvent;
@@ -59,7 +60,17 @@ register_activation_hook(__FILE__, function(){
 register_deactivation_hook(__FILE__, function(){
    $deactivationEvent = new DeactivationEvent();
    $deactivationEvent->storeEvent();
+
+
 });
+
+/*
+  |--------------------------------------------------------------------------
+  | Cron Jobs for account maintance
+  |--------------------------------------------------------------------------
+  */
+LeadpagesCronJobs::addCronScheduleTimes();
+LeadpagesCronJobs::registerCronJobs();
 
 /*
   |--------------------------------------------------------------------------

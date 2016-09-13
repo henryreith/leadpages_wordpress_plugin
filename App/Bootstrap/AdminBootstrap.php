@@ -4,6 +4,7 @@ namespace LeadpagesWP\Bootstrap;
 
 use LeadpagesWP\Lib\AdminNotices;
 use LeadpagesWP\models\LeadboxesModel;
+use LeadpagesWP\Lib\LeadpagesCronJobs;
 use LeadpagesWP\Admin\Factories\MetaBoxes;
 use LeadpagesWP\Admin\Factories\SettingsPage;
 use LeadpagesWP\Admin\MetaBoxes\LeadpageSlug;
@@ -77,6 +78,7 @@ class AdminBootstrap
             //$this->login->setLoggedInCookie();
             $this->isLoggedIn = true;
             $this->login->getToken();
+
         }
     }
 
