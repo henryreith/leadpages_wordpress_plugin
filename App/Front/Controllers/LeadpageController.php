@@ -61,6 +61,10 @@ class LeadpageController
             if ($post > 0) {
                 $pageId = $this->leadpagesModel->getLeadpagePageId($post);
 
+                if($pageId = '') {
+                    return $posts;
+                }
+
                 //check for cache
 
                 $getCache = get_post_meta($post, 'cache_page', true);
@@ -125,6 +129,10 @@ class LeadpageController
         }elseif(isset($post['leadpages_my_selected_page'])){
             $pageId = $this->leadpagesModel->getPageByXORId($post['post_id'], $post['leadpages_my_selected_page']);
         }else{
+            return false;
+        }
+
+        if(empty($pageId)){
             return false;
         }
 
