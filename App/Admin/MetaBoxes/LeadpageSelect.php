@@ -82,7 +82,8 @@ class LeadpageSelect extends LeadpagesPostType implements MetaBox
        $items = $leadpagesApp['pagesApi']->getAllUserPages();
         $optionString = '';
         foreach($items['_items'] as $page){
-            $optionString .= "<option value=\"{$page['_meta']['xor_hex_id']}:{$page['id']}\" ". ($currentPage == $page['id'] ? 'selected="selected"' : '')." >{$page['name']}</option>";
+            $pageId = number_format($page['id'], 0, '.', '');
+            $optionString .= "<option value=\"{$page['_meta']['xor_hex_id']}:{$pageId}\" ". ($currentPage == $pageId ? 'selected="selected"' : '')." >{$page['name']}</option>";
         }
         echo $optionString;
         die();
