@@ -17,7 +17,7 @@
                 leadboxesMenu.push({
                     'text': leadbox.name,
                     'onclick': function () {
-                        return_text = '[leadpages_leadbox leadbox_id=' + leadbox.xor_id + '] [/leadpages_leadbox]';
+                        return_text = '[leadpages_leadbox leadbox_id=' + leadbox.xor_id + ']' + ed.selection.getContent() + '[/leadpages_leadbox]';
                         ed.insertContent(return_text);
                     }
                 });
